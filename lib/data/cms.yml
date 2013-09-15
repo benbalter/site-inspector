@@ -1,0 +1,48 @@
+---
+SMF: >
+  <script .+\s+var smf_
+Magento: >
+  var BLANK_URL = '[^>]+js\/blank\.html'
+Tumblr: >
+  <iframe src=("|')http:\/\/\S+\.tumblr\.com
+WordPress: >
+  <link rel=("|')stylesheet("|') [^>]+wp-content
+Closure: >
+  <script[^>]*>.*goog\.require
+Liferay: >
+  <script[^>]*>.*LifeRay\.currentURL
+vBulletin: vbmenu_control
+MODx: >
+  (<a[^>]+>Powered by MODx<\/a>|var el= \$\('modxhost'\);|<script type=("|')text\/javascript("|')>var MODX_MEDIA_PATH = "media";)
+miniBB: >
+  <a href=("|')[^>]+minibb.+\s*<!--End of copyright link
+PHP-Fusion: >
+  (href|src)=["']?infusions\/
+OpenX: >
+  (href|src)=["'].*delivery\/(afr|ajs|avw|ck)\.php[^"']*
+GetSatisfaction: >
+  asset_host\s*\+\s*"javascripts\/feedback.*\.js
+Fatwire: >
+  \/Satellite\?|\/ContentServer\?
+Contao: >
+  powered by (TYPOlight|Contao)
+Moodle: >
+  <link[^>]*\/theme\/standard\/styles.php".*>|<link[^>]*\/theme\/styles.php\?theme=.*".*>
+1c-bitrix: >
+  <link[^>]*\/bitrix\/.*?>
+OpenCMS: >
+  <link[^>]*\.opencms\..*?>
+HumansTxt: >
+  <link[^>]*rel=['"]?author['"]?
+GoogleFontApi: >
+  ref=["']?http:\/\/fonts.googleapis.com\/
+Prostores: >
+  -legacycss\/Asset">
+osCommerce: >
+  (product_info\.php\?products_id|_eof \/\/-->)
+OpenCart: >
+  index.php\?route=product\/product
+Shibboleth: >
+  <form action="\/idp\/Authn\/UserPassword" method="post">
+Drupal: >
+  \/sites\/default\/

@@ -1,0 +1,36 @@
+---
+Joomla: 'joomla!?\s*([\d\.]+)?'
+vBulletin: 'vBulletin\s*(.*)'
+WordPress: 'WordPress\s*(.*)'
+XOOPS: xoops
+Plone: plone
+MediaWiki: MediaWiki
+CMSMadeSimple: CMS Made Simple
+SilverStripe: SilverStripe
+'Movable Type': Movable Type
+'Amiro.CMS': Amiro
+Koobi: koobi
+bbPress: bbPress
+DokuWiki: dokuWiki
+TYPO3: TYPO3
+'PHP-Nuke': 'PHP-Nuke'
+DotNetNuke: DotNetNuke
+Sitefinity: 'Sitefinity\s+(.*)'
+WebGUI: WebGUI
+'ez Publish': 'eZ\s*Publish'
+BIGACE: BIGACE
+TypePad: 'typepad\.com'
+Blogger: blogger
+PrestaShop: PrestaShop
+SharePoint: SharePoint
+JaliosJCMS: Jalios JCMS
+ZenCart: zen-cart
+WPML: WPML
+PivotX: PivotX
+OpenACS: OpenACS
+AlphaCMS: 'alphacms\s+(.*)'
+concrete5: 'concrete5 -\s*(.*)$'
+Webnode: Webnode
+GetSimple: GetSimple
+DataLifeEngine: DataLife Engine
+ClanSphere: ClanSphere
