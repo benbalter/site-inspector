@@ -79,7 +79,7 @@ class SiteInspector
   end
 
   def dnsec?
-    raise "not yet implemented"
+    dns.any? { |answer| answer.class == Net::DNS::RR::DNSKEY }
   end
 
   def dns
