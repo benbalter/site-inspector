@@ -90,6 +90,18 @@ class SiteInspector
     response && @non_www
   end
 
+  def cdn
+    raise "not yet implemented"
+  end
+
+  def cloud_provider
+    raise "not yet implemented"
+  end
+
+  def google_apps?
+    raise "not yet implemented"
+  end
+
   def sniff(type)
     results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
     results.each { |name, result| result.delete :found} if results
