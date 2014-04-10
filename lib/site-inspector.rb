@@ -9,7 +9,9 @@ require 'yaml'
 require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
-require File.expand_path './site-inspector-cache', File.dirname(__FILE__)
+require File.expand_path './site-inspector/cache', File.dirname(__FILE__)
+require File.expand_path './site-inspector/sniffer', File.dirname(__FILE__)
+require File.expand_path './site-inspector/dns', File.dirname(__FILE__)
 
 class SiteInspector
 
@@ -78,53 +80,7 @@ class SiteInspector
     https? && Addressable::URI.parse(request("http", !non_www?).effective_url).scheme == "https"
   end
 
-  def dnsec?
-    dns.any? { |answer| answer.class == Net::DNS::RR::DNSKEY }
-  end
-
-  def dns
-    @dns ||= Net::DNS::Resolver.start(domain.to_s).answer
-  end
-
   def non_www?
     response && @non_www
-  end
-
-  def cdn
-    raise "not yet implemented"
-  end
-
-  def cloud_provider
-    raise "not yet implemented"
-  end
-
-  def google_apps?
-    raise "not yet implemented"
-  end
-
-  def ipv6?
-    dns.any? { |answer| answer.class == Net::DNS::RR::AAAA }
-  end
-
-  def sniff(type)
-    results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
-    results.each { |name, result| result.delete :found} if results
-    results
-  end
-
-  def cms
-    sniff :cms
-  end
-
-  def analytics
-    sniff :analytics
-  end
-
-  def javascript
-    sniff :javascript
-  end
-
-  def advertising
-    sniff :advertising
   end
 end
