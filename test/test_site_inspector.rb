@@ -26,4 +26,12 @@ class TestSiteInspector < Test::Unit::TestCase
     assert_equal "http://foo.gov", site.uri.to_s
     assert_equal "https://foo.gov", site.uri("https").to_s
   end
+
+  should "strip www from domain" do
+    site = SiteInspector.new "www.foo.gov"
+    assert_equal "foo.gov", site.domain.to_s
+    
+    site = SiteInspector.new "http://www.foo.gov"
+    assert_equal "foo.gov", site.domain.to_s
+  end
 end

@@ -4,10 +4,12 @@ require 'public_suffix'
 require 'gman'
 require 'net/http'
 require "net/dns"
+require 'net/dns/resolver'
 require 'yaml'
 require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
+require File.expand_path './site-inspector-cache', File.dirname(__FILE__)
 
 class SiteInspector
 
@@ -16,22 +18,40 @@ class SiteInspector
   def initialize(domain)
     domain = domain.sub /^http\:/, ""
     domain = domain.sub /^\/+/, ""
+    domain = domain.sub /^www\./, ""
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
+    Typhoeus::Config.cache = SiteInspectorCache.new
   end
 
   def inspect
     "<SiteInspector domain=\"#{domain}\">"
   end
 
-  def uri(scheme="http")
+  def uri(scheme="http",www=false)
     uri = @uri.clone
+    uri.host = "www.#{uri.host}" if www
     uri.scheme = scheme
     uri
   end
 
+  def request(scheme="http", www=false)
+    response = Typhoeus::Request.get(uri(scheme, false), followlocation: true)
+    response if response.success?
+  end
+
   def response
-    @response ||= Typhoeus::Request.get uri, followlocation: true
+    @response ||= begin
+      if response = request("http", false)
+        @non_www = true
+        response
+      elsif response = request("http", true)
+        @non_www = false
+        response
+      else
+        false
+      end
+    end
   end
 
   def doc
@@ -47,19 +67,27 @@ class SiteInspector
   end
 
   def government?
-    Gman.valid? domain
+    Gman.valid? domain.to_s
   end
 
   def https?
-    raise "not yet implemented"
+    !!request(scheme="https", !non_www?)
+  end
+
+  def enforce_https?
+    https? && Addressable::URI.parse(request("http", !non_www?).effective_url).scheme == "https"
   end
 
   def dnsec?
     raise "not yet implemented"
   end
 
+  def dns
+    @dns ||= Net::DNS::Resolver.start(domain.to_s).answer
+  end
+
   def non_www?
-    raise "not yet implemented"
+    response && @non_www
   end
 
   def sniff(type)
@@ -83,7 +111,4 @@ class SiteInspector
   def advertising
     sniff :advertising
   end
-
 end
-
-# s = SiteInspector.new("ben.balter.com")
