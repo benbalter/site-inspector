@@ -103,7 +103,7 @@ class SiteInspector
   end
 
   def ipv6?
-    raise "not yet implemented"
+    dns.any? { |answer| answer.class == Net::DNS::RR::AAAA }
   end
 
   def sniff(type)
