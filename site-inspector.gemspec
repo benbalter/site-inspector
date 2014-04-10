@@ -12,6 +12,12 @@ Gem::Specification.new do |s|
   s.add_dependency("nokogiri")
   s.add_dependency("public_suffix")
   s.add_dependency("gman")
-  s.add_dependency("dnsruby")
-
+  s.add_dependency("net-dns")
+  s.add_dependency("sniffles")
+  s.add_dependency("typhoeus")
+  s.add_development_dependency("pry")
+  s.add_development_dependency( "rake" )
+  s.add_development_dependency( "shoulda" )
+  s.add_development_dependency( "rdoc" )
+  s.add_development_dependency( "bundler" )
 end

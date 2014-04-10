@@ -3,40 +3,51 @@ require 'open-uri'
 require 'public_suffix'
 require 'gman'
 require 'net/http'
-require "dnsruby"
+require "net/dns"
 require 'yaml'
+require 'sniffles'
+require "addressable/uri"
+require 'typhoeus'
 
 class SiteInspector
 
-  def initialize(domain)
-    self.domain= domain
-  end
-
-  def domain=(domain)
-    @domain = PublicSuffix.parse domain
-  end
   attr_reader :domain
 
-  def uri(protocal=nil)
-    protocal ||= "http"
-    "#{protocal}://#{@domain.to_s}"
+  def initialize(domain)
+    domain = domain.sub /^http\:/, ""
+    domain = domain.sub /^\/+/, ""
+    @uri = Addressable::URI.parse "//#{domain}"
+    @domain = PublicSuffix.parse @uri.host
+  end
+
+  def inspect
+    "<SiteInspector domain=\"#{domain}\">"
+  end
+
+  def uri(scheme="http")
+    uri = @uri.clone
+    uri.scheme = scheme
+    uri
+  end
+
+  def response
+    @response ||= Typhoeus::Request.get uri, followlocation: true
   end
 
   def doc
-    @doc = Nokogiri::HTML open self.uri if @doc.nil?
-    @doc
+    @doc ||= Nokogiri::HTML response.body if response
   end
 
   def body
-    self.doc.to_s
+    doc.to_s
   end
 
   def load_data(name)
-    YAML.load_file "#{File.dirname(__FILE__)}/data/#{name}.yml"
+    YAML.load_file File.expand_path "./data/#{name}.yml", File.Dirname(__FILE__)
   end
 
   def government?
-    Gman.valid? @domain.to_s
+    Gman.valid? domain
   end
 
   def https?
@@ -51,61 +62,26 @@ class SiteInspector
     raise "not yet implemented"
   end
 
-  def scripts_regex
-    self.load_data "scripts"
-  end
-
-  def scripts
-    scripts = []
-    self.doc.css("script").each do |script_tag|
-      self.scripts_regex.each do |script,regex|
-        if script_tag.attribute("src") =~ /#{regex}/i
-          scripts.push script
-        elsif script_tag.content =~ /#{regex}/i
-          scripts.push script
-        end
-      end
-    end
-    scripts
-  end
-
-  def generator
-    generator = self.doc.css("meta[name='generator']")
-    return if generator.empty?
-    generator.first.attribute("content").to_s
-  end
-
-  def generators_regex
-    self.load_data "generators"
-  end
-
-  def body_regex
-    self.load_data "cms"
-  end
-
-  def find_by_generator
-    found = nil
-    return unless self.generator
-    self.generators_regex.each do |generator, regex|
-      break found = generator if self.generator =~ /#{regex}/i
-    end
-    found
-  end
-
-  def find_by_body_regex
-    found = nil
-    self.body_regex.each do |generator, regex|
-      break found = generator if self.body =~ /#{regex}/i
-    end
-    found
+  def sniff(type)
+    results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
+    results.each { |name, result| result.delete :found} if results
+    results
   end
 
   def cms
-    found = self.find_by_generator
-    return found if found
+    sniff :cms
+  end
 
-    found = self.find_by_body_regex
-    return found if found
+  def analytics
+    sniff :analytics
+  end
+
+  def javascript
+    sniff :javascript
+  end
+
+  def advertising
+    sniff :advertising
   end
 
 end
