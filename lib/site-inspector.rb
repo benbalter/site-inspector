@@ -102,6 +102,10 @@ class SiteInspector
     raise "not yet implemented"
   end
 
+  def ipv6?
+    raise "not yet implemented"
+  end
+
   def sniff(type)
     results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
     results.each { |name, result| result.delete :found} if results
