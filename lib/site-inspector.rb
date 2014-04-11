@@ -37,7 +37,7 @@ class SiteInspector
   end
 
   def domain
-    @domain ||= non_www? ? @domain : PublicSuffix.parse("www.#{@uri.host}")
+    non_www? ? @domain : PublicSuffix.parse("www.#{@uri.host}")
   end
 
   def request(ssl=false, www=false)
