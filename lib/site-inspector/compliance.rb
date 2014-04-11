@@ -10,7 +10,7 @@ class SiteInspector
   end
 
   def slash_developer?
-    @slash_developer ||= path_exists?("/developer")
+    @slash_developer ||= (path_exists?("/developer") || path_exists?("/developers"))
   end
 
   def data_dot_json?
