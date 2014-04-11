@@ -52,6 +52,9 @@
     <h3>Technology</h3>
     <table class="table table-striped">
       <tr>
+        <th>Server</th><td><%= site.server %></td>
+      </tr>
+      <tr>
         <th>CMS</th>
         <td>
           <% site.cms.each do |name, meta| %>
@@ -102,9 +105,6 @@
             </ul>
           <% end %>
         </td>
-      </tr>
-      <tr>
-        <th>Server</th><td>Soon</td>
       </tr>
     </table>
   </div>
