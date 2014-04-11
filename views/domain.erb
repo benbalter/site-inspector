@@ -109,6 +109,22 @@
     </table>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-4">
+    <h3>Complaince</h3>
+    <table class="table table-striped">
+      <tr>
+        <th>/data</th><td class="<%= site.slash_data? %>"><%= site.slash_data? %></td>
+      </tr>
+      <tr>
+        <th>/developer</th><td class="<%= site.slash_developer? %>"><%= site.slash_developer? %></td>
+      </tr>
+      <tr>
+        <th>/data.json</th><td class="<%= site.data_dot_json? %>"><%= site.data_dot_json? %></td>
+      </tr>
+    </table>
+  </div>
+</div>
 
 <% else %>
   <blink>Invalid Domain</blink>
