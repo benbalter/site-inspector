@@ -2,3 +2,4 @@
 .false { color: red }
 body { padding: 25px; }
 footer { margin: 40px 0 20px; font-size: 1.5em; text-align: center; }
+.have_another { text-align: center; font-size: 2em; margin-top: 20px; margin-bottom: 20px; }
