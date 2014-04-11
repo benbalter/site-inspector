@@ -39,7 +39,7 @@ class SiteInspector
   end
 
   def request(ssl=false, www=false)
-    response = Typhoeus::Request.get(uri(ssl, false), followlocation: true)
+    response = Typhoeus::Request.get(uri(ssl, www), followlocation: true)
     response if response.success?
   end
 
