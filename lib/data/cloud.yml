@@ -1,4 +1,4 @@
-amazon: "amazonaws.com"
+amazon: "compute-1.amazonaws.com"
 linode: "lindoe.com"
 rackspace: ""
 heroku: ""
