@@ -12,6 +12,7 @@ require 'typhoeus'
 require File.expand_path './site-inspector/cache',   File.dirname(__FILE__)
 require File.expand_path './site-inspector/sniffer', File.dirname(__FILE__)
 require File.expand_path './site-inspector/dns',     File.dirname(__FILE__)
+require File.expand_path './site-inspector/compliance',     File.dirname(__FILE__)
 
 class SiteInspector
 
@@ -30,24 +31,24 @@ class SiteInspector
     "<SiteInspector domain=\"#{domain}\">"
   end
 
-  def uri(scheme="http",www=false)
+  def uri(ssl=false,www=false)
     uri = @uri.clone
     uri.host = "www.#{uri.host}" if www
-    uri.scheme = scheme
+    uri.scheme = ssl ? "https" : "http"
     uri
   end
 
-  def request(scheme="http", www=false)
-    response = Typhoeus::Request.get(uri(scheme, false), followlocation: true)
+  def request(ssl=false, www=false)
+    response = Typhoeus::Request.get(uri(ssl, false), followlocation: true)
     response if response.success?
   end
 
   def response
     @response ||= begin
-      if response = request("http", false)
+      if response = request(false, false)
         @non_www = true
         response
-      elsif response = request("http", true)
+      elsif response = request(false, true)
         @non_www = false
         response
       else
@@ -73,11 +74,11 @@ class SiteInspector
   end
 
   def https?
-    !!request(scheme="https", !non_www?)
+    !!request(true, !non_www?)
   end
 
   def enforce_https?
-    https? && Addressable::URI.parse(request("http", !non_www?).effective_url).scheme == "https"
+    https? && Addressable::URI.parse(request(false, !non_www?).effective_url).scheme == "https"
   end
 
   def non_www?

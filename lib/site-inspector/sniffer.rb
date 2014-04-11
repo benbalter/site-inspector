@@ -20,4 +20,8 @@ class SiteInspector
   def advertising
     sniff :advertising
   end
+
+  def server
+
+  end
 end

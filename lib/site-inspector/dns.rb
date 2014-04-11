@@ -23,4 +23,11 @@ class SiteInspector
     raise "not yet implemented"
   end
 
+  def ip
+    @ip ||= Resolv.getaddress domain.to_s
+  end
+
+  def hostname
+    @hostname ||= Resolv.getname ip
+  end
 end

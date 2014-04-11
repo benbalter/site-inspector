@@ -1,0 +1,26 @@
+<h2><%= site.domain %></h2>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-3">
+    <h3>Basics</h3>
+    <table class="table table-striped">
+      <tr>
+        <th>Government</th><td class="<%= site.government? %>"><%= site.government? %></td>
+      </tr>
+      <tr>
+        <th>Live</th><td class="<%= !!site.response %>"><%= !!site.response %></td>
+      </tr>
+    <% if site.response %>
+      <tr>
+        <th>SSL (HTTPS)</th><td class="<%= site.https? %>"><%= site.https? %></td>
+      </tr>
+      <tr>
+        <th>SSL Enforced</th><td class="<%= site.enforce_https? %>"><%= site.enforce_https? %></td>
+      </tr>
+      <tr>
+        <th>Non-www support</th><td class="<%= site.non_www? %>"><%= site.non_www? %></td>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+</div>

@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency( "shoulda" )
   s.add_development_dependency( "rdoc" )
   s.add_development_dependency( "bundler" )
+  s.add_development_dependency( "rerun" )
 end
