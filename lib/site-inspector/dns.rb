@@ -12,7 +12,9 @@ class SiteInspector
   end
 
   def cdn
-    raise "not yet implemented"
+    cdns = load_data "cdn"
+    cdn = cdns.find { |name, domain| domain == hostname.domain }
+    cdn[0] if cdn
   end
 
   def cloud_provider
@@ -30,7 +32,7 @@ class SiteInspector
   end
 
   def hostname
-    @hostname ||= Resolv.getname ip
+    @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
   rescue Resolv::ResolvError => e
     nil
   end

@@ -68,7 +68,7 @@ class SiteInspector
   end
 
   def load_data(name)
-    YAML.load_file File.expand_path "./data/#{name}.yml", File.Dirname(__FILE__)
+    YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
 
   def government?
