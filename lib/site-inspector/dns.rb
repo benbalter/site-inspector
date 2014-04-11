@@ -12,15 +12,16 @@ class SiteInspector
   end
 
   def detect_by_hostname(type)
-    return false unless hostname
+
     haystack = load_data(type)
     needle = haystack.find { |name, domain|
-      cnames.any? { |hostname|
-        domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
+      cnames.any? { |cname|
+        domain == hostname.tld || domain == "#{cname.sld}.#{cname.tld}"
       }
     }
 
     return needle[0] if needle
+    return false unless hostname
 
     needle = haystack.find { |name, domain|
       domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
