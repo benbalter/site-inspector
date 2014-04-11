@@ -14,7 +14,7 @@ class SiteInspector
   def detect_by_hostname(type)
     haystack = load_data(type)
     needle = haystack.find { |name,domain| domain == hostname.domain }
-    needle[0] if needle
+    needle ? needle[0] : false
   end
 
   def cdn
