@@ -11,14 +11,18 @@ class SiteInspector
     dns.any? { |answer| answer.class == Net::DNS::RR::AAAA }
   end
 
+  def detect_by_hostname(type)
+    haystack = load_data(type)
+    needle = haystack.find { |name,domain| domain == hostname.domain }
+    needle[0] if needle
+  end
+
   def cdn
-    cdns = load_data "cdn"
-    cdn = cdns.find { |name, domain| domain == hostname.domain }
-    cdn[0] if cdn
+    detect_by_hostname "cdn"
   end
 
   def cloud_provider
-    raise "not yet implemented"
+    detect_by_hostname "cloud"
   end
 
   def google_apps?
