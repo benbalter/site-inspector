@@ -4,7 +4,7 @@ class SiteInspector
   end
 
   def dnsec?
-    dns.any? { |answer| answer.class == Net::DNS::RR::DNSKEY }
+    false #dns.any? { |answer| answer.class == Net::DNS::RR::DNSKEY }
   end
 
   def ipv6?

@@ -74,11 +74,11 @@ class SiteInspector
   end
 
   def https?
-    !!request(true, !non_www?)
+    @https ||= !!request(true, !non_www?)
   end
 
   def enforce_https?
-    https? && Addressable::URI.parse(request(false, !non_www?).effective_url).scheme == "https"
+    @enforce_https ||= https? && Addressable::URI.parse(request(false, !non_www?).effective_url).scheme == "https"
   end
 
   def non_www?
