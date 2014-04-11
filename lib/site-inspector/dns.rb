@@ -25,6 +25,8 @@ class SiteInspector
 
   def ip
     @ip ||= Resolv.getaddress domain.to_s
+  rescue Resolv::ResolvError
+    nil
   end
 
   def hostname

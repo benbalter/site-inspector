@@ -16,8 +16,6 @@ require File.expand_path './site-inspector/compliance',     File.dirname(__FILE_
 
 class SiteInspector
 
-  attr_reader :domain
-
   def initialize(domain)
     domain = domain.sub /^http\:/, ""
     domain = domain.sub /^\/+/, ""
@@ -36,6 +34,10 @@ class SiteInspector
     uri.host = "www.#{uri.host}" if www
     uri.scheme = ssl ? "https" : "http"
     uri
+  end
+
+  def domain
+    non_www? ? @domain : PublicSuffix.parse("www.#{@uri.host}")
   end
 
   def request(ssl=false, www=false)
