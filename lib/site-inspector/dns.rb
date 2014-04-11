@@ -37,7 +37,9 @@ class SiteInspector
   end
 
   def google_apps?
-    raise "not yet implemented"
+    @google ||= Net::DNS::Resolver.start(domain.to_s, "MX").answer.any? { |record|
+      record.exchange =~ /google(mail)?\.com\.?$/
+    }
   end
 
   def ip
