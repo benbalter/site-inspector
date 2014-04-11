@@ -13,7 +13,18 @@ class SiteInspector
 
   def detect_by_hostname(type)
     haystack = load_data(type)
-    needle = haystack.find { |name,domain| domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}" }
+    needle = haystack.find { |name, domain|
+      cnames.any? { |hostname|
+        domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
+      }
+    }
+
+    return needle[0] if needle
+
+    needle = haystack.find { |name, domain|
+      domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
+    }
+
     needle ? needle[0] : false
   end
 
@@ -39,5 +50,9 @@ class SiteInspector
     @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
   rescue Resolv::ResolvError => e
     nil
+  end
+
+  def cnames
+    @cnames ||= dns.select {|record| record.class == Net::DNS::RR::CNAME }.map { |record| PublicSuffix.parse(record.cname) }
   end
 end
