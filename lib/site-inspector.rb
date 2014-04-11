@@ -9,10 +9,10 @@ require 'yaml'
 require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
-require File.expand_path './site-inspector/cache',   File.dirname(__FILE__)
-require File.expand_path './site-inspector/sniffer', File.dirname(__FILE__)
-require File.expand_path './site-inspector/dns',     File.dirname(__FILE__)
-require File.expand_path './site-inspector/compliance',     File.dirname(__FILE__)
+require File.expand_path './site-inspector/cache',      File.dirname(__FILE__)
+require File.expand_path './site-inspector/sniffer',    File.dirname(__FILE__)
+require File.expand_path './site-inspector/dns',        File.dirname(__FILE__)
+require File.expand_path './site-inspector/compliance', File.dirname(__FILE__)
 
 class SiteInspector
 

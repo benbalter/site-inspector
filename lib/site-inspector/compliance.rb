@@ -1,19 +1,19 @@
 class SiteInspector
 
   def path_exists?(path)
-    url = uri(https?, !non_www?) + "/#{path}"
+    url = URI.join uri(https?, !non_www?), path
     Typhoeus::Request.get(url, followlocation: true).success?
   end
 
-  def slash_data
-    path_exists?("/data")
+  def slash_data?
+    @slash_data ||= path_exists?("/data")
   end
 
-  def slash_developer
-    path_exists?("/developer")
+  def slash_developer?
+    @slash_developer ||= path_exists?("/developer")
   end
 
-  def data_dot_json
-    path_exists?("/data.json")
+  def data_dot_json?
+    @data_dot_json ||= path_exists?("/data.json")
   end
 end
