@@ -29,5 +29,7 @@ class SiteInspector
 
   def hostname
     @hostname ||= Resolv.getname ip
+  rescue Resolv::ResolvError => e
+    nil
   end
 end
