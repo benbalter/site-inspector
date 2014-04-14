@@ -12,7 +12,7 @@ class SiteInspector
     @dns ||= query
   end
 
-  def dnsec?
+  def dnssec?
     @dnssec ||= dns.any? { |record| record.type == "DNSKEY" }
   end
 
