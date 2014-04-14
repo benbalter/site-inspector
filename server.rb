@@ -25,9 +25,16 @@ module SiteInspectorServer
       render_template :index
     end
 
+    get "/domains/:domain.json" do
+      content_type :json
+      site = SiteInspector.new params[:domain]
+      site.to_json
+    end
+
     get "/domains/:domain" do
       site = SiteInspector.new params[:domain]
       render_template :domain, site: site
     end
+
   end
 end

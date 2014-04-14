@@ -102,4 +102,11 @@ class TestSiteInspector < Minitest::Test
       assert_equal false, site.non_www?
     end
   end
+
+  should "output json" do
+    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
+      site = SiteInspector.new "whitehouse.gov"
+      assert_equal Hash, JSON.parse(site.to_json).class
+    end
+  end
 end

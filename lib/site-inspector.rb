@@ -8,6 +8,7 @@ require 'yaml'
 require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
+require 'json'
 require File.expand_path './site-inspector/cache',      File.dirname(__FILE__)
 require File.expand_path './site-inspector/sniffer',    File.dirname(__FILE__)
 require File.expand_path './site-inspector/dns',        File.dirname(__FILE__)
@@ -93,5 +94,30 @@ class SiteInspector
 
   def non_www?
     response && @non_www
+  end
+
+  def to_json
+    {
+      :government => government?,
+      :live => !!response,
+      :ssl => https?,
+      :enforce_https => enforce_https?,
+      :non_www => non_www?,
+      :ip => ip,
+      :hostname => hostname,
+      :ipv6 => ipv6?,
+      :dnssec => dnsec?,
+      :cdn => cdn,
+      :google_apps => google_apps?,
+      :could_provider => cloud_provider,
+      :server => server,
+      :cms => cms,
+      :analytics => analytics,
+      :javascript => javascript,
+      :advertising => advertising,
+      :slash_data => slash_data?,
+      :slash_developer => slash_developer?,
+      :data_dot_json => data_dot_json?
+    }.to_json
   end
 end
