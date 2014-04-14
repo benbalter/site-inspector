@@ -12,7 +12,7 @@ class TestSiteInspectorDns < Minitest::Test
   should "detect DNSSec support" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal true, site.dnsec?
+      assert_equal true, site.dnssec?
     end
   end
 

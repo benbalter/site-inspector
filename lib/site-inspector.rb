@@ -106,7 +106,7 @@ class SiteInspector
       :ip => ip,
       :hostname => hostname,
       :ipv6 => ipv6?,
-      :dnssec => dnsec?,
+      :dnssec => dnssec?,
       :cdn => cdn,
       :google_apps => google_apps?,
       :could_provider => cloud_provider,
