@@ -48,9 +48,9 @@ class SiteInspector
   end
 
   def google_apps?
-    @google ||= query("MX").answer.any? { |record|
-      record.exchange =~ /google(mail)?\.com\.?$/
-    }
+    @google ||= dns.any? do |record|
+      record.type == "MX" && record.exchange =~ /google(mail)?\.com\.?$/
+    end
   end
 
   def ip
@@ -66,6 +66,6 @@ class SiteInspector
   end
 
   def cnames
-    @cnames ||= dns.select {|record| record.class == Net::DNS::RR::CNAME }.map { |record| PublicSuffix.parse(record.cname) }
+    @cnames ||= dns.select {|record| record.type == "CNAME" }.map { |record| PublicSuffix.parse(record.cname.to_s) }
   end
 end
