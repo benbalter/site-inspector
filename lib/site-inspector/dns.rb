@@ -16,7 +16,7 @@ class SiteInspector
     haystack = load_data(type)
     needle = haystack.find { |name, domain|
       cnames.any? { |cname|
-        domain == hostname.tld || domain == "#{cname.sld}.#{cname.tld}"
+        domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"
       }
     }
 
