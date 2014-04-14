@@ -1,0 +1,713 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://cio.gov/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 14 Apr 2014 19:51:38 GMT
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=43200
+      X-Powered-By:
+      - PHP/5.3.3
+      Expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+      Pragma:
+      - no-cache
+      X-Pingback:
+      - https://cio.gov/xmlrpc.php
+      Content-Type:
+      - text/html; charset=UTF-8
+      P3p:
+      - CP="CAO DSP CURa ADMa DEVa TAIa PSAa PSDa IVAi IVDi HISa OUR IND PHY ONL UNI
+        COM NAV INT CNT STA LOC GOV"
+      Set-Cookie:
+      - PHPSESSID=arsnaks094k6oo701p5uldvho0; path=/; Secure
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "<!DOCTYPE html>\r\n\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta
+        charset=\"utf-8\">\r\n    <title>CIO Council | Chief Information Officers
+        Council</title>\r\n    <meta name=\"viewport\" content=\"width=device-width,
+        initial-scale=1.0\">\r\n    \r\n    <meta name=\"author\" content=\"\">\r\n\r\n
+        \   <!-- Le styles -->\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/fonts/stylesheet.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/bootstrap.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/bootstrap-responsive.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/docs.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/js/google-code-prettify/prettify.css\"
+        rel=\"stylesheet\">\r\n\r\n    <!-- Le HTML5 shim, for IE6-8 support of HTML5
+        elements -->\r\n    <!--[if lt IE 9]>\r\n      <script src=\"https://html5shim.googlecode.com/svn/trunk/html5.js\"></script>\r\n<style>\r\n.cont-side-bar
+        { margin-right: 0px; }\r\n.side-bar { margin-right: 0px; }\r\n.nav-menu-side-bar
+        { margin-right: 0px; }\r\n</style>\r\n    <![endif]-->\r\n\r\n    <!-- Le
+        fav and touch icons -->\r\n    <link rel=\"shortcut icon\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/favicon.ico\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"144x144\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-144-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"114x114\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-114-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"72x72\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-72-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-57-precomposed.png\">\r\n\t<script
+        type='text/javascript' src='https://cio.gov/wp-content/themes/twentyten/jquery-1.8.0.min.js'></script>
+        \r\n<!--\r\n<script type='text/javascript' src='/ui/jquery.ui.core.js'></script>\r\n<script
+        type='text/javascript' src='/ui/jquery.ui.widget.js'></script>\r\n<script
+        type='text/javascript' src='/ui/jquery.ui.datepicker.js'></script>\r\n<link
+        rel='stylesheet' id='datepickermystyle-css'  href='/redmond/jquery-ui-1.8.23.custom.css'
+        type='text/css' media='all' />\r\n--> \r\n  \r\n\t\t \r\n <SCRIPT TYPE=\"text/javascript\">\r\n\r\n\r\n
+        \ \r\n    // Change this URL to be that of your own website  \r\n    var base_url
+        = \"https://cio.gov\";  \r\n    var base_url_length = base_url.length;  \r\n
+        \     var $jy = jQuery.noConflict(true);\r\n \r\n    $jy(document).ready(function()
+        {  \r\n        $jy(\"a\").click(function() {  \r\n  \t\t\r\n            var
+        link_location = $jy(this).attr('href'); \r\n             if(link_location!=\"\"){\r\n
+        \           // if the link clicked is external  \r\n            if (link_location.indexOf(\"http://\"
+        || \"https://\")!=-1 && link_location.substr(0, base_url_length)!=base_url)
+        {  \r\n              \r\n                /* DO ACTION HERE */  \r\n                var
+        answer = confirm(\"You are now leaving CIO.gov.\");  \r\n              \tif
+        (!answer) {\r\n\t\t\treturn false;\r\n\t\t}              \r\n            }
+        \ \r\n          }\r\n        });  \r\n      \r\n    });  \r\n    \r\n</SCRIPT>\r\n
+        <script language=\"JavaScript\" src=\"https://cio.gov/wp-content/themes/twentyten/htmlDatePicker.js\"
+        type=\"text/javascript\"></script>\r\n\t\t<link href=\"https://cio.gov/wp-content/themes/twentyten/htmlDatePicker.css\"
+        rel=\"stylesheet\" />\r\n\r\n\r\n\r\n\r\n\r\n<link rel=\"pingback\" href=\"https://cio.gov/xmlrpc.php\"
+        />\r\n<style type='text/css'>\r\n\t\t.stpulldown-gradient\r\n\t\t{\r\n\t\t\tbackground:
+        #E1E1E1;\r\n\t\t\tbackground: -moz-linear-gradient(top, #E1E1E1 0%, #A7A7A7
+        100%); /* firefox */\r\n\t\t\tbackground: -webkit-gradient(linear, left top,
+        left bottom, color-stop(0%,#E1E1E1), color-stop(100%,#A7A7A7)); /* webkit
+        */\r\n\t\t\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E1E1E1',
+        endColorstr='#A7A7A7',GradientType=0 ); /* ie */\r\n\t\t\tbackground: -o-linear-gradient(top,
+        #E1E1E1 0%,#A7A7A7 100%); /* opera */\r\n\t\t\tcolor: #636363;\r\n\t\t}\r\n\t\t#stpulldown
+        .stpulldown-logo\r\n\t\t{\r\n\t\t\theight: 40px;\r\n\t\t\twidth: 300px;\r\n\t\t\tmargin-left:
+        20px;\r\n\t\t\tmargin-top: 5px;\r\n\t\t\tbackground:url('') no-repeat;\r\n\t\t}\n</style>\n\n<!--
+        This site is optimized with the Yoast WordPress SEO plugin v1.4.18 - http://yoast.com/wordpress/seo/
+        -->\n<link rel=\"canonical\" href=\"https://cio.gov/\" />\n<link rel=\"next\"
+        href=\"https://cio.gov/page/2/\" />\n<meta property=\"og:locale\" content=\"en_US\"/>\n<meta
+        property=\"og:type\" content=\"website\"/>\n<meta property=\"og:title\" content=\"CIO
+        Council - Chief Information Officers Council\"/>\n<meta property=\"og:url\"
+        content=\"https://cio.gov/\"/>\n<meta property=\"og:site_name\" content=\"CIO
+        Council\"/>\n<!-- / Yoast WordPress SEO plugin. -->\n\n<link rel=\"alternate\"
+        type=\"application/rss+xml\" title=\"CIO Council &raquo; Feed\" href=\"https://cio.gov/feed/\"
+        />\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"CIO Council
+        &raquo; Comments Feed\" href=\"https://cio.gov/comments/feed/\" />\n<link
+        rel='stylesheet' id='contact-form-7-css'  href='https://cio.gov/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=3.5.3'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='mystyle-css'  href='https://cio.gov/wp-content/plugins/my-slider/css/nivo-slider.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='default-css'  href='https://cio.gov/wp-content/plugins/my-slider/css/default.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='thickbox-css'  href='https://cio.gov/wp-includes/js/thickbox/thickbox.css?ver=20121105'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='PW_Archives_CSS-css'
+        \ href='https://cio.gov/wp-content/plugins/pw-archives/pw-archives.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='wp_dlmp_styles-css'
+        \ href='https://cio.gov/wp-content/plugins/download-monitor/page-addon/styles.css?ver=3.5.2'
+        type='text/css' media='all' />\n<script type='text/javascript' src='https://cio.gov/wp-includes/js/jquery/jquery.js?ver=1.8.3'></script>\n<script
+        type='text/javascript' src='https://cio.gov/wp-content/plugins/my-slider/js/jquery.nivo.slider.js?ver=3.5.2'></script>\n<script
+        type='text/javascript' src='https://cio.gov/wp-includes/js/json2.min.js?ver=2011-02-23'></script>\n<link
+        rel=\"EditURI\" type=\"application/rsd+xml\" title=\"RSD\" href=\"https://cio.gov/xmlrpc.php?rsd\"
+        />\n<link rel=\"wlwmanifest\" type=\"application/wlwmanifest+xml\" href=\"https://cio.gov/wp-includes/wlwmanifest.xml\"
+        /> \n<meta name=\"generator\" content=\"WordPress 3.5.2\" />\n\t<style type='text/css'>\n\t.download-info
+        .download-button {\n\t\tbackground-image: url(https://cio.gov/wp-content/plugins/download-monitor/page-addon/downloadbutton.gif);\n\t}\n\t.download-info
+        .more-button {\n\t\tbackground-image: url(https://cio.gov/wp-content/plugins/download-monitor/page-addon/morebutton.gif);\n\t}\n\t</style>\n<script
+        charset=\"utf-8\" type=\"text/javascript\">var switchTo5x=true;</script><script
+        charset=\"utf-8\" type=\"text/javascript\" src=\"/includes/buttons.js\"></script><script
+        type=\"text/javascript\">stLight.options({publisher:'wp.e1779ca7-74fe-4e4e-9343-3c7e45755e74'});var
+        st_type='wordpress3.4.2';</script>\r\n  </head>\r\n  <body data-spy=\"scroll\"
+        data-target=\".bs-docs-sidebar\"> \r\n\r\n<div class=\"main-head\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid  main-head-side\">\r\n
+        \       \t<div class=\"span8 header-left\"><a href=\"https://cio.gov\"><img
+        src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/logo.png\" alt=\"CIO
+        Council - Chief Information Officers Council - Beta\" border=\"0\" title=\"CIO
+        Council - Chief Information Officers Council - Beta\"/></a></div>\r\n            <div
+        class=\"span4 side-bar\">\r\n            \t<a href=\"https://cio.gov/cio-feeds/\"><img
+        class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/rss-icon.png\"/><h4>
+        SUBSCRIBE by RSS</h4></a>\r\n                <a href=\"https://twitter.com/ciodotgov\"
+        target=\"_blank\"><img class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/twitter-icon.png\"/><h4>FOLLOW
+        </h4></a>\r\n\r\n                <a href=\"https://cio.gov/feedback/\"><img
+        class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/mail-icon.png\"/><h4>FEEDBACK
+        </h4></a>\r\n          </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<!--
+        nav-mnu ================================================== -->\r\n<div class=\"nav-menu\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid nav-menu-side\">\r\n
+        \       \t<div class=\"span8\">\r\n            \t\r\n                <div
+        class=\"navbar inner-tab\">\r\n                      <div style=\"width: auto;\"
+        class=\"container\">\r\n                        <a data-target=\".nav-collapse\"
+        data-toggle=\"collapse\" class=\"btn btn-navbar\">\r\n                          <span
+        class=\"icon-bar\"></span>\r\n                          <span class=\"icon-bar\"></span>\r\n
+        \                         <span class=\"icon-bar\"></span>\r\n                        </a>\r\n
+        \                       <div class=\"nav-collapse\">\r\n                         \r\n<ul
+        id=\"menu-cio-menu\" class=\"nav span12\"><li id=\"menu-item-1409\" class=\"menu-item
+        menu-item-type-post_type menu-item-object-page menu-item-1409\"><a href=\"https://cio.gov/about/\">About</a>\n<ul
+        class=\"sub-menu\">\n\t<li id=\"menu-item-1886\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1886\"><a href=\"https://cio.gov/about/leadership/\">Leadership</a></li>\n\t<li
+        id=\"menu-item-1887\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1887\"><a href=\"https://cio.gov/about/members/\">Members</a></li>\n\t<li
+        id=\"menu-item-1885\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1885\"><a href=\"https://cio.gov/about/groups/\">Groups</a></li>\n</ul>\n</li>\n<li
+        id=\"menu-item-1169\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1169\"><a href=\"https://cio.gov/agenda/\">Agenda</a>\n<ul class=\"sub-menu\">\n\t<li
+        id=\"menu-item-1892\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1892\"><a href=\"https://cio.gov/innovate/\">Innovate</a></li>\n\t<li
+        id=\"menu-item-1891\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1891\"><a href=\"https://cio.gov/deliver/\">Deliver</a></li>\n\t<li
+        id=\"menu-item-1890\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1890\"><a href=\"https://cio.gov/protect/\">Protect</a></li>\n\t<li
+        id=\"menu-item-1893\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1893\"><a href=\"https://cio.gov/national-initiatives/\">National
+        Initiatives</a></li>\n</ul>\n</li>\n<li id=\"menu-item-1165\" class=\"menu-item
+        menu-item-type-post_type menu-item-object-page menu-item-1165\"><a href=\"https://cio.gov/cioc-blog/\">BLOG</a></li>\n<li
+        id=\"menu-item-1396\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1396\"><a href=\"https://cio.gov/resources/\">Resources</a>\n<ul
+        class=\"sub-menu\">\n\t<li id=\"menu-item-1888\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1888\"><a href=\"https://cio.gov/resources/document-library/\">Document
+        Library</a></li>\n\t<li id=\"menu-item-1889\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1889\"><a href=\"https://cio.gov/resources/multimedia/\">Multimedia</a></li>\n</ul>\n</li>\n</ul>
+        \r\n                        </div><!-- /.nav-collapse -->\r\n                      </div>\r\n
+        \                 </div>\r\n                \t\r\n            </div>\r\n            <div
+        class=\"span4 nav-menu-side-bar\"> \r\n\r\n<form method=\"get\" id=\"searchform\"
+        action=\"https://cio.gov\">\r\n<label class=\"hidden\" for=\"query\">Search
+        site for:</label>\r\n<div><input type=\"text\" value='' name=\"query\" id=\"query\"
+        />\r\n<input type=\"hidden\" name=\"s\" value=\"1\" />\r\n<input type=\"submit\"
+        id=\"searchsubmit\" value=\"\" class=\"search\"/>\r\n</div>\r\n</form>\r\n\r\n
+        \           \t \r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\t\t<!--
+        banner ================================================== -->\r\n<div class=\"banner\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid\">\r\n     <!--   \t<div
+        class=\"span8\">\r\n            \t<img src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/banner-img.jpg\"
+        alt=\"\" border=\"0\"/>\r\n            </div>\r\n            <div class=\"span4
+        banner-side-bar\">\r\n            \t<h2>Roadmap Toward IPv6 \x03Adoption for
+        the Federal \x03Government</h2>\r\n                <p>In September 2010, OMB
+        issued a memo requiring federal agencies to transition to Internet Protocol</p>\r\n
+        \               <a href=\"#\" class=\"more\">  Continued </a>\r\n            </div>-->\r\n\t\t\t<div
+        class=\"slider-wrapper theme-default span12\">\r\n            <div id=\"slider1\"
+        class=\"nivoSlider\"><a href=\"https://cio.gov/building-a-21st-century-government/digital-strategy/\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider1.jpg\"
+        title=\"#desc_1\" /></a><a href=\"https://cio.gov/president-obama-signs-executive-order-on-open-data/\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider2.jpg\"
+        title=\"#desc_2\" /></a><a href=\"http://www.itdashboard.gov/\" target=\"_blank\"><img
+        src=\"https://cio.gov/wp-content/uploads/2013/12/slider4.png\" title=\"#desc_4\"
+        /></a><a href=\"https://cio.gov/wp-content/uploads/downloads/2012/09/2012_IPv6_Roadmap_FINAL_20120712.pdf\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider5.jpg\"
+        title=\"#desc_5\" /></a>\t</div><div id=\"desc_1\" class=\"nivo-html-caption\"><h2>One
+        Year Anniversary of the Digital Government Strategy</h2>\r\n                <p>May
+        23 marks the one year anniversary of the Digital Government Strategy. As the
+        final deadline passes, the Federal CIO Council has released several products
+        to facilitate adoption of mobile technology within the Federal Government</p>\r\n
+        \               <a href=\"https://cio.gov/building-a-21st-century-government/digital-strategy/\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_2\" class=\"nivo-html-caption\"><h2>President
+        Obama Releases Open Data Rules </h2>\r\n                <p>On May 9, President
+        Obama signed an Executive Order making open and machine readable data the
+        new default for Government information.</p>\r\n                <a href=\"https://cio.gov/president-obama-signs-executive-order-on-open-data/\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_3\" class=\"nivo-html-caption\">
+        \r\n            </div><div id=\"desc_4\" class=\"nivo-html-caption\"><h2>Federal
+        IT Dashboard</h2>\r\n<p>The IT Dashboard is a website enabling federal agencies,
+        industry, the general public and other stakeholders to view details of federal
+        information technology investments.</p>\r\n<p><a href=\"http://www.itdashboard.gov/\">Learn
+        More</a></p> \r\n            </div><div id=\"desc_5\" class=\"nivo-html-caption\"><h2>Roadmap
+        Toward IPv6 Adoption</h2>\r\n                <p>Read the updated guidance
+        and best practices for agencies transitioning to the next generation Internet.</p>\r\n
+        \               <a href=\"/wp-content/uploads/downloads/2012/09/2012_IPv6_Roadmap_FINAL_20120712.pdf\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_6\" class=\"nivo-html-caption\">
+        \r\n            </div></div>\r\n\t\t\t<script type=\"text/javascript\">\r\n\t\t\tvar
+        $jw = jQuery.noConflict();\r\n    $jw(window).load(function() {\r\n        $jw(\"#slider1\").nivoSlider({\r\n\t\teffect:
+        \"fade\",\r\n\t\t animSpeed: 500, \r\n        pauseTime: 8000 \r\n\t\t});\r\n
+        \   });\r\n    </script>\r\n\t\t\t        </div>\r\n    </div>\r\n</div>\r\n\r\n<!--
+        cont ================================================== -->\r\n<div class=\"cont\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid cont-side\" style=\"min-height:640px;\">\r\n
+        \       \t<div class=\"span8 cont-main\">\r\n                <div class=\"row-fluid\">\r\n
+        \                \r\n                <div class=\"cont-head home\">\r\n                        \t\r\n
+        \                           <h2>Highlights </h2>\r\n                        </div>\r\n
+        \             </div>\r\n                <div class=\"row-fluid\">\r\n                <div
+        class=\"span6 cont-section\">\r\n                    \t  <ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"widget_sp_image-10\" class=\"widget-container widget_sp_image\"><a href=\"http://www.whitehouse.gov/sites/default/files/omb/assets/egov_docs/omb_presidents_it_budget_for_fy_2015_summary_chart.pdf\"
+        target=\"_self\" class=\"widget_sp_image-image-link\" title=\"Dollar Image\"><img
+        width=\"326\" height=\"108\" alt=\"\" class=\"attachment-full\" style=\"max-width:
+        100%;\" src=\"https://cio.gov/wp-content/uploads/2012/09/dollar-326x1084.jpg\"
+        /></a><div class=\"widget_sp_image-description\" ><h3><a href=\"http://www.whitehouse.gov/sites/default/files/omb/assets/egov_docs/omb_presidents_it_budget_for_fy_2015_summary_chart.pdf\">FY
+        2015 IT Budget Request</a></h3>\n</div></div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t</li>\r\n
+        \                   </div>\r\n                    <div class=\"span6 cont-section\">\r\n\t\t\t\t\t
+        \ <ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div id=\"widget_sp_image-9\"
+        class=\"widget-container widget_sp_image\"><img width=\"328\" height=\"109\"
+        alt=\"\" class=\"attachment-full\" style=\"max-width: 100%;\" src=\"https://cio.gov/wp-content/uploads/2014/03/328x109socialmedia.jpg\"
+        /><div class=\"widget_sp_image-description\" ><h3><a href=\"https://cio.gov/trendingtopic-privacy-best-practices-for-socialmedia/\">Privacy
+        Best Practices for Social Media</a></h3>\n</div></div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t</li>\r\n
+        \               </div>  \t\r\n            </div>\r\n\t\t\t</div>\r\n            <div
+        class=\"span4 cont-side-bar\">\r\n            <div class=\"cont-side-bar-main\">\r\n
+        \                   <div class=\"row-fluid\">\r\n                        <div
+        class=\"cont-head home\">\r\n                        \t<div class=\"view-all\">\r\n
+        \                           \t<a href=\"./cioc-blog\"> View all</a>\r\n                            </div>\r\n
+        \                           <h2> CIOC Blog </h2>\r\n                        </div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div
+        class=\"row-fluid\">\r\n\t\t\t\t\t\t  \t\t\t\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 11, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/nist-releases-appvet-open-source-mobile-app-vetting-system/\">NIST
+        Releases AppVet, an Open Source Mobile App Vetting System</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 04, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/nists-intersection-cloud-mobility-workshop-video/\">NIST&#8217;s
+        Intersection of Cloud and Mobility Workshop Video</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 03, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/digitalgovs-digital-analytics-program-dap-provides-oceans-data/\">DigitalGov&#8217;s
+        Digital Analytics Program (DAP) Provides Oceans of Data</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n\r\n\r\n
+        \  \r\n\r\n                </div>\r\n            </div>\r\n        </div>\r\n
+        \   </div>\r\n</div>\r\n</div>\r\n\r\n\t<!-- footer ==================================================
+        -->\r\n<div class=\"footer\">\r\n\t<div class=\"container\">\r\n    \t<div
+        class=\"row-fluid\">\r\n        \t<div class=\"span3 cont-box\"> \r\n            \t\t\t\t\t\t\t<div
+        id=\"first\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"flexipages-4\" class=\"widget-container flexipages_widget\"><h3 class=\"widget-title\">About</h3>\n<ul>\n\t<li
+        class=\"page_item page-item-633\"><a href=\"https://cio.gov/about/leadership/\"
+        title=\"Leadership\">Leadership</a></li>\n\t<li class=\"page_item page-item-379\"><a
+        href=\"https://cio.gov/about/members/\" title=\"Members\">Members</a></li>\n\t<li
+        class=\"page_item page-item-309\"><a href=\"https://cio.gov/about/groups/\"
+        title=\"Groups\">Groups</a></li>\n</ul>\n</div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!--
+        #first .widget-area -->\r\n\t\t\t            </div>\r\n            <div class=\"span3
+        cont-box\">\r\n            \t    \r\n\t\t\t\t\t\t\t<div id=\"first\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul
+        class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div id=\"flexipages-15\" class=\"widget-container
+        flexipages_widget\"><h3 class=\"widget-title\">Agenda</h3>\n<ul>\n\t<li class=\"page_item
+        page-item-1285\"><a href=\"https://cio.gov/innovate/\" title=\"Innovate -
+        Innovating for the American People\">Innovate - Innovating for the American
+        People</a></li>\n\t<li class=\"page_item page-item-1292\"><a href=\"https://cio.gov/deliver/\"
+        title=\"Deliver - Maximizing the Value of Federal IT\">Deliver - Maximizing
+        the Value of Federal IT</a></li>\n\t<li class=\"page_item page-item-1294\"><a
+        href=\"https://cio.gov/protect/\" title=\"Protect - Advancing our Nation's
+        Cybersecurity\">Protect - Advancing our Nation's Cybersecurity</a></li>\n\t<li
+        class=\"page_item page-item-1296\"><a href=\"https://cio.gov/national-initiatives/\"
+        title=\"National Initiatives\">National Initiatives</a></li>\n</ul>\n</div>
+        \r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!-- #first .widget-area
+        -->\r\n\t\t\t            </div>\r\n            <div class=\"span3 cont-box\">\r\n
+        \           \t\t\t\t\t\t\t\t\t<div id=\"third\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t\t<ul
+        class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t\t<div id=\"nav_menu-2\" class=\"widget-container
+        widget_nav_menu\"><h3 class=\"widget-title\">CIOC Blog</h3><div class=\"menu-blog-archives-container\"><ul
+        id=\"menu-blog-archives\" class=\"menu\"><li id=\"menu-item-4092\" class=\"menu-item
+        menu-item-type-custom menu-item-object-custom menu-item-4092\"><a href=\"https://cio.gov/2014/\">Current
+        Year 2014</a></li>\n<li id=\"menu-item-3627\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-3627\"><a href=\"https://cio.gov/2013/\">Archives
+        2013</a></li>\n<li id=\"menu-item-1937\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1937\"><a href=\"https://cio.gov/2012/\">Archives
+        2012</a></li>\n<li id=\"menu-item-1938\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1938\"><a href=\"https://cio.gov/2011/\">Archives
+        2011</a></li>\n<li id=\"menu-item-1939\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1939\"><a href=\"https://cio.gov/2010/\">Archives
+        2010</a></li>\n<li id=\"menu-item-1940\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1940\"><a href=\"https://cio.gov/2009/\">Archives
+        2009</a></li>\n</ul></div></div>\t\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t\t</div><!--
+        #third .widget-area -->\r\n\t\t\t\t            </div>\r\n            <div
+        class=\"span3 cont-box\">\r\n            \t\t\t\t\t\t\t<div id=\"fourth\"
+        class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"flexipages-6\" class=\"widget-container flexipages_widget\"><h3 class=\"widget-title\">Resources</h3>\n<ul>\n\t<li
+        class=\"page_item page-item-1386\"><a href=\"https://cio.gov/resources/document-library/\"
+        title=\"Document Library\">Document Library</a></li>\n\t<li class=\"page_item
+        page-item-1011\"><a href=\"https://cio.gov/resources/multimedia/\" title=\"Multimedia\">Multimedia</a></li>\n</ul>\n</div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!--
+        #fourth .widget-area -->\r\n\t\t\t            </div>\r\n           <!--   <div
+        class=\"span3 cont-box\">\r\n                        </div> #.widget-area
+        -->\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<!-- footer-bottom
+        ================================================== -->\r\n<div class=\"footer-bottom\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid\">\r\n        \t<div
+        class=\"span12\">\r\n            \t<a href=\"https://cio.gov\"><img src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/logo.png\"
+        \ alt=\"CIO Council\" border=\"0\" title=\"CIO Council\" border=\"0\"/></a>\r\n
+        \               <p>Copyright &copy;&nbsp;\r\n\t\t\t\t<SCRIPT LANGUAGE=\"JavaScript\">\r\n\t\t\t\t\t//
+        JKH for the copyright notice, we'll report the full year\r\n\t\t\t\t\tdocument.write(new
+        Date().getFullYear());\r\n\t\t\t\t</SCRIPT>\t\t\t\t\r\n\t\t\t\t&nbsp;Chief
+        Information Officers Council, All Rights Reserved &bull; <a href=\"https://cio.gov/about/privacy-statement/\"/>Privacy
+        Policy</a> &bull; <a href=\"https://cio.gov/about/accessibility-statement/\">Accessibility
+        Statement</a> &bull; <a href=\"http://www.usa.gov/\" target=\"_blank\">USA.GOV</a></p>\r\n
+        \           </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<!--
+        ================================================== -->\r\n\r\n\r\n    <!--
+        Le javascript\r\n    ================================================== -->\r\n
+        \   <!-- Placed at the end of the document so the pages load faster -->\r\n
+        \   <script type=\"text/javascript\" src=\"https://cio.gov/includes/widgets.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/jquery.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/google-code-prettify/prettify.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-transition.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-alert.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-modal.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-dropdown.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-scrollspy.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-tab.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-tooltip.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-popover.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-button.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-collapse.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-carousel.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-typeahead.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-affix.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/application.js\"></script>\r\n\r\n<script
+        type=\"text/javascript\">\r\n \r\n  var _gaq = _gaq || [];\r\n  _gaq.push(['_setAccount',
+        'UA-19354627-1']);\r\n  _gaq.push(['_trackPageview']);\r\n \r\n  (function()
+        {\r\n    var ga = document.createElement('script'); ga.type = 'text/javascript';
+        ga.async = true;\r\n    ga.src = ('https:' == document.location.protocol ?
+        'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\r\n    var
+        s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,
+        s);\r\n  })();\r\n \r\n</script>\r\n<script type=\"text/javascript\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/federated-analytics.js?agency=unspecified:cio.gov&pua=UA-46219405-1\"></script>\r\n\r\n
+        \ </body>\r\n</html>"
+    http_version: 
+  recorded_at: Mon, 14 Apr 2014 19:51:38 GMT
+- request:
+    method: get
+    uri: https://cio.gov/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 14 Apr 2014 19:51:38 GMT
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=43200
+      X-Powered-By:
+      - PHP/5.3.3
+      Expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+      Pragma:
+      - no-cache
+      X-Pingback:
+      - https://cio.gov/xmlrpc.php
+      Content-Type:
+      - text/html; charset=UTF-8
+      P3p:
+      - CP="CAO DSP CURa ADMa DEVa TAIa PSAa PSDa IVAi IVDi HISa OUR IND PHY ONL UNI
+        COM NAV INT CNT STA LOC GOV"
+      Set-Cookie:
+      - PHPSESSID=r8fnnja7aavbdn6sjv2t39mf12; path=/; Secure
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "<!DOCTYPE html>\r\n\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta
+        charset=\"utf-8\">\r\n    <title>CIO Council | Chief Information Officers
+        Council</title>\r\n    <meta name=\"viewport\" content=\"width=device-width,
+        initial-scale=1.0\">\r\n    \r\n    <meta name=\"author\" content=\"\">\r\n\r\n
+        \   <!-- Le styles -->\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/fonts/stylesheet.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/bootstrap.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/bootstrap-responsive.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/css/docs.css\"
+        rel=\"stylesheet\">\r\n    <link href=\"https://cio.gov/wp-content/themes/twentyten/assets/js/google-code-prettify/prettify.css\"
+        rel=\"stylesheet\">\r\n\r\n    <!-- Le HTML5 shim, for IE6-8 support of HTML5
+        elements -->\r\n    <!--[if lt IE 9]>\r\n      <script src=\"https://html5shim.googlecode.com/svn/trunk/html5.js\"></script>\r\n<style>\r\n.cont-side-bar
+        { margin-right: 0px; }\r\n.side-bar { margin-right: 0px; }\r\n.nav-menu-side-bar
+        { margin-right: 0px; }\r\n</style>\r\n    <![endif]-->\r\n\r\n    <!-- Le
+        fav and touch icons -->\r\n    <link rel=\"shortcut icon\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/favicon.ico\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"144x144\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-144-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"114x114\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-114-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" sizes=\"72x72\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-72-precomposed.png\">\r\n
+        \   <link rel=\"apple-touch-icon-precomposed\" href=\"https://cio.gov/wp-content/themes/twentyten/assets/ico/apple-touch-icon-57-precomposed.png\">\r\n\t<script
+        type='text/javascript' src='https://cio.gov/wp-content/themes/twentyten/jquery-1.8.0.min.js'></script>
+        \r\n<!--\r\n<script type='text/javascript' src='/ui/jquery.ui.core.js'></script>\r\n<script
+        type='text/javascript' src='/ui/jquery.ui.widget.js'></script>\r\n<script
+        type='text/javascript' src='/ui/jquery.ui.datepicker.js'></script>\r\n<link
+        rel='stylesheet' id='datepickermystyle-css'  href='/redmond/jquery-ui-1.8.23.custom.css'
+        type='text/css' media='all' />\r\n--> \r\n  \r\n\t\t \r\n <SCRIPT TYPE=\"text/javascript\">\r\n\r\n\r\n
+        \ \r\n    // Change this URL to be that of your own website  \r\n    var base_url
+        = \"https://cio.gov\";  \r\n    var base_url_length = base_url.length;  \r\n
+        \     var $jy = jQuery.noConflict(true);\r\n \r\n    $jy(document).ready(function()
+        {  \r\n        $jy(\"a\").click(function() {  \r\n  \t\t\r\n            var
+        link_location = $jy(this).attr('href'); \r\n             if(link_location!=\"\"){\r\n
+        \           // if the link clicked is external  \r\n            if (link_location.indexOf(\"http://\"
+        || \"https://\")!=-1 && link_location.substr(0, base_url_length)!=base_url)
+        {  \r\n              \r\n                /* DO ACTION HERE */  \r\n                var
+        answer = confirm(\"You are now leaving CIO.gov.\");  \r\n              \tif
+        (!answer) {\r\n\t\t\treturn false;\r\n\t\t}              \r\n            }
+        \ \r\n          }\r\n        });  \r\n      \r\n    });  \r\n    \r\n</SCRIPT>\r\n
+        <script language=\"JavaScript\" src=\"https://cio.gov/wp-content/themes/twentyten/htmlDatePicker.js\"
+        type=\"text/javascript\"></script>\r\n\t\t<link href=\"https://cio.gov/wp-content/themes/twentyten/htmlDatePicker.css\"
+        rel=\"stylesheet\" />\r\n\r\n\r\n\r\n\r\n\r\n<link rel=\"pingback\" href=\"https://cio.gov/xmlrpc.php\"
+        />\r\n<style type='text/css'>\r\n\t\t.stpulldown-gradient\r\n\t\t{\r\n\t\t\tbackground:
+        #E1E1E1;\r\n\t\t\tbackground: -moz-linear-gradient(top, #E1E1E1 0%, #A7A7A7
+        100%); /* firefox */\r\n\t\t\tbackground: -webkit-gradient(linear, left top,
+        left bottom, color-stop(0%,#E1E1E1), color-stop(100%,#A7A7A7)); /* webkit
+        */\r\n\t\t\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E1E1E1',
+        endColorstr='#A7A7A7',GradientType=0 ); /* ie */\r\n\t\t\tbackground: -o-linear-gradient(top,
+        #E1E1E1 0%,#A7A7A7 100%); /* opera */\r\n\t\t\tcolor: #636363;\r\n\t\t}\r\n\t\t#stpulldown
+        .stpulldown-logo\r\n\t\t{\r\n\t\t\theight: 40px;\r\n\t\t\twidth: 300px;\r\n\t\t\tmargin-left:
+        20px;\r\n\t\t\tmargin-top: 5px;\r\n\t\t\tbackground:url('') no-repeat;\r\n\t\t}\n</style>\n\n<!--
+        This site is optimized with the Yoast WordPress SEO plugin v1.4.18 - http://yoast.com/wordpress/seo/
+        -->\n<link rel=\"canonical\" href=\"https://cio.gov/\" />\n<link rel=\"next\"
+        href=\"https://cio.gov/page/2/\" />\n<meta property=\"og:locale\" content=\"en_US\"/>\n<meta
+        property=\"og:type\" content=\"website\"/>\n<meta property=\"og:title\" content=\"CIO
+        Council - Chief Information Officers Council\"/>\n<meta property=\"og:url\"
+        content=\"https://cio.gov/\"/>\n<meta property=\"og:site_name\" content=\"CIO
+        Council\"/>\n<!-- / Yoast WordPress SEO plugin. -->\n\n<link rel=\"alternate\"
+        type=\"application/rss+xml\" title=\"CIO Council &raquo; Feed\" href=\"https://cio.gov/feed/\"
+        />\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"CIO Council
+        &raquo; Comments Feed\" href=\"https://cio.gov/comments/feed/\" />\n<link
+        rel='stylesheet' id='contact-form-7-css'  href='https://cio.gov/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=3.5.3'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='mystyle-css'  href='https://cio.gov/wp-content/plugins/my-slider/css/nivo-slider.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='default-css'  href='https://cio.gov/wp-content/plugins/my-slider/css/default.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='thickbox-css'  href='https://cio.gov/wp-includes/js/thickbox/thickbox.css?ver=20121105'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='PW_Archives_CSS-css'
+        \ href='https://cio.gov/wp-content/plugins/pw-archives/pw-archives.css?ver=3.5.2'
+        type='text/css' media='all' />\n<link rel='stylesheet' id='wp_dlmp_styles-css'
+        \ href='https://cio.gov/wp-content/plugins/download-monitor/page-addon/styles.css?ver=3.5.2'
+        type='text/css' media='all' />\n<script type='text/javascript' src='https://cio.gov/wp-includes/js/jquery/jquery.js?ver=1.8.3'></script>\n<script
+        type='text/javascript' src='https://cio.gov/wp-content/plugins/my-slider/js/jquery.nivo.slider.js?ver=3.5.2'></script>\n<script
+        type='text/javascript' src='https://cio.gov/wp-includes/js/json2.min.js?ver=2011-02-23'></script>\n<link
+        rel=\"EditURI\" type=\"application/rsd+xml\" title=\"RSD\" href=\"https://cio.gov/xmlrpc.php?rsd\"
+        />\n<link rel=\"wlwmanifest\" type=\"application/wlwmanifest+xml\" href=\"https://cio.gov/wp-includes/wlwmanifest.xml\"
+        /> \n<meta name=\"generator\" content=\"WordPress 3.5.2\" />\n\t<style type='text/css'>\n\t.download-info
+        .download-button {\n\t\tbackground-image: url(https://cio.gov/wp-content/plugins/download-monitor/page-addon/downloadbutton.gif);\n\t}\n\t.download-info
+        .more-button {\n\t\tbackground-image: url(https://cio.gov/wp-content/plugins/download-monitor/page-addon/morebutton.gif);\n\t}\n\t</style>\n<script
+        charset=\"utf-8\" type=\"text/javascript\">var switchTo5x=true;</script><script
+        charset=\"utf-8\" type=\"text/javascript\" src=\"/includes/buttons.js\"></script><script
+        type=\"text/javascript\">stLight.options({publisher:'wp.e1779ca7-74fe-4e4e-9343-3c7e45755e74'});var
+        st_type='wordpress3.4.2';</script>\r\n  </head>\r\n  <body data-spy=\"scroll\"
+        data-target=\".bs-docs-sidebar\"> \r\n\r\n<div class=\"main-head\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid  main-head-side\">\r\n
+        \       \t<div class=\"span8 header-left\"><a href=\"https://cio.gov\"><img
+        src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/logo.png\" alt=\"CIO
+        Council - Chief Information Officers Council - Beta\" border=\"0\" title=\"CIO
+        Council - Chief Information Officers Council - Beta\"/></a></div>\r\n            <div
+        class=\"span4 side-bar\">\r\n            \t<a href=\"https://cio.gov/cio-feeds/\"><img
+        class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/rss-icon.png\"/><h4>
+        SUBSCRIBE by RSS</h4></a>\r\n                <a href=\"https://twitter.com/ciodotgov\"
+        target=\"_blank\"><img class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/twitter-icon.png\"/><h4>FOLLOW
+        </h4></a>\r\n\r\n                <a href=\"https://cio.gov/feedback/\"><img
+        class=\"head-icon\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/mail-icon.png\"/><h4>FEEDBACK
+        </h4></a>\r\n          </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<!--
+        nav-mnu ================================================== -->\r\n<div class=\"nav-menu\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid nav-menu-side\">\r\n
+        \       \t<div class=\"span8\">\r\n            \t\r\n                <div
+        class=\"navbar inner-tab\">\r\n                      <div style=\"width: auto;\"
+        class=\"container\">\r\n                        <a data-target=\".nav-collapse\"
+        data-toggle=\"collapse\" class=\"btn btn-navbar\">\r\n                          <span
+        class=\"icon-bar\"></span>\r\n                          <span class=\"icon-bar\"></span>\r\n
+        \                         <span class=\"icon-bar\"></span>\r\n                        </a>\r\n
+        \                       <div class=\"nav-collapse\">\r\n                         \r\n<ul
+        id=\"menu-cio-menu\" class=\"nav span12\"><li id=\"menu-item-1409\" class=\"menu-item
+        menu-item-type-post_type menu-item-object-page menu-item-1409\"><a href=\"https://cio.gov/about/\">About</a>\n<ul
+        class=\"sub-menu\">\n\t<li id=\"menu-item-1886\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1886\"><a href=\"https://cio.gov/about/leadership/\">Leadership</a></li>\n\t<li
+        id=\"menu-item-1887\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1887\"><a href=\"https://cio.gov/about/members/\">Members</a></li>\n\t<li
+        id=\"menu-item-1885\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1885\"><a href=\"https://cio.gov/about/groups/\">Groups</a></li>\n</ul>\n</li>\n<li
+        id=\"menu-item-1169\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1169\"><a href=\"https://cio.gov/agenda/\">Agenda</a>\n<ul class=\"sub-menu\">\n\t<li
+        id=\"menu-item-1892\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1892\"><a href=\"https://cio.gov/innovate/\">Innovate</a></li>\n\t<li
+        id=\"menu-item-1891\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1891\"><a href=\"https://cio.gov/deliver/\">Deliver</a></li>\n\t<li
+        id=\"menu-item-1890\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1890\"><a href=\"https://cio.gov/protect/\">Protect</a></li>\n\t<li
+        id=\"menu-item-1893\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1893\"><a href=\"https://cio.gov/national-initiatives/\">National
+        Initiatives</a></li>\n</ul>\n</li>\n<li id=\"menu-item-1165\" class=\"menu-item
+        menu-item-type-post_type menu-item-object-page menu-item-1165\"><a href=\"https://cio.gov/cioc-blog/\">BLOG</a></li>\n<li
+        id=\"menu-item-1396\" class=\"menu-item menu-item-type-post_type menu-item-object-page
+        menu-item-1396\"><a href=\"https://cio.gov/resources/\">Resources</a>\n<ul
+        class=\"sub-menu\">\n\t<li id=\"menu-item-1888\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1888\"><a href=\"https://cio.gov/resources/document-library/\">Document
+        Library</a></li>\n\t<li id=\"menu-item-1889\" class=\"menu-item menu-item-type-post_type
+        menu-item-object-page menu-item-1889\"><a href=\"https://cio.gov/resources/multimedia/\">Multimedia</a></li>\n</ul>\n</li>\n</ul>
+        \r\n                        </div><!-- /.nav-collapse -->\r\n                      </div>\r\n
+        \                 </div>\r\n                \t\r\n            </div>\r\n            <div
+        class=\"span4 nav-menu-side-bar\"> \r\n\r\n<form method=\"get\" id=\"searchform\"
+        action=\"https://cio.gov\">\r\n<label class=\"hidden\" for=\"query\">Search
+        site for:</label>\r\n<div><input type=\"text\" value='' name=\"query\" id=\"query\"
+        />\r\n<input type=\"hidden\" name=\"s\" value=\"1\" />\r\n<input type=\"submit\"
+        id=\"searchsubmit\" value=\"\" class=\"search\"/>\r\n</div>\r\n</form>\r\n\r\n
+        \           \t \r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\t\t<!--
+        banner ================================================== -->\r\n<div class=\"banner\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid\">\r\n     <!--   \t<div
+        class=\"span8\">\r\n            \t<img src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/banner-img.jpg\"
+        alt=\"\" border=\"0\"/>\r\n            </div>\r\n            <div class=\"span4
+        banner-side-bar\">\r\n            \t<h2>Roadmap Toward IPv6 \x03Adoption for
+        the Federal \x03Government</h2>\r\n                <p>In September 2010, OMB
+        issued a memo requiring federal agencies to transition to Internet Protocol</p>\r\n
+        \               <a href=\"#\" class=\"more\">  Continued </a>\r\n            </div>-->\r\n\t\t\t<div
+        class=\"slider-wrapper theme-default span12\">\r\n            <div id=\"slider1\"
+        class=\"nivoSlider\"><a href=\"https://cio.gov/building-a-21st-century-government/digital-strategy/\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider1.jpg\"
+        title=\"#desc_1\" /></a><a href=\"https://cio.gov/president-obama-signs-executive-order-on-open-data/\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider2.jpg\"
+        title=\"#desc_2\" /></a><a href=\"http://www.itdashboard.gov/\" target=\"_blank\"><img
+        src=\"https://cio.gov/wp-content/uploads/2013/12/slider4.png\" title=\"#desc_4\"
+        /></a><a href=\"https://cio.gov/wp-content/uploads/downloads/2012/09/2012_IPv6_Roadmap_FINAL_20120712.pdf\"
+        target=\"_blank\"><img src=\"https://cio.gov/wp-content/uploads/2013/12/slider5.jpg\"
+        title=\"#desc_5\" /></a>\t</div><div id=\"desc_1\" class=\"nivo-html-caption\"><h2>One
+        Year Anniversary of the Digital Government Strategy</h2>\r\n                <p>May
+        23 marks the one year anniversary of the Digital Government Strategy. As the
+        final deadline passes, the Federal CIO Council has released several products
+        to facilitate adoption of mobile technology within the Federal Government</p>\r\n
+        \               <a href=\"https://cio.gov/building-a-21st-century-government/digital-strategy/\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_2\" class=\"nivo-html-caption\"><h2>President
+        Obama Releases Open Data Rules </h2>\r\n                <p>On May 9, President
+        Obama signed an Executive Order making open and machine readable data the
+        new default for Government information.</p>\r\n                <a href=\"https://cio.gov/president-obama-signs-executive-order-on-open-data/\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_3\" class=\"nivo-html-caption\">
+        \r\n            </div><div id=\"desc_4\" class=\"nivo-html-caption\"><h2>Federal
+        IT Dashboard</h2>\r\n<p>The IT Dashboard is a website enabling federal agencies,
+        industry, the general public and other stakeholders to view details of federal
+        information technology investments.</p>\r\n<p><a href=\"http://www.itdashboard.gov/\">Learn
+        More</a></p> \r\n            </div><div id=\"desc_5\" class=\"nivo-html-caption\"><h2>Roadmap
+        Toward IPv6 Adoption</h2>\r\n                <p>Read the updated guidance
+        and best practices for agencies transitioning to the next generation Internet.</p>\r\n
+        \               <a href=\"/wp-content/uploads/downloads/2012/09/2012_IPv6_Roadmap_FINAL_20120712.pdf\"
+        class=\"more\">Learn More</a> \r\n            </div><div id=\"desc_6\" class=\"nivo-html-caption\">
+        \r\n            </div></div>\r\n\t\t\t<script type=\"text/javascript\">\r\n\t\t\tvar
+        $jw = jQuery.noConflict();\r\n    $jw(window).load(function() {\r\n        $jw(\"#slider1\").nivoSlider({\r\n\t\teffect:
+        \"fade\",\r\n\t\t animSpeed: 500, \r\n        pauseTime: 8000 \r\n\t\t});\r\n
+        \   });\r\n    </script>\r\n\t\t\t        </div>\r\n    </div>\r\n</div>\r\n\r\n<!--
+        cont ================================================== -->\r\n<div class=\"cont\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid cont-side\" style=\"min-height:640px;\">\r\n
+        \       \t<div class=\"span8 cont-main\">\r\n                <div class=\"row-fluid\">\r\n
+        \                \r\n                <div class=\"cont-head home\">\r\n                        \t\r\n
+        \                           <h2>Highlights </h2>\r\n                        </div>\r\n
+        \             </div>\r\n                <div class=\"row-fluid\">\r\n                <div
+        class=\"span6 cont-section\">\r\n                    \t  <ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"widget_sp_image-10\" class=\"widget-container widget_sp_image\"><a href=\"http://www.whitehouse.gov/sites/default/files/omb/assets/egov_docs/omb_presidents_it_budget_for_fy_2015_summary_chart.pdf\"
+        target=\"_self\" class=\"widget_sp_image-image-link\" title=\"Dollar Image\"><img
+        width=\"326\" height=\"108\" alt=\"\" class=\"attachment-full\" style=\"max-width:
+        100%;\" src=\"https://cio.gov/wp-content/uploads/2012/09/dollar-326x1084.jpg\"
+        /></a><div class=\"widget_sp_image-description\" ><h3><a href=\"http://www.whitehouse.gov/sites/default/files/omb/assets/egov_docs/omb_presidents_it_budget_for_fy_2015_summary_chart.pdf\">FY
+        2015 IT Budget Request</a></h3>\n</div></div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t</li>\r\n
+        \                   </div>\r\n                    <div class=\"span6 cont-section\">\r\n\t\t\t\t\t
+        \ <ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div id=\"widget_sp_image-9\"
+        class=\"widget-container widget_sp_image\"><img width=\"328\" height=\"109\"
+        alt=\"\" class=\"attachment-full\" style=\"max-width: 100%;\" src=\"https://cio.gov/wp-content/uploads/2014/03/328x109socialmedia.jpg\"
+        /><div class=\"widget_sp_image-description\" ><h3><a href=\"https://cio.gov/trendingtopic-privacy-best-practices-for-socialmedia/\">Privacy
+        Best Practices for Social Media</a></h3>\n</div></div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t</li>\r\n
+        \               </div>  \t\r\n            </div>\r\n\t\t\t</div>\r\n            <div
+        class=\"span4 cont-side-bar\">\r\n            <div class=\"cont-side-bar-main\">\r\n
+        \                   <div class=\"row-fluid\">\r\n                        <div
+        class=\"cont-head home\">\r\n                        \t<div class=\"view-all\">\r\n
+        \                           \t<a href=\"./cioc-blog\"> View all</a>\r\n                            </div>\r\n
+        \                           <h2> CIOC Blog </h2>\r\n                        </div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div
+        class=\"row-fluid\">\r\n\t\t\t\t\t\t  \t\t\t\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 11, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/nist-releases-appvet-open-source-mobile-app-vetting-system/\">NIST
+        Releases AppVet, an Open Source Mobile App Vetting System</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 04, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/nists-intersection-cloud-mobility-workshop-video/\">NIST&#8217;s
+        Intersection of Cloud and Mobility Workshop Video</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n<div class=\"home-blog\">\r\n\r\n\t<div
+        class=\"span3\"><img src=\"https://cio.gov/wp-content/uploads/userphoto/6.thumbnail.png\"
+        alt=\"CIO Council Operations\" width=\"80\" height=\"80\" class=\"photo\"
+        /></div>\r\n\t  <div class=\"span9\"> \r\n                        \t<span
+        class=\"blog-date\">April 03, 2014</span><br>\r\n\t\t\t\t\t\t\t<span class=\"blog-head\"><a
+        href=\"https://cio.gov/digitalgovs-digital-analytics-program-dap-provides-oceans-data/\">DigitalGov&#8217;s
+        Digital Analytics Program (DAP) Provides Oceans of Data</a></span><br>\r\n\t\t\t\t\t\t\t<p>CIO
+        Council Operations </p>\r\n \r\n    </div>  \r\n</div>\r\n \r\n\r\n\r\n\r\n
+        \  \r\n\r\n                </div>\r\n            </div>\r\n        </div>\r\n
+        \   </div>\r\n</div>\r\n</div>\r\n\r\n\t<!-- footer ==================================================
+        -->\r\n<div class=\"footer\">\r\n\t<div class=\"container\">\r\n    \t<div
+        class=\"row-fluid\">\r\n        \t<div class=\"span3 cont-box\"> \r\n            \t\t\t\t\t\t\t<div
+        id=\"first\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"flexipages-4\" class=\"widget-container flexipages_widget\"><h3 class=\"widget-title\">About</h3>\n<ul>\n\t<li
+        class=\"page_item page-item-633\"><a href=\"https://cio.gov/about/leadership/\"
+        title=\"Leadership\">Leadership</a></li>\n\t<li class=\"page_item page-item-379\"><a
+        href=\"https://cio.gov/about/members/\" title=\"Members\">Members</a></li>\n\t<li
+        class=\"page_item page-item-309\"><a href=\"https://cio.gov/about/groups/\"
+        title=\"Groups\">Groups</a></li>\n</ul>\n</div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!--
+        #first .widget-area -->\r\n\t\t\t            </div>\r\n            <div class=\"span3
+        cont-box\">\r\n            \t    \r\n\t\t\t\t\t\t\t<div id=\"first\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul
+        class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div id=\"flexipages-15\" class=\"widget-container
+        flexipages_widget\"><h3 class=\"widget-title\">Agenda</h3>\n<ul>\n\t<li class=\"page_item
+        page-item-1285\"><a href=\"https://cio.gov/innovate/\" title=\"Innovate -
+        Innovating for the American People\">Innovate - Innovating for the American
+        People</a></li>\n\t<li class=\"page_item page-item-1292\"><a href=\"https://cio.gov/deliver/\"
+        title=\"Deliver - Maximizing the Value of Federal IT\">Deliver - Maximizing
+        the Value of Federal IT</a></li>\n\t<li class=\"page_item page-item-1294\"><a
+        href=\"https://cio.gov/protect/\" title=\"Protect - Advancing our Nation's
+        Cybersecurity\">Protect - Advancing our Nation's Cybersecurity</a></li>\n\t<li
+        class=\"page_item page-item-1296\"><a href=\"https://cio.gov/national-initiatives/\"
+        title=\"National Initiatives\">National Initiatives</a></li>\n</ul>\n</div>
+        \r\n\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!-- #first .widget-area
+        -->\r\n\t\t\t            </div>\r\n            <div class=\"span3 cont-box\">\r\n
+        \           \t\t\t\t\t\t\t\t\t<div id=\"third\" class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t\t<ul
+        class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t\t<div id=\"nav_menu-2\" class=\"widget-container
+        widget_nav_menu\"><h3 class=\"widget-title\">CIOC Blog</h3><div class=\"menu-blog-archives-container\"><ul
+        id=\"menu-blog-archives\" class=\"menu\"><li id=\"menu-item-4092\" class=\"menu-item
+        menu-item-type-custom menu-item-object-custom menu-item-4092\"><a href=\"https://cio.gov/2014/\">Current
+        Year 2014</a></li>\n<li id=\"menu-item-3627\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-3627\"><a href=\"https://cio.gov/2013/\">Archives
+        2013</a></li>\n<li id=\"menu-item-1937\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1937\"><a href=\"https://cio.gov/2012/\">Archives
+        2012</a></li>\n<li id=\"menu-item-1938\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1938\"><a href=\"https://cio.gov/2011/\">Archives
+        2011</a></li>\n<li id=\"menu-item-1939\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1939\"><a href=\"https://cio.gov/2010/\">Archives
+        2010</a></li>\n<li id=\"menu-item-1940\" class=\"menu-item menu-item-type-custom
+        menu-item-object-custom menu-item-1940\"><a href=\"https://cio.gov/2009/\">Archives
+        2009</a></li>\n</ul></div></div>\t\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t\t</div><!--
+        #third .widget-area -->\r\n\t\t\t\t            </div>\r\n            <div
+        class=\"span3 cont-box\">\r\n            \t\t\t\t\t\t\t<div id=\"fourth\"
+        class=\"widget-area\">\r\n\t\t\t\t\t\t\t\t<ul class=\"list-style\">\r\n\t\t\t\t\t\t\t\t\t<div
+        id=\"flexipages-6\" class=\"widget-container flexipages_widget\"><h3 class=\"widget-title\">Resources</h3>\n<ul>\n\t<li
+        class=\"page_item page-item-1386\"><a href=\"https://cio.gov/resources/document-library/\"
+        title=\"Document Library\">Document Library</a></li>\n\t<li class=\"page_item
+        page-item-1011\"><a href=\"https://cio.gov/resources/multimedia/\" title=\"Multimedia\">Multimedia</a></li>\n</ul>\n</div>\t\t\t\t\t\t\t\t</ul>\r\n\t\t\t\t\t\t\t</div><!--
+        #fourth .widget-area -->\r\n\t\t\t            </div>\r\n           <!--   <div
+        class=\"span3 cont-box\">\r\n                        </div> #.widget-area
+        -->\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<!-- footer-bottom
+        ================================================== -->\r\n<div class=\"footer-bottom\">\r\n\t<div
+        class=\"container\">\r\n    \t<div class=\"row-fluid\">\r\n        \t<div
+        class=\"span12\">\r\n            \t<a href=\"https://cio.gov\"><img src=\"https://cio.gov/wp-content/themes/twentyten/assets/img/logo.png\"
+        \ alt=\"CIO Council\" border=\"0\" title=\"CIO Council\" border=\"0\"/></a>\r\n
+        \               <p>Copyright &copy;&nbsp;\r\n\t\t\t\t<SCRIPT LANGUAGE=\"JavaScript\">\r\n\t\t\t\t\t//
+        JKH for the copyright notice, we'll report the full year\r\n\t\t\t\t\tdocument.write(new
+        Date().getFullYear());\r\n\t\t\t\t</SCRIPT>\t\t\t\t\r\n\t\t\t\t&nbsp;Chief
+        Information Officers Council, All Rights Reserved &bull; <a href=\"https://cio.gov/about/privacy-statement/\"/>Privacy
+        Policy</a> &bull; <a href=\"https://cio.gov/about/accessibility-statement/\">Accessibility
+        Statement</a> &bull; <a href=\"http://www.usa.gov/\" target=\"_blank\">USA.GOV</a></p>\r\n
+        \           </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<!--
+        ================================================== -->\r\n\r\n\r\n    <!--
+        Le javascript\r\n    ================================================== -->\r\n
+        \   <!-- Placed at the end of the document so the pages load faster -->\r\n
+        \   <script type=\"text/javascript\" src=\"https://cio.gov/includes/widgets.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/jquery.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/google-code-prettify/prettify.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-transition.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-alert.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-modal.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-dropdown.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-scrollspy.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-tab.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-tooltip.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-popover.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-button.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-collapse.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-carousel.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-typeahead.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/bootstrap-affix.js\"></script>\r\n
+        \   <script src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/application.js\"></script>\r\n\r\n<script
+        type=\"text/javascript\">\r\n \r\n  var _gaq = _gaq || [];\r\n  _gaq.push(['_setAccount',
+        'UA-19354627-1']);\r\n  _gaq.push(['_trackPageview']);\r\n \r\n  (function()
+        {\r\n    var ga = document.createElement('script'); ga.type = 'text/javascript';
+        ga.async = true;\r\n    ga.src = ('https:' == document.location.protocol ?
+        'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\r\n    var
+        s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,
+        s);\r\n  })();\r\n \r\n</script>\r\n<script type=\"text/javascript\" src=\"https://cio.gov/wp-content/themes/twentyten/assets/js/federated-analytics.js?agency=unspecified:cio.gov&pua=UA-46219405-1\"></script>\r\n\r\n
+        \ </body>\r\n</html>"
+    http_version: 
+  recorded_at: Mon, 14 Apr 2014 19:51:38 GMT
+recorded_with: VCR 2.9.0

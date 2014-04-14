@@ -80,7 +80,16 @@ class SiteInspector
   end
 
   def enforce_https?
-    @enforce_https ||= https? && Addressable::URI.parse(request(false, !non_www?).effective_url).scheme == "https"
+    return false unless https?
+    @enforce_https ||= begin
+      response = request(false, !non_www?)
+      if response.effective_url
+        Addressable::URI.parse(response.effective_url).scheme == "https"
+      else
+        puts response.inspect
+        false
+      end
+    end
   end
 
   def non_www?
