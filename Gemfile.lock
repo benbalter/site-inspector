@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     site-inspector (0.0.1)
+      dnsruby
       gman
-      net-dns
       nokogiri
       public_suffix
       sniffles
@@ -31,6 +31,7 @@ GEM
     coffee-script-source (1.7.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    dnsruby (1.54)
     ethon (0.7.0)
       ffi (>= 1.3.0)
     execjs (2.0.2)
@@ -49,7 +50,6 @@ GEM
     method_source (0.8.2)
     mini_portile (0.5.3)
     minitest (5.3.2)
-    net-dns (0.8.0)
     nio4r (1.0.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)

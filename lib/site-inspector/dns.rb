@@ -1,14 +1,23 @@
 class SiteInspector
+
+  def resolver
+    @resolver ||= Dnsruby::Resolver.new
+  end
+
+  def query(type="ANY")
+    resolver.query(domain.to_s, type).answer
+  end
+
   def dns
-    @dns ||= Net::DNS::Resolver.start(domain.to_s).answer
+    @dns ||= query
   end
 
   def dnsec?
-    false #dns.any? { |answer| answer.class == Net::DNS::RR::DNSKEY }
+    @dnssec ||= dns.any? { |record| record.type == "DNSKEY" }
   end
 
   def ipv6?
-    dns.any? { |answer| answer.class == Net::DNS::RR::AAAA }
+    @ipv6 ||= dns.any? { |record| record.type == "AAAA" }
   end
 
   def detect_by_hostname(type)
@@ -39,7 +48,7 @@ class SiteInspector
   end
 
   def google_apps?
-    @google ||= Net::DNS::Resolver.start(domain.to_s, "MX").answer.any? { |record|
+    @google ||= query("MX").answer.any? { |record|
       record.exchange =~ /google(mail)?\.com\.?$/
     }
   end

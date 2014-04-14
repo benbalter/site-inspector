@@ -3,8 +3,7 @@ require 'open-uri'
 require 'public_suffix'
 require 'gman'
 require 'net/http'
-require "net/dns"
-require 'net/dns/resolver'
+require "dnsruby"
 require 'yaml'
 require 'sniffles'
 require "addressable/uri"
