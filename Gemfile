@@ -7,3 +7,4 @@ gemspec
 gem 'sinatra'
 gem 'rack-ssl-enforcer'
 gem 'rack-coffee'
+gem 'guard-rake'
