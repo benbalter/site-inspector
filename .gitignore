@@ -1,5 +1,6 @@
 .bundle
 /*.gem
+vendor
 
 #bower bloat
 public/vendor/bootstrap/grunt
