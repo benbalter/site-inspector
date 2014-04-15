@@ -9,10 +9,12 @@ require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
 require 'json'
-require File.expand_path './site-inspector/cache',      File.dirname(__FILE__)
-require File.expand_path './site-inspector/sniffer',    File.dirname(__FILE__)
-require File.expand_path './site-inspector/dns',        File.dirname(__FILE__)
-require File.expand_path './site-inspector/compliance', File.dirname(__FILE__)
+
+require_relative 'site-inspector/cache'
+require_relative 'site-inspector/sniffer'
+require_relative 'site-inspector/dns'
+require_relative 'site-inspector/compliance'
+require_relative 'site-inspector/headers'
 
 class SiteInspector
 
