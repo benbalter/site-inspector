@@ -70,6 +70,8 @@ GEM
       slop (~> 3.4)
     public_suffix (1.4.2)
     rack (1.5.2)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-coffee (1.0.3)
       coffee-script
       rack
@@ -120,6 +122,7 @@ DEPENDENCIES
   bundler
   guard-rake
   pry
+  rack-cache
   rack-coffee
   rack-ssl-enforcer
   rake

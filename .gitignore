@@ -2,6 +2,9 @@
 /*.gem
 vendor
 
+# rack-cache
+cache
+
 #bower bloat
 public/vendor/bootstrap/grunt
 public/vendor/bootstrap/less

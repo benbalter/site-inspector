@@ -7,4 +7,8 @@ gemspec
 gem 'sinatra'
 gem 'rack-ssl-enforcer'
 gem 'rack-coffee'
-gem 'guard-rake'
+gem 'rack-cache'
+
+group :development do
+  gem 'guard-rake'
+end
