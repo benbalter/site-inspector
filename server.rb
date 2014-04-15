@@ -10,10 +10,12 @@ module SiteInspectorServer
 
     use Rack::Coffee, root: 'public', urls: '/assets/javascripts'
 
-    use Rack::Cache,
-        :verbose => true,
-        :metastore => "file:cache/meta",
-        :entitystore => "file:cache/body"
+    configure :development do
+      use Rack::Cache,
+          :verbose => true,
+          :metastore => "file:cache/meta",
+          :entitystore => "file:cache/body"
+    end
 
     use Rack::Session::Cookie, {
       :http_only => true,
@@ -34,6 +36,7 @@ module SiteInspectorServer
     end
 
     get "/domains/:domain.json" do
+      cache_control :public, max_age: GLOBAL_CACHE_TIMEOUT
       content_type :json
       site = SiteInspector.new params[:domain]
       site.to_json
