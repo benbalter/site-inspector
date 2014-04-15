@@ -119,7 +119,12 @@ class SiteInspector
       :advertising => advertising,
       :slash_data => slash_data?,
       :slash_developer => slash_developer?,
-      :data_dot_json => data_dot_json?
+      :data_dot_json => data_dot_json?,
+      :click_jacking_protection => click_jacking_protection?,
+      :content_security_policy => content_security_policy?,
+      :xss_protection => xss_protection?,
+      :secure_cookies => secure_cookies?,
+      :strict_transport_security => strict_transport_security?
     }.to_json
   end
 end
