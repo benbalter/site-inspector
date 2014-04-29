@@ -130,9 +130,11 @@
       <tr>
         <th>XSS protection</th><td class="<%= site.xss_protection? %>"><%= site.xss_protection? %></td>
       </tr>
+      <% if site.has_cookies? %>
       <tr>
         <th>Secure cookies</th><td class="<%= site.secure_cookies? %>"><%= site.secure_cookies? %></td>
       </tr>
+      <% end %>
       <tr>
         <th>Strict transport security (HSTS)</th><td class="<%= site.strict_transport_security? %>"><%= site.strict_transport_security? %></td>
       </tr>

@@ -7,11 +7,15 @@ class SiteInspector
     response.headers["X-XSS-Protection"] == "1; mode=block"
   end
 
+  def has_cookies?
+    response.headers.include? "Set-Cookie"
+  end
+
   def secure_cookies?
-    return false if !response.headers.include? "Set-Cookie"
-    cookie = response.headers["Set-Cookie"][0]
-    marked_secure = !!(cookie =~ /secure/)
-    marked_http_only = !!(cookie =~ /HttpOnly/)
+    return nil if !has_cookies?
+    cookie = response.headers["Set-Cookie"]
+    marked_secure = !!(cookie.downcase =~ /secure/)
+    marked_http_only = !!(cookie.downcase =~ /HttpOnly/)
     marked_secure and marked_http_only
   end
 
