@@ -1,11 +1,21 @@
 require 'sinatra'
 require 'rack/coffee'
 require 'site-inspector'
+require 'rack-cache'
+
+GLOBAL_CACHE_TIMEOUT = 30
 
 module SiteInspectorServer
   class App < Sinatra::Base
 
     use Rack::Coffee, root: 'public', urls: '/assets/javascripts'
+
+    configure :development do
+      use Rack::Cache,
+          :verbose => true,
+          :metastore => "file:cache/meta",
+          :entitystore => "file:cache/body"
+    end
 
     use Rack::Session::Cookie, {
       :http_only => true,
@@ -26,12 +36,14 @@ module SiteInspectorServer
     end
 
     get "/domains/:domain.json" do
+      cache_control :public, max_age: GLOBAL_CACHE_TIMEOUT
       content_type :json
       site = SiteInspector.new params[:domain]
       site.to_json
     end
 
     get "/domains/:domain" do
+      cache_control :public, max_age: GLOBAL_CACHE_TIMEOUT
       site = SiteInspector.new params[:domain]
       render_template :domain, site: site
     end

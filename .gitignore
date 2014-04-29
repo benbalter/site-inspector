@@ -1,5 +1,9 @@
 .bundle
 /*.gem
+vendor
+
+# rack-cache
+cache
 
 #bower bloat
 public/vendor/bootstrap/grunt

@@ -21,7 +21,4 @@ class SiteInspector
     sniff :advertising
   end
 
-  def server
-    response.headers["Server"]
-  end
 end
