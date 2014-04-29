@@ -14,6 +14,7 @@ class SiteInspector
   def secure_cookies?
     return nil if !has_cookies?
     cookie = response.headers["Set-Cookie"]
+    cookie = cookie.first if cookie.is_a?(Array)
     marked_secure = !!(cookie.downcase =~ /secure/)
     marked_http_only = !!(cookie.downcase =~ /HttpOnly/)
     marked_secure and marked_http_only
@@ -28,7 +29,6 @@ class SiteInspector
   end
 
   def click_jacking_protection?
-    response.headers["X-Frame-Options"] == "DENY" and \
-      response.headers["X-Content-Type-Options"] == "nosniff"
+    response.headers.include? "X-Frame-Options"
   end
 end
