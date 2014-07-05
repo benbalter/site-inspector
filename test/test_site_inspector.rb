@@ -32,8 +32,8 @@ class TestSiteInspector < Minitest::Test
   should "generate a URI with a scheme" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal "http://whitehouse.gov", site.uri.to_s
-      assert_equal "https://whitehouse.gov", site.uri("https").to_s
+      assert_equal "http://whitehouse.gov", site.uri(false).to_s
+      assert_equal "https://whitehouse.gov", site.uri(true).to_s
     end
   end
 
@@ -50,7 +50,7 @@ class TestSiteInspector < Minitest::Test
   should "build a uri from a domain" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal "http://whitehouse.gov", site.uri.to_s
+      assert_equal "http://whitehouse.gov", site.uri(false).to_s
     end
   end
 
@@ -107,6 +107,21 @@ class TestSiteInspector < Minitest::Test
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
       assert_equal Hash, JSON.parse(site.to_json).class
+    end
+  end
+
+  should "detect www redirects" do
+    VCR.use_cassette "consumerfinance.gov", :record => :new_episodes do
+      site = SiteInspector.new "consumerfinance.gov"
+      assert_equal true, site.www?
+    end
+  end
+
+  should "detect redirects" do
+    VCR.use_cassette "cfpb.gov", :record => :new_episodes do
+      site = SiteInspector.new "cfpb.gov"
+      assert_equal true, site.redirect?
+      assert_equal "consumerfinance.gov", site.redirect
     end
   end
 end

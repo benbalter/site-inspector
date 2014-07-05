@@ -29,7 +29,7 @@ class SiteInspector
     "<SiteInspector domain=\"#{domain}\">"
   end
 
-  def uri(ssl=false,www=false)
+  def uri(ssl=https?,www=www?)
     uri = @uri.clone
     uri.host = "www.#{uri.host}" if www
     uri.scheme = ssl ? "https" : "http"
@@ -40,23 +40,26 @@ class SiteInspector
     non_www? ? @domain : PublicSuffix.parse("www.#{@uri.host}")
   end
 
-  def request(ssl=false, www=false)
-    response = Typhoeus::Request.get(uri(ssl, www), followlocation: true)
-    response if response.success?
+  def request(ssl=false, www=false, followlocation=true)
+    Typhoeus::Request.get(uri(ssl, www), followlocation: followlocation, timeout: 10)
   end
 
   def response
     @response ||= begin
-      if response = request(false, false)
+      if response = request(false, false) and response.success?
         @non_www = true
         response
-      elsif response = request(false, true)
+      elsif response = request(false, true) and response.success?
         @non_www = false
         response
       else
         false
       end
     end
+  end
+
+  def timed_out?
+    response && response.timed_out?
   end
 
   def doc
@@ -76,13 +79,14 @@ class SiteInspector
   end
 
   def https?
-    @https ||= !!request(true, !non_www?)
+    @https ||= request(true, www?).success?
   end
+  alias_method :ssl?, :https?
 
   def enforce_https?
     return false unless https?
     @enforce_https ||= begin
-      response = request(false, !non_www?)
+      response = request(false, www?)
       if response.effective_url
         Addressable::URI.parse(response.effective_url).scheme == "https"
       else
@@ -92,8 +96,25 @@ class SiteInspector
     end
   end
 
+  def www?
+    response && response.effective_url && !!response.effective_url.match(/https?:\/\/www\./)
+  end
+
   def non_www?
     response && @non_www
+  end
+
+  def redirect?
+    !!redirect
+  end
+
+  def redirect
+    @redirect ||= begin
+      if location = request(https?, www?, false).headers["location"]
+        redirect_domain = SiteInspector.new(location).domain
+        redirect_domain.to_s if redirect_domain.to_s != domain.to_s
+      end
+    end
   end
 
   def to_json

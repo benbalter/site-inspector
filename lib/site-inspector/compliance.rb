@@ -1,8 +1,8 @@
 class SiteInspector
 
   def path_exists?(path)
-    url = URI.join uri(https?, !non_www?), path
-    Typhoeus::Request.get(url, followlocation: true).success?
+    url = URI.join uri, path
+    Typhoeus::Request.get(url, followlocation: true, timeout: 10).success?
   end
 
   def slash_data?
