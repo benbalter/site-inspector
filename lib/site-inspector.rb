@@ -126,6 +126,7 @@ class SiteInspector
       :ssl => https?,
       :enforce_https => enforce_https?,
       :non_www => non_www?,
+      :redirect => redirect,
       :ip => ip,
       :hostname => hostname,
       :ipv6 => ipv6?,
