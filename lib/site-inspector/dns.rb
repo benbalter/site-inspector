@@ -43,8 +43,16 @@ class SiteInspector
     detect_by_hostname "cdn"
   end
 
+  def cdn?
+    !!cdn
+  end
+
   def cloud_provider
     detect_by_hostname "cloud"
+  end
+
+  def cloud?
+    !!cloud_provider
   end
 
   def google_apps?

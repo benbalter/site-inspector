@@ -1,4 +1,5 @@
 amazon: "compute-1.amazonaws.com"
+Amazon GovCloud: "us-gov-west-1.compute.amazonaws.com"
 linode: "lindoe.com"
 rackspace: ""
 heroku: "herokuapp.com"
