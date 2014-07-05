@@ -1,4 +1,4 @@
-# Site Inspector (Ruby Eddition)
+# Site Inspector (Ruby Edition)
 
 A Ruby port and v2 of Site Inspector (http://github.com/benbalter/site-inspector)
 

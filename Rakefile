@@ -15,3 +15,5 @@ Rake::TestTask.new(:test) do |test|
   test.pattern = 'test/**/test_site_inspector*.rb'
   test.verbose = true
 end
+
+task :default => [:test]

@@ -35,7 +35,7 @@
         <th>IPv6 Support</th><td class="<%= site.ipv6? %>"><%= site.ipv6? %></td>
       </tr>
       <tr>
-        <th>DNSec</th><td class="<%= site.dnsec? %>"><%= site.dnsec? %></td>
+        <th>DNSSEC</th><td class="<%= site.dnssec? %>"><%= site.dnssec? %></td>
       </tr>
       <tr>
         <th>CDN</th><td class="<%= site.cdn %>"><%= site.cdn %></td>
@@ -111,7 +111,7 @@
 </div>
 <div class="row">
   <div class="col-md-4">
-    <h3>Complaince</h3>
+    <h3>Compliance</h3>
     <table class="table table-striped">
       <tr>
         <th>/data</th><td class="<%= site.slash_data? %>"><%= site.slash_data? %></td>
@@ -124,6 +124,29 @@
       </tr>
     </table>
   </div>
+  <div class="col-md-4">
+    <h3>Security headers</h3>
+    <table class="table table-striped">
+      <tr>
+        <th>XSS protection</th><td class="<%= site.xss_protection? %>"><%= site.xss_protection? %></td>
+      </tr>
+      <% if site.has_cookies? %>
+      <tr>
+        <th>Secure cookies</th><td class="<%= site.secure_cookies? %>"><%= site.secure_cookies? %></td>
+      </tr>
+      <% end %>
+      <tr>
+        <th>Strict transport security (HSTS)</th><td class="<%= site.strict_transport_security? %>"><%= site.strict_transport_security? %></td>
+      </tr>
+      <tr>
+        <th>Content security policy</th><td class="<%= site.content_security_policy? %>"><%= site.content_security_policy? %></td>
+      </tr>
+      <tr>
+        <th>Clickjacking protection</th><td class="<%= site.click_jacking_protection? %>"><%= site.click_jacking_protection? %></td>
+      </tr>
+    </table>
+  </div>
+
 </div>
 
 <% else %>
