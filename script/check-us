@@ -32,11 +32,17 @@ CSV.new(data, headers: true).each_with_index do |row, index|
         domain[field] = domain[field].keys.join(", ")
       end
     end
-    domain[:agency] = row["Federal Agency "]
-    domains.push domain
   rescue Exception => msg
     puts "#{row["Domain Name"]} errored out: #{msg} :("
+    domain = {
+      :domain => row["Domain Name"].downcase,
+      :uri => nil,
+      :government => nil,
+      :live => false
+    }
   end
+  domain[:agency] = row["Federal Agency "]
+  domains.push domain
 end
 
 CSV.open("data.csv", "wb", headers: true, write_headers: true) do |csv|

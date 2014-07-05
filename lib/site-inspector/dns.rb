@@ -6,6 +6,8 @@ class SiteInspector
 
   def query(type="ANY")
     resolver.query(domain.to_s, type).answer
+  rescue
+    []
   end
 
   def dns
@@ -69,7 +71,7 @@ class SiteInspector
 
   def hostname
     @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
-  rescue Resolv::ResolvError => e
+  rescue Exception => e
     nil
   end
 
