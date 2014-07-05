@@ -9,6 +9,7 @@ require 'sniffles'
 require "addressable/uri"
 require 'typhoeus'
 require 'json'
+require 'resolv'
 
 require_relative 'site-inspector/cache'
 require_relative 'site-inspector/sniffer'
@@ -19,6 +20,7 @@ require_relative 'site-inspector/headers'
 class SiteInspector
 
   def initialize(domain)
+    domain = domain.downcase
     domain = domain.sub /^http\:/, ""
     domain = domain.sub /^\/+/, ""
     domain = domain.sub /^www\./, ""
@@ -116,13 +118,19 @@ class SiteInspector
         redirect_domain = SiteInspector.new(location).domain
         redirect_domain.to_s if redirect_domain.to_s != domain.to_s
       end
+    rescue
+      nil
     end
   end
 
   def to_json
+    as_json.to_json
+  end
+
+  def as_json
     {
-      :domain => domain,
-      :uri => uri,
+      :domain => domain.to_s,
+      :uri => uri.to_s,
       :government => government?,
       :live => !!response,
       :ssl => https?,
@@ -130,7 +138,7 @@ class SiteInspector
       :non_www => non_www?,
       :redirect => redirect,
       :ip => ip,
-      :hostname => hostname,
+      :hostname => hostname.to_s,
       :ipv6 => ipv6?,
       :dnssec => dnssec?,
       :cdn => cdn,
@@ -149,6 +157,6 @@ class SiteInspector
       :xss_protection => xss_protection?,
       :secure_cookies => secure_cookies?,
       :strict_transport_security => strict_transport_security?
-    }.to_json
+    }
   end
 end
