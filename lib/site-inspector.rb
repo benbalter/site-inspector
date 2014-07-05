@@ -121,6 +121,8 @@ class SiteInspector
 
   def to_json
     {
+      :domain => domain,
+      :uri => uri,
       :government => government?,
       :live => !!response,
       :ssl => https?,
