@@ -2,13 +2,23 @@ Gem::Specification.new do |s|
 
   s.name                  = "site-inspector"
   s.version               = "0.1.0"
-  s.summary               = ""
-  s.description           = ""
+  s.summary               = "A Ruby port and v2 of Site Inspector (http://github.com/benbalter/site-inspector)"
+  s.description           = "Returns information about a domain's technology and capabilities"
   s.authors               = "Ben Balter"
   s.email                 = "ben@balter.com"
   s.homepage              = "https://github.com/benbalter/site-inspector-ruby"
   s.license               = "MIT"
-
+  s.files = [
+    "lib/site-inspector.rb",
+    "lib/data/cdn.yml",
+    "lib/data/cloud.yml",
+    "lib/site-inspector/cache.rb",
+    "lib/site-inspector/compliance.rb",
+    "lib/site-inspector/dns.rb",
+    "lib/site-inspector/headers.rb",
+    "lib/site-inspector/sniffer.rb",
+    "LICENSE"
+  ]
   s.add_dependency("nokogiri")
   s.add_dependency("public_suffix")
   s.add_dependency("gman")
