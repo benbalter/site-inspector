@@ -23,7 +23,7 @@ http_interactions:
       Link:
       - "<http://www.consumerfinance.gov/?p=74>; rel=shortlink"
       Date:
-      - Sat, 05 Jul 2014 21:39:59 GMT
+      - Mon, 07 Jul 2014 16:21:56 GMT
       Content-Length:
       - '22903'
       Connection:
@@ -541,7 +541,7 @@ http_interactions:
         bGQoc2NyaXB0KTsKICAvL11dPgo8L3NjcmlwdD4KCjwvZGl2PjwhLS0gRU5E
         IENPTkRJVElPTkFMIENPTU1FTlRTIC0tPgo8L2JvZHk+Cgo8L2h0bWw+Cg==
     http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:39:58 GMT
+  recorded_at: Mon, 07 Jul 2014 16:21:56 GMT
 - request:
     method: get
     uri: https://www.cfpb.gov/
@@ -560,7 +560,7 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:39:58 GMT
+  recorded_at: Mon, 07 Jul 2014 16:21:57 GMT
 - request:
     method: get
     uri: http://www.cfpb.gov/
@@ -582,14 +582,14 @@ http_interactions:
       Location:
       - http://www.consumerfinance.gov
       Date:
-      - Sat, 05 Jul 2014 21:39:59 GMT
+      - Mon, 07 Jul 2014 16:21:56 GMT
       Connection:
       - keep-alive
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:39:58 GMT
+  recorded_at: Mon, 07 Jul 2014 16:21:57 GMT
 - request:
     method: get
     uri: http://consumerfinance.gov/
@@ -613,7 +613,7 @@ http_interactions:
       Link:
       - "<http://www.consumerfinance.gov/?p=74>; rel=shortlink"
       Date:
-      - Sat, 05 Jul 2014 21:39:59 GMT
+      - Mon, 07 Jul 2014 16:21:54 GMT
       Content-Length:
       - '22903'
       Connection:
@@ -1131,51 +1131,5 @@ http_interactions:
         bGQoc2NyaXB0KTsKICAvL11dPgo8L3NjcmlwdD4KCjwvZGl2PjwhLS0gRU5E
         IENPTkRJVElPTkFMIENPTU1FTlRTIC0tPgo8L2JvZHk+Cgo8L2h0bWw+Cg==
     http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:39:58 GMT
-- request:
-    method: get
-    uri: https://cfpb.gov/
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Typhoeus - https://github.com/typhoeus/typhoeus
-  response:
-    status:
-      code: 0
-      message: 
-    headers: {}
-    body:
-      encoding: UTF-8
-      string: ''
-    http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:40:21 GMT
-- request:
-    method: get
-    uri: http://cfpb.gov/
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Typhoeus - https://github.com/typhoeus/typhoeus
-  response:
-    status:
-      code: 302
-      message: Found
-    headers:
-      Location:
-      - http://www.consumerfinance.gov/
-      Server:
-      - BigIP
-      Connection:
-      - Keep-Alive
-      Content-Length:
-      - '0'
-    body:
-      encoding: UTF-8
-      string: ''
-    http_version: 
-  recorded_at: Sat, 05 Jul 2014 21:40:21 GMT
-recorded_with: VCR 2.9.0
+  recorded_at: Mon, 07 Jul 2014 16:21:57 GMT
+recorded_with: VCR 2.9.2

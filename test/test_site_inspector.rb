@@ -1,6 +1,11 @@
 require File.join(File.dirname(__FILE__), 'helper')
 
 class TestSiteInspector < Minitest::Test
+
+  def setup
+    Typhoeus::Config.cache = SiteInspectorCache.new
+  end
+
   should "parse a domain" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
@@ -38,12 +43,12 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "strip www from domain" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "www.whitehouse.gov"
-      assert_equal "whitehouse.gov", site.domain.to_s
+    VCR.use_cassette "www.cio.gov", :record => :new_episodes do
+      site = SiteInspector.new "www.cio.gov"
+      assert_equal "cio.gov", site.domain.to_s
 
-      site = SiteInspector.new "http://www.whitehouse.gov"
-      assert_equal "whitehouse.gov", site.domain.to_s
+      site = SiteInspector.new "http://www.cio.gov"
+      assert_equal "cio.gov", site.domain.to_s
     end
   end
 
@@ -81,14 +86,14 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "validate HTTPS enforcement" do
+    # VCR doesn't seem to properly record the redirect
+    site = SiteInspector.new "cio.gov"
+    assert_equal true, site.enforce_https?
+
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
       assert_equal false, site.enforce_https?
     end
-
-    # VCR doesn't seem to properly record the redirect
-    site = SiteInspector.new "cio.gov"
-    assert_equal true, site.enforce_https?
   end
 
   should "validate non-www support" do
@@ -111,17 +116,13 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "detect www redirects" do
-    VCR.use_cassette "consumerfinance.gov", :record => :new_episodes do
-      site = SiteInspector.new "consumerfinance.gov"
-      assert_equal true, site.www?
-    end
+    site = SiteInspector.new "consumerfinance.gov"
+    assert_equal true, site.www?
   end
 
   should "detect redirects" do
-    VCR.use_cassette "cfpb.gov", :record => :new_episodes do
-      site = SiteInspector.new "cfpb.gov"
-      assert_equal true, site.redirect?
-      assert_equal "consumerfinance.gov", site.redirect
-    end
+    site = SiteInspector.new "cfpb.gov"
+    assert_equal true, site.redirect?
+    assert_equal "www.consumerfinance.gov", site.redirect
   end
 end

@@ -19,7 +19,7 @@ http_interactions:
       Content-Type:
       - text/html
       Date:
-      - Sat, 05 Jul 2014 22:00:30 GMT
+      - Mon, 07 Jul 2014 16:21:30 GMT
       Last-Modified:
       - Mon, 30 Jun 2014 22:07:36 GMT
       Server:
@@ -580,5 +580,5 @@ http_interactions:
         NDg2MDU5NjQtMScsICdnc2EuZ292Jyk7CiAgICAgIGdhKCdzZW5kJywgJ3Bh
         Z2V2aWV3Jyk7CiAgICA8L3NjcmlwdD4KICA8L2JvZHk+CjwvaHRtbD4K
     http_version: 
-  recorded_at: Sat, 05 Jul 2014 22:00:50 GMT
+  recorded_at: Mon, 07 Jul 2014 16:21:52 GMT
 recorded_with: VCR 2.9.2

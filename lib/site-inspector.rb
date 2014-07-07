@@ -42,7 +42,7 @@ class SiteInspector
   end
 
   def domain
-    www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain 
+    www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain
   end
 
   def request(ssl=false, www=false, followlocation=true)
@@ -95,7 +95,6 @@ class SiteInspector
       if response.effective_url
         Addressable::URI.parse(response.effective_url).scheme == "https"
       else
-        puts response.inspect
         false
       end
     end

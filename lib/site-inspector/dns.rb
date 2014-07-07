@@ -19,7 +19,7 @@ class SiteInspector
   end
 
   def ipv6?
-    @ipv6 ||= dns.any? { |record| record.type == "AAAA" }
+    @ipv6 ||= query("AAAA").count != 0
   end
 
   def detect_by_hostname(type)
