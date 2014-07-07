@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    site-inspector (0.0.1)
+    site-inspector (0.1.0)
       dnsruby
       gman
       nokogiri
