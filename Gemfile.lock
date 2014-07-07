@@ -22,16 +22,11 @@ GEM
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coderay (1.1.0)
-    coffee-script (2.2.0)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.7.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     dnsruby (1.54)
     ethon (0.7.1)
       ffi (>= 1.3.0)
-    execjs (2.2.1)
     ffi (1.9.3)
     formatador (0.2.5)
     gman (2.1.3)
@@ -64,15 +59,6 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (1.4.4)
-    rack (1.5.2)
-    rack-cache (1.2)
-      rack (>= 0.4)
-    rack-coffee (1.0.3)
-      coffee-script
-      rack
-    rack-protection (1.5.3)
-      rack
-    rack-ssl-enforcer (0.2.7)
     rake (10.3.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
@@ -88,10 +74,6 @@ GEM
     shoulda-context (1.2.1)
     shoulda-matchers (2.6.1)
       activesupport (>= 3.0.0)
-    sinatra (1.4.5)
-      rack (~> 1.4)
-      rack-protection (~> 1.4)
-      tilt (~> 1.3, >= 1.3.4)
     slop (3.5.0)
     sniffles (0.2.0)
       nokogiri (~> 1.6.1)
@@ -99,7 +81,6 @@ GEM
       public_suffix
     thor (0.19.1)
     thread_safe (0.3.4)
-    tilt (1.4.1)
     timers (1.1.0)
     typhoeus (0.6.9)
       ethon (>= 0.7.1)
@@ -117,14 +98,10 @@ DEPENDENCIES
   bundler
   guard-rake
   pry
-  rack-cache
-  rack-coffee
-  rack-ssl-enforcer
   rake
   rdoc
   rerun
   shoulda
-  sinatra
   site-inspector!
   vcr
   webmock
