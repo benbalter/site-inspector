@@ -17,6 +17,8 @@ require_relative 'site-inspector/dns'
 require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/headers'
 
+Typhoeus::Config.cache = SiteInspectorCache.new
+
 class SiteInspector
 
   def initialize(domain)
@@ -26,7 +28,6 @@ class SiteInspector
     domain = domain.sub /^www\./, ""
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
-    Typhoeus::Config.cache = SiteInspectorCache.new
   end
 
   def inspect
