@@ -38,7 +38,7 @@ site.cms
   :dnssec                    => false,
   :cdn                       => "akamai",
   :google_apps               => false,
-  :could_provider            => false,
+  :cloud_provider            => false,
   :server                    => nil,
   :cms                       => {},
   :analytics                 => {},

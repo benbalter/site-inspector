@@ -144,7 +144,7 @@ class SiteInspector
       :dnssec => dnssec?,
       :cdn => cdn,
       :google_apps => google_apps?,
-      :could_provider => cloud_provider,
+      :cloud_provider => cloud_provider,
       :server => server,
       :cms => cms,
       :analytics => analytics,
