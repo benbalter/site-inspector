@@ -25,6 +25,13 @@ class TestSiteInspectorHeaders < Minitest::Test
     end
   end
 
+  should "detect when secure cookies are present" do
+    VCR.use_cassette "github.com", :record => :new_episodes do
+      site = SiteInspector.new "github.com"
+      assert_equal true, site.secure_cookies?
+    end
+  end
+
   should "detect strict transport security" do
     VCR.use_cassette "cio.gov", :record => :new_episodes do
       site = SiteInspector.new "cio.gov"
