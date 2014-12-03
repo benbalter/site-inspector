@@ -23,7 +23,7 @@ class SiteInspector
 
   def initialize(domain)
     domain = domain.downcase
-    domain = domain.sub /^http\:/, ""
+    domain = domain.sub /^https?\:/, ""
     domain = domain.sub /^\/+/, ""
     domain = domain.sub /^www\./, ""
     @uri = Addressable::URI.parse "//#{domain}"
