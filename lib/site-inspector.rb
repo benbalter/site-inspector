@@ -72,7 +72,7 @@ class SiteInspector
   end
 
   def body
-    doc.to_s
+    doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
   end
 
   def load_data(name)
