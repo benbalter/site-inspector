@@ -2,19 +2,19 @@ class SiteInspector
 
   # the ? versions could maybe just be dropped
   def has_cookies?
-    !!header_from("Set-Cookie")
+    !!has_cookies
   end
 
   def strict_transport_security?
-    !!header_from("Strict-Transport-Security")
+    !!strict_transport_security
   end
 
   def content_security_policy?
-    !!header_from("Content-Security-Policy")
+    !!content_security_policy
   end
 
   def click_jacking_protection?
-    !!header_from("X-Frame-Options")
+    !!click_jacking_protection
   end
 
   # return the found header value
@@ -45,7 +45,7 @@ class SiteInspector
 
   # more specific checks than presence of headers
   def xss_protection?
-    header_from("X-XSS-Protection") == "1; mode=block"
+    xss_protection == "1; mode=block"
   end
 
   def secure_cookies?
