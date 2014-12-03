@@ -33,7 +33,7 @@ class TestSiteInspectorDns < Minitest::Test
   should "detect a site's cloud provider" do
     VCR.use_cassette "18f.gsa.gov", :record => :new_episodes do
       site = SiteInspector.new "18f.gsa.gov"
-      assert_equal "Amazon GovCloud", site.cloud_provider
+      assert_equal "amazon", site.cloud_provider
       assert_equal true, site.cloud?
     end
   end
