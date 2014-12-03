@@ -1,8 +1,9 @@
 class SiteInspector
 
-  # the ? versions could maybe just be dropped
+  # cookies can have multiple set-cookie headers, so this detects
+  # whether cookies are set, but not all their values.
   def has_cookies?
-    !!has_cookies
+    !!header_from("Set-Cookie")
   end
 
   def strict_transport_security?
@@ -18,10 +19,6 @@ class SiteInspector
   end
 
   # return the found header value
-
-  def has_cookies
-    header_from("Set-Cookie")
-  end
 
   def strict_transport_security
     header_from("Strict-Transport-Security")

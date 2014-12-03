@@ -13,7 +13,6 @@ class TestSiteInspectorHeaders < Minitest::Test
     VCR.use_cassette "ed.gov", :record => :new_episodes do
       site = SiteInspector.new "ed.gov"
       assert_equal false, site.has_cookies?
-      assert_nil site.has_cookies
     end
   end
 
@@ -21,7 +20,6 @@ class TestSiteInspectorHeaders < Minitest::Test
     VCR.use_cassette "cio.gov", :record => :new_episodes do
       site = SiteInspector.new "cio.gov"
       assert_equal true, site.has_cookies?
-      assert !site.has_cookies.nil? # uses a generated ID
     end
   end
 
