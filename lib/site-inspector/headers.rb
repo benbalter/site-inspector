@@ -50,10 +50,10 @@ class SiteInspector
 
   def secure_cookies?
     return nil if !response || !has_cookies?
-    cookie = header_from(response, "Set-Cookie")
+    cookie = header_from("Set-Cookie")
     cookie = cookie.first if cookie.is_a?(Array)
     marked_secure = !!(cookie.downcase =~ /secure/)
-    marked_http_only = !!(cookie.downcase =~ /HttpOnly/)
+    marked_http_only = !!(cookie.downcase =~ /httponly/)
     marked_secure and marked_http_only
   end
 
