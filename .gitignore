@@ -1,6 +1,7 @@
 .bundle
 /*.gem
 vendor
+Gemfile.lock
 
 # rack-cache
 cache
