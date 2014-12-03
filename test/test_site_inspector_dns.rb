@@ -4,7 +4,7 @@ class TestSiteInspectorDns < Minitest::Test
   should "retrieve a site's DNS records" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal Dnsruby::Message::Section, site.dns.class
+      assert_equal Dnsruby::Section, site.dns.class
       assert_equal false, site.dns.empty?
     end
   end
