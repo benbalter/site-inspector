@@ -4,6 +4,8 @@ Information about a domain's technology and capabilities.
 
 A Ruby port and v2 of Site Inspector (http://github.com/benbalter/site-inspector)
 
+[![Gem Version](https://badge.fury.io/rb/site-inspector.svg)](http://badge.fury.io/rb/site-inspector) [![Build Status](https://travis-ci.org/benbalter/site-inspector-ruby.svg)](https://travis-ci.org/benbalter/site-inspector-ruby)
+
 ## Demo
 
 [gov-inspector.herokuapp.com](https://gov-inspector.herokuapp.com) ([source](https://github.com/benbalter/site-inspector-demo))
