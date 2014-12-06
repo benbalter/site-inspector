@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.email                 = "ben@balter.com"
   s.homepage              = "https://github.com/benbalter/site-inspector-ruby"
   s.license               = "MIT"
+  s.executable            = "site-inspector"
   s.files = [
     "lib/site-inspector.rb",
     "lib/data/cdn.yml",

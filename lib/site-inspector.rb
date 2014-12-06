@@ -124,10 +124,10 @@ class SiteInspector
   end
 
   def to_json
-    as_json.to_json
+    to_hash.to_json
   end
 
-  def as_json
+  def to_hash
     {
       :domain => domain.to_s,
       :uri => uri.to_s,
