@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/site-inspector"
+domain = ARGV[0]
+
+if domain.to_s.empty?
+  puts "Usage: site-inspector [DOMAIN]"
+  exit 1
+end
+
+SiteInspector.new(domain).to_hash.each do |key, value|
+  puts "#{key}: #{value}"
+end
