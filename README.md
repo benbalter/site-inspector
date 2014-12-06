@@ -22,6 +22,10 @@ site.cms
 #  =>  { :drupal  =>  {}}
 ```
 
+### Command line usage
+
+`site-inspector [DOMAIN]`
+
 ## Methods (what's checked)
 
 ```ruby
