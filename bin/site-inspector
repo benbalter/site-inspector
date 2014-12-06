@@ -3,7 +3,10 @@
 require_relative "../lib/site-inspector"
 domain = ARGV[0]
 
-raise "Usage: site-inspector [DOMAIN]" if domain.to_s.empty?
+if domain.to_s.empty?
+  puts "Usage: site-inspector [DOMAIN]"
+  exit 1
+end
 
 SiteInspector.new(domain).to_hash.each do |key, value|
   puts "#{key}: #{value}"
