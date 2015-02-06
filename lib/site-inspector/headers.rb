@@ -3,7 +3,7 @@ class SiteInspector
   # cookies can have multiple set-cookie headers, so this detects
   # whether cookies are set, but not all their values.
   def has_cookies?
-    !!header_from("Set-Cookie")
+    !!headers["set-cookie"]
   end
 
   def strict_transport_security?
@@ -21,23 +21,23 @@ class SiteInspector
   # return the found header value
 
   def strict_transport_security
-    header_from("Strict-Transport-Security")
+    headers["strict-transport-security"]
   end
 
   def content_security_policy
-    header_from("Content-Security-Policy")
+    headers["content-security-policy"]
   end
 
   def click_jacking_protection
-    header_from("X-Frame-Options")
+    headers["x-frame-options"]
   end
 
   def server
-    header_from("Server")
+    headers["server"]
   end
 
   def xss_protection
-    header_from("X-XSS-Protection")
+    headers["x-xss-protection"]
   end
 
   # more specific checks than presence of headers
@@ -46,19 +46,14 @@ class SiteInspector
   end
 
   def secure_cookies?
-    return nil if !response || !has_cookies?
-    cookie = header_from("Set-Cookie")
+    return nil if !has_cookies?
+    cookie = headers["set-cookie"]
     cookie = cookie.first if cookie.is_a?(Array)
-    marked_secure = !!(cookie.downcase =~ /secure/)
-    marked_http_only = !!(cookie.downcase =~ /httponly/)
-    marked_secure and marked_http_only
+    !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
   end
 
-  # helper function: case-insensitive sweep for header, return value
-  def header_from(header)
-    return nil unless response
-
-    the_header = response.headers.keys.find {|h| h.downcase =~ /^#{header.downcase}/}
-    response.headers[the_header]
+  # Returns an array of hashes of downcased key/value header pairs (or nil)
+  def headers
+    @headers ||= Hash[response.headers.map{ |k,v| [k.downcase,v] }] if response
   end
 end
