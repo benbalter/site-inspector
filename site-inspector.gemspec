@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name                  = "site-inspector"
-  s.version               = "0.1.2"
+  s.version               = "1.0.0"
   s.summary               = "A Ruby port and v2 of Site Inspector (http://github.com/benbalter/site-inspector)"
   s.description           = "Returns information about a domain's technology and capabilities"
   s.authors               = "Ben Balter"
