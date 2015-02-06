@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require_relative "../lib/site-inspector"
+require "json"
+
 domain = ARGV[0]
 
 if domain.to_s.empty?
@@ -8,6 +10,6 @@ if domain.to_s.empty?
   exit 1
 end
 
-SiteInspector.new(domain).to_hash.each do |key, value|
-  puts "#{key}: #{value}"
-end
+details = SiteInspector.new(domain).to_hash
+
+puts JSON.pretty_generate(details)
