@@ -49,7 +49,7 @@ class SiteInspector
     return nil if !has_cookies?
     cookie = headers["set-cookie"]
     cookie = cookie.first if cookie.is_a?(Array)
-    !!(cookie.downcase =~ /secure/) && !!(cookie.downcase =~ /httponly/)
+    !!(cookie =~ /; (secure|httponly)/i)
   end
 
   # Returns an array of hashes of downcased key/value header pairs (or nil)
