@@ -15,7 +15,7 @@ class SiteInspector
   end
 
   def dnssec?
-    @dnssec ||= dns.any? { |record| record.type == "DNSKEY" }
+    @dnssec ||= query("DNSKEY").count != 0
   end
 
   def ipv6?
