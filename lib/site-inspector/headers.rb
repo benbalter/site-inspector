@@ -21,7 +21,6 @@ class SiteInspector
   # return the found header value
 
   def strict_transport_security
-    puts response.inspect
     headers["strict-transport-security"]
   end
 
