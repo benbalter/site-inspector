@@ -3,6 +3,8 @@ class SiteInspector
     results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
     results.each { |name, result| result.delete :found} if results
     results
+  rescue
+    nil
   end
 
   def cms
@@ -20,5 +22,4 @@ class SiteInspector
   def advertising
     sniff :advertising
   end
-
 end

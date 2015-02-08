@@ -45,7 +45,7 @@ class SiteInspector
   def domain
     www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain
   end
-  
+
   def request(ssl=false, www=false, followlocation=true)
     Typhoeus.get(uri(ssl, www), followlocation: followlocation, timeout: 10)
   end
