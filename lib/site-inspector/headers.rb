@@ -46,14 +46,14 @@ class SiteInspector
   end
 
   def secure_cookies?
-    return nil if !has_cookies?
+    return false if !has_cookies?
     cookie = headers["set-cookie"]
     cookie = cookie.first if cookie.is_a?(Array)
     !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
   end
 
-  # Returns an array of hashes of downcased key/value header pairs (or nil)
+  # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
   def headers
-    @headers ||= Hash[response.headers.map{ |k,v| [k.downcase,v] }] if response
+    @headers ||= response ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
   end
 end

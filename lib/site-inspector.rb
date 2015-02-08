@@ -18,6 +18,7 @@ require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/headers'
 
 Typhoeus::Config.cache = SiteInspectorCache.new
+#Typhoeus::Config.memoize = true
 
 class SiteInspector
 
@@ -44,9 +45,9 @@ class SiteInspector
   def domain
     www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain
   end
-
+  
   def request(ssl=false, www=false, followlocation=true)
-    Typhoeus::Request.get(uri(ssl, www), followlocation: followlocation, timeout: 10)
+    Typhoeus.get(uri(ssl, www), followlocation: followlocation, timeout: 10)
   end
 
   def response
