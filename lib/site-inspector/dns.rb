@@ -24,7 +24,7 @@ class SiteInspector
 
   def detect_by_hostname(type)
 
-    haystack = load_data(type)
+    haystack = SiteInspector.load_data(type)
     needle = haystack.find { |name, domain|
       cnames.any? { |cname|
         domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"

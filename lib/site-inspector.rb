@@ -22,6 +22,10 @@ Typhoeus::Config.cache = SiteInspectorCache.new
 
 class SiteInspector
 
+  def self.load_data(name)
+    YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
+  end
+
   def initialize(domain)
     domain = domain.downcase
     domain = domain.sub /^https?\:/, ""
@@ -74,10 +78,6 @@ class SiteInspector
 
   def body
     doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
-  end
-
-  def load_data(name)
-    YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
 
   def government?
