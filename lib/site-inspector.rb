@@ -18,7 +18,6 @@ require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/headers'
 
 Typhoeus::Config.cache = SiteInspectorCache.new
-#Typhoeus::Config.memoize = true
 
 class SiteInspector
 
