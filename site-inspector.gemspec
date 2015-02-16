@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency("dnsruby", "~> 1.56")
   s.add_dependency("sniffles", "~> 0.2")
   s.add_dependency("typhoeus", "~> 0.6")
+  s.add_dependency("oj", "~> 2.11")
   s.add_development_dependency("pry", "~> 0.10")
   s.add_development_dependency( "rake", "~> 10.4" )
   s.add_development_dependency( "shoulda", "~> 3.5" )
