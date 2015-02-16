@@ -6,6 +6,6 @@ class TestSiteInspectorBin < Minitest::Test
   end
 
   should "output the hash" do
-    assert `bundle exec site-inspector whitehouse.gov` =~ /"government": true/i
+    assert `bundle exec site-inspector whitehouse.gov` =~ /"government":true/i
   end
 end

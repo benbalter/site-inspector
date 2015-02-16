@@ -156,7 +156,8 @@ class SiteInspector
       :content_security_policy => content_security_policy?,
       :xss_protection => xss_protection?,
       :secure_cookies => secure_cookies?,
-      :strict_transport_security => strict_transport_security?
+      :strict_transport_security => strict_transport_security?,
+      :headers => headers
     }
   end
 end
