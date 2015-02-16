@@ -1,7 +1,11 @@
 class SiteInspector
 
   def resolver
-    @resolver ||= Dnsruby::Resolver.new
+    @resolver ||= begin
+      resolver = Dnsruby::Resolver.new
+      resolver.config.nameserver = ["8.8.8.8", "8.8.4.4"]
+      resolver
+    end
   end
 
   def query(type="ANY")
@@ -14,12 +18,16 @@ class SiteInspector
     @dns ||= query
   end
 
+  def has_record?(type)
+    dns.any? { |record| record.type == type } || query(type).count != 0
+  end
+
   def dnssec?
-    @dnssec ||= query("DNSKEY").count != 0
+    @dnssec ||= has_record? "DNSKEY"
   end
 
   def ipv6?
-    @ipv6 ||= query("AAAA").count != 0
+    @ipv6 ||= has_record? "AAAA"
   end
 
   def detect_by_hostname(type)
