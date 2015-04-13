@@ -9,14 +9,14 @@ class TestSiteInspector < Minitest::Test
   should "parse a domain" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal "whitehouse.gov", site.domain.to_s
+      assert_equal "www.whitehouse.gov", site.domain.to_s
     end
   end
 
   should "parse a domain with a scheme" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "http://whitehouse.gov"
-      assert_equal "whitehouse.gov", site.domain.to_s
+      assert_equal "www.whitehouse.gov", site.domain.to_s
     end
   end
 
@@ -35,10 +35,10 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "generate a URI with a scheme" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "whitehouse.gov"
-      assert_equal "http://whitehouse.gov", site.uri(false).to_s
-      assert_equal "https://whitehouse.gov", site.uri(true).to_s
+    VCR.use_cassette "gsa.gov", :record => :new_episodes do
+      site = SiteInspector.new "gsa.gov"
+      assert_equal "http://gsa.gov", site.uri(false).to_s
+      assert_equal "https://gsa.gov", site.uri(true).to_s
     end
   end
 
@@ -53,16 +53,16 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "build a uri from a domain" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "whitehouse.gov"
-      assert_equal "http://whitehouse.gov", site.uri(false).to_s
+    VCR.use_cassette "gsa.gov", :record => :new_episodes do
+      site = SiteInspector.new "gsa.gov"
+      assert_equal "http://gsa.gov", site.uri(false).to_s
     end
   end
 
   should "build an https uri from a domain" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "whitehouse.gov"
-      assert_equal "https://whitehouse.gov", site.uri(true).to_s
+    VCR.use_cassette "gsa.gov", :record => :new_episodes do
+      site = SiteInspector.new "gsa.gov"
+      assert_equal "https://gsa.gov", site.uri(true).to_s
     end
   end
 
@@ -74,24 +74,25 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "validate HTTPS support" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "whitehouse.gov"
+    VCR.use_cassette "gsa.gov", :record => :new_episodes do
+      site = SiteInspector.new "gsa.gov"
       assert_equal false, site.https?
     end
 
-    VCR.use_cassette "cio.gov", :record => :new_episodes do
-      site = SiteInspector.new "cio.gov"
+    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
+      site = SiteInspector.new "whitehouse.gov"
       assert_equal true, site.https?
     end
   end
 
   should "validate HTTPS enforcement" do
-    # VCR doesn't seem to properly record the redirect
-    site = SiteInspector.new "cio.gov"
-    assert_equal true, site.enforce_https?
+    VCR.use_cassette "cio.gov", :record => :new_episodes do
+      site = SiteInspector.new "cio.gov"
+      assert_equal true, site.enforce_https?
+    end
 
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      site = SiteInspector.new "whitehouse.gov"
+    VCR.use_cassette "gsa.gov", :record => :new_episodes do
+      site = SiteInspector.new "gsa.gov"
       assert_equal false, site.enforce_https?
     end
   end
@@ -116,13 +117,17 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "detect www redirects" do
-    site = SiteInspector.new "consumerfinance.gov"
-    assert_equal true, site.www?
+    VCR.use_cassette "consumerfinance.gov", :record => :new_episodes do
+      site = SiteInspector.new "consumerfinance.gov"
+      assert_equal true, site.www?
+    end
   end
 
   should "detect redirects" do
-    site = SiteInspector.new "cfpb.gov"
-    assert_equal true, site.redirect?
-    assert_equal "www.consumerfinance.gov", site.redirect
+    VCR.use_cassette "cfpb.gov", :record => :new_episodes do
+      site = SiteInspector.new "cfpb.gov"
+      assert_equal true, site.redirect?
+      assert_equal "www.consumerfinance.gov", site.redirect
+    end
   end
 end
