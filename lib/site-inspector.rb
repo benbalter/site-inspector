@@ -53,7 +53,10 @@ class SiteInspector
 
   def request(ssl=false, www=false, followlocation=true, ssl_verifypeer=true, ssl_verifyhost=true)
     to_get = uri(ssl, www)
+
+    # debugging
     puts "fetching: #{to_get}, #{followlocation ? "follow" : "no follow"}, #{ssl_verifypeer ? "verify peer, " : ""}#{ssl_verifyhost ? "verify host" : ""}"
+
     Typhoeus.get(to_get, followlocation: followlocation, ssl_verifypeer: ssl_verifypeer, ssl_verifyhost: (ssl_verifyhost ? 2 : 0), timeout: @timeout)
   end
 
@@ -132,30 +135,25 @@ class SiteInspector
   end
 
   def http
-    puts "WHAT"
-
-    puts domain
-    puts uri
-
-    puts "NO"
     details = {
+      # site-inspector's best guess
       domain: domain.to_s,
       uri: uri.to_s,
-      live: !!response,
 
+      endpoints: endpoints
+    }
+
+    live: !!response,
       https: https?,
       www: www?,
       root: non_www?,
 
       enforce_https: enforce_https?,
       redirect: redirect?
-    }
 
     # HTTPS is enforced if the HTTP endpoints either:
-    #  * are down (status == 0),
-    #  * OR, redirect to HTTPS
-    # AND:
-    #  * at least one HTTPS endpoint has valid_https
+    #  * are both down (status == 0),
+    #  * OR, both redirect to HTTPS
 
     details[:endpoints] = endpoints
 
