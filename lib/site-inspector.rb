@@ -17,7 +17,11 @@ require_relative 'site-inspector/dns'
 require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/headers'
 
-Typhoeus::Config.cache = SiteInspectorCache.new
+if ENV['CACHE']
+  Typhoeus::Config.cache = SiteInspectorDiskCache.new(ENV['CACHE'])
+else
+  Typhoeus::Config.cache = SiteInspectorCache.new
+end
 
 class SiteInspector
 
