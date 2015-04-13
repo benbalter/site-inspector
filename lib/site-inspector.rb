@@ -55,7 +55,7 @@ class SiteInspector
     to_get = uri(ssl, www)
 
     # debugging
-    puts "fetching: #{to_get}, #{followlocation ? "follow" : "no follow"}, #{ssl_verifypeer ? "verify peer, " : ""}#{ssl_verifyhost ? "verify host" : ""}"
+    # puts "fetching: #{to_get}, #{followlocation ? "follow" : "no follow"}, #{ssl_verifypeer ? "verify peer, " : ""}#{ssl_verifyhost ? "verify host" : ""}"
 
     Typhoeus.get(to_get, followlocation: followlocation, ssl_verifypeer: ssl_verifypeer, ssl_verifyhost: (ssl_verifyhost ? 2 : 0), timeout: @timeout)
   end
