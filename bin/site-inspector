@@ -1,15 +1,29 @@
 #!/usr/bin/env ruby
 
 require_relative "../lib/site-inspector"
+
 require "oj"
 
 domain = ARGV[0]
+http_mode = (ARGV[1] == "--http")
 
 if domain.to_s.empty?
   puts "Usage: site-inspector [DOMAIN]"
   exit 1
 end
 
-details = SiteInspector.new(domain).to_hash
+# HTTP mode:
+#   * all details for possible endpoints
+#   * don't follow redirects
+#   * shorter timeout
+if http_mode
+  site = SiteInspector.new(domain, {:timeout => 5})
+  details = site.http
 
-puts Oj.dump(details, indent: 2, :mode => :compat)
+# Normal mode: autodetect canonical domain, sweep every attribute.
+else
+  site = SiteInspector.new(domain)
+  details = site.to_hash
+end
+
+puts Oj.dump(details, indent: 2, mode: :compat)

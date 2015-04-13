@@ -25,22 +25,24 @@ class SiteInspector
     YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
 
-  def initialize(domain)
+  # makes no network requests
+  def initialize(domain, options = {})
     domain = domain.downcase
     domain = domain.sub /^https?\:/, ""
     domain = domain.sub /^\/+/, ""
     domain = domain.sub /^www\./, ""
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
+    @timeout = options[:timeout] || 10
   end
 
   def inspect
     "<SiteInspector domain=\"#{domain}\">"
   end
 
-  def uri(ssl=https?,www=www?)
+  def uri(ssl=enforce_https?,www=www?)
     uri = @uri.clone
-    uri.host = "www.#{uri.host}" if www
+    uri.host = www ? "www.#{uri.host}" : uri.host
     uri.scheme = ssl ? "https" : "http"
     uri
   end
@@ -49,8 +51,10 @@ class SiteInspector
     www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain
   end
 
-  def request(ssl=false, www=false, followlocation=true)
-    Typhoeus.get(uri(ssl, www), followlocation: followlocation, timeout: 10)
+  def request(ssl=false, www=false, followlocation=true, ssl_verifypeer=true, ssl_verifyhost=true)
+    to_get = uri(ssl, www)
+    puts "fetching: #{to_get}, #{followlocation ? "follow" : "no follow"}, #{ssl_verifypeer ? "verify peer, " : ""}#{ssl_verifyhost ? "verify host" : ""}"
+    Typhoeus.get(to_get, followlocation: followlocation, ssl_verifypeer: ssl_verifypeer, ssl_verifyhost: (ssl_verifyhost ? 2 : 0), timeout: @timeout)
   end
 
   def response
@@ -125,6 +129,129 @@ class SiteInspector
 
   def to_json
     to_hash.to_json
+  end
+
+  def http
+    puts "WHAT"
+
+    puts domain
+    puts uri
+
+    puts "NO"
+    details = {
+      domain: domain.to_s,
+      uri: uri.to_s,
+      live: !!response,
+
+      https: https?,
+      www: www?,
+      root: non_www?,
+
+      enforce_https: enforce_https?,
+      redirect: redirect?
+    }
+
+    # HTTPS is enforced if the HTTP endpoints either:
+    #  * are down (status == 0),
+    #  * OR, redirect to HTTPS
+    # AND:
+    #  * at least one HTTPS endpoint has valid_https
+
+    details[:endpoints] = endpoints
+
+    details
+  end
+
+  def endpoints
+    https_www = http_endpoint(true, true)
+    http_www = http_endpoint(false, true)
+    https_root = http_endpoint(true, false)
+    http_root = http_endpoint(false, false)
+
+    {
+      https: {
+        www: https_www,
+        root: https_root
+      },
+      http: {
+        www: http_www,
+        root: http_root
+      }
+    }
+  end
+
+  # State of affairs at a particular endpoint.
+  def http_endpoint(ssl, www)
+    details = {}
+
+    # Don't follow redirects for first ping.
+    response = request(ssl, www, false)
+
+
+    # For HTTPS: examine the full range of possibilities.
+    if ssl
+      if response.return_code == :ok
+        details[:https_valid] = true
+
+      # Bad certificate chain.
+      elsif response.return_code == :ssl_cacert
+        details[:https_valid] = false
+        details[:https_bad_chain] = true
+        response = request(ssl, www, false, false, true)
+        # Bad everything.
+        if response.return_code == :peer_failed_verification
+          details[:https_bad_name] = true
+          response = request(ssl, www, false, false, false)
+        end
+      # Bad hostname.
+      elsif response.return_code == :peer_failed_verification
+        details[:https_valid] = false
+        details[:https_bad_name] = true
+        response = request(ssl, www, false, true, false)
+        # Bad everything.
+        if response.return_code == :ssl_cacert
+          details[:https_bad_chain] = true
+          response = request(ssl, www, false, false, false)
+        end
+      end
+    end
+
+    # If we ended up with a failure, return it.
+    details[:status] = response.response_code
+    return details if response.response_code == 0
+
+    headers = Hash[response.headers.map{ |k,v| [k.downcase,v] }]
+    # details[:headers] = headers
+
+
+    # HSTS only takes effect when delivered over valid HTTPS.
+    details[:hsts] = (ssl and details[:https_valid] and headers["strict-transport-security"])
+    details[:hsts_header] = headers["strict-transport-security"]
+
+
+    # If it's a redirect, go find the ultimate response starting from this combo.
+    redirect_code = response.response_code.to_s.start_with?("3")
+    location_header = headers["location"]
+    if redirect_code and location_header
+      details[:redirect] = true
+
+      ultimate_response = request(ssl, www, true, !details[:https_bad_chain], !details[:https_bad_name])
+      uri_original = URI(ultimate_response.request.url)
+      uri_eventual = URI(ultimate_response.effective_url)
+
+      details[:redirect_to] = uri_eventual.to_s
+      details[:redirect_to_external] = (uri_original.hostname != uri_eventual.hostname)
+      details[:redirect_to_https] = (uri_eventual.scheme == "https")
+
+      details[:live] = ultimate_response.success?
+
+    # otherwise, judge it here
+    else
+      details[:redirect] = false
+      details[:live] = response.success?
+    end
+
+    details
   end
 
   def to_hash
