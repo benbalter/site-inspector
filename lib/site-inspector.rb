@@ -267,7 +267,7 @@ class SiteInspector
     return details if response.response_code == 0
 
     headers = Hash[response.headers.map{ |k,v| [k.downcase,v] }]
-    # details[:headers] = headers
+    details[:headers] = headers
 
 
     # HSTS only takes effect when delivered over valid HTTPS.
