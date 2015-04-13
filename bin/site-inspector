@@ -8,7 +8,7 @@ domain = ARGV[0]
 http_mode = (ARGV[1] == "--http")
 
 if domain.to_s.empty?
-  puts "Usage: site-inspector [DOMAIN]"
+  puts "Usage: site-inspector [DOMAIN] [--http]"
   exit 1
 end
 
