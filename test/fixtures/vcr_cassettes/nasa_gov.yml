@@ -20,7 +20,7 @@ http_interactions:
     http_version: 
     adapter_metadata:
       effective_url: http://nasa.gov/
-  recorded_at: Mon, 13 Apr 2015 02:11:02 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:18 GMT
 - request:
     method: get
     uri: http://www.nasa.gov
@@ -48,13 +48,13 @@ http_interactions:
       Server:
       - AmazonS3
       Age:
-      - '234'
+      - '76'
       Date:
-      - Mon, 13 Apr 2015 02:11:02 GMT
+      - Mon, 13 Apr 2015 02:30:18 GMT
       Last-Modified:
       - Fri, 10 Apr 2015 20:57:45 GMT
       Expires:
-      - Mon, 13 Apr 2015 02:12:08 GMT
+      - Mon, 13 Apr 2015 02:34:02 GMT
       Content-Length:
       - '33351'
       Connection:
@@ -807,5 +807,5 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://www.nasa.gov/
-  recorded_at: Mon, 13 Apr 2015 02:11:02 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:18 GMT
 recorded_with: VCR 2.9.3
