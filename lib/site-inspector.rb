@@ -134,7 +134,6 @@ class SiteInspector
     to_hash.to_json
   end
 
-<<<<<<< HEAD
   def http
     details = {
       # site-inspector's best guess
