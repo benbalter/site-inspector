@@ -23,14 +23,12 @@ class SiteInspectorDiskCache
   end
 
   def fetch(request)
-    puts request.cache_key
     if File.exist?(path(request))
       Marshal.load(File.read(path(request)))
     end
   end
 
   def store(request, response)
-    puts request.cache_key
     File.open(File.join(@dir, request.cache_key), "w") do |f|
       f.write Marshal.dump(response)
     end
