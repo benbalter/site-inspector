@@ -137,25 +137,68 @@ class SiteInspector
   def http
     details = {
       # site-inspector's best guess
-      domain: domain.to_s,
-      uri: uri.to_s,
+      canonical: uri.to_s,
+      canonical_protocol: https? ? :https : :http,
+      canonical_endpoint: www? ? :www : :root,
 
       endpoints: endpoints
     }
 
-    live: !!response,
-      https: https?,
-      www: www?,
-      root: non_www?,
+    combos = details[:endpoints]
 
-      enforce_https: enforce_https?,
-      redirect: redirect?
+    details[:live] = (
+      combos[:https][:www][:live] or
+      combos[:https][:root][:live] or
+      combos[:http][:www][:live] or
+      combos[:http][:root][:live]
+    )
 
-    # HTTPS is enforced if the HTTP endpoints either:
-    #  * are both down (status == 0),
-    #  * OR, both redirect to HTTPS
+    details[:broken_root] = (
+      (combos[:https][:root][:status] == 0) and
+      (combos[:http][:root][:status] == 0)
+    )
 
-    details[:endpoints] = endpoints
+    details[:broken_www] = (
+      (combos[:https][:www][:status] == 0) and
+      (combos[:http][:www][:status] == 0)
+    )
+
+    details[:enforce_https] = (
+      (
+        (combos[:http][:www][:status] == 0) ||
+        (combos[:http][:www][:redirect_to_https])
+      ) and
+      (
+        (combos[:http][:root][:status] == 0) or
+        (combos[:http][:root][:redirect_to_https])
+      ) and
+      (
+        combos[:https][:www][:live] or
+        combos[:https][:root][:live]
+      )
+    )
+
+    details[:redirect] = (
+      combos[:http][:www][:redirect_to_external] and
+      combos[:http][:root][:redirect_to_external] and
+      combos[:https][:www][:redirect_to_external] and
+      combos[:https][:root][:redirect_to_external]
+    )
+
+    # HSTS on the canonical domain? (valid HTTPS checked in endpoint)
+    details[:hsts] = combos[:https][details[:canonical_endpoint]][:hsts]
+
+    # HSTS on the entire domain?
+    details[:hsts_entire_domain] = (
+      combos[:https][:root][:hsts] and
+      combos[:https][:root][:hsts_header].downcase.include?("includesubdomains")
+    )
+
+    # HSTS preload --ready?
+    details[:hsts_entire_domain_preload] = (
+      details[:hsts_entire_domain] and
+      combos[:https][:root][:hsts_header].downcase.include?("preload")
+    )
 
     details
   end
@@ -223,7 +266,7 @@ class SiteInspector
 
 
     # HSTS only takes effect when delivered over valid HTTPS.
-    details[:hsts] = (ssl and details[:https_valid] and headers["strict-transport-security"])
+    details[:hsts] = !!(ssl and details[:https_valid] and headers["strict-transport-security"])
     details[:hsts_header] = headers["strict-transport-security"]
 
 
@@ -238,7 +281,7 @@ class SiteInspector
       uri_eventual = URI(ultimate_response.effective_url)
 
       details[:redirect_to] = uri_eventual.to_s
-      details[:redirect_to_external] = (uri_original.hostname != uri_eventual.hostname)
+      details[:redirect_to_external] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
       details[:redirect_to_https] = (uri_eventual.scheme == "https")
 
       details[:live] = ultimate_response.success?
@@ -246,6 +289,8 @@ class SiteInspector
     # otherwise, judge it here
     else
       details[:redirect] = false
+      details[:redirect_to_external] = false
+      details[:redirect_to_https] = false
       details[:live] = response.success?
     end
 
