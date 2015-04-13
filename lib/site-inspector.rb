@@ -187,6 +187,7 @@ class SiteInspector
 
     # HSTS on the canonical domain? (valid HTTPS checked in endpoint)
     details[:hsts] = combos[:https][details[:canonical_endpoint]][:hsts]
+    details[:hsts_header] = combos[:https][details[:canonical_endpoint]][:hsts_header]
 
     # HSTS on the entire domain?
     details[:hsts_entire_domain] = (
