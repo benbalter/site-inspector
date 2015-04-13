@@ -127,37 +127,50 @@ class SiteInspector
     to_hash.to_json
   end
 
-  def to_hash
-    {
-      :domain => domain.to_s,
-      :uri => uri.to_s,
-      :government => government?,
-      :live => !!response,
-      :ssl => https?,
-      :enforce_https => enforce_https?,
-      :non_www => non_www?,
-      :redirect => redirect,
-      :ip => ip,
-      :hostname => hostname.to_s,
-      :ipv6 => ipv6?,
-      :dnssec => dnssec?,
-      :cdn => cdn,
-      :google_apps => google_apps?,
-      :cloud_provider => cloud_provider,
-      :server => server,
-      :cms => cms,
-      :analytics => analytics,
-      :javascript => javascript,
-      :advertising => advertising,
-      :slash_data => slash_data?,
-      :slash_developer => slash_developer?,
-      :data_dot_json => data_dot_json?,
-      :click_jacking_protection => click_jacking_protection?,
-      :content_security_policy => content_security_policy?,
-      :xss_protection => xss_protection?,
-      :secure_cookies => secure_cookies?,
-      :strict_transport_security => strict_transport_security?,
-      :headers => headers
-    }
+  def to_hash(http_only=false)
+    if http_only
+      {
+        :domain => domain.to_s,
+        :uri => uri.to_s,
+        :live => !!response,
+        :ssl => https?,
+        :enforce_https => enforce_https?,
+        :non_www => non_www?,
+        :redirect => redirect,
+        :headers => headers
+      }
+    else
+      {
+        :domain => domain.to_s,
+        :uri => uri.to_s,
+        :government => government?,
+        :live => !!response,
+        :ssl => https?,
+        :enforce_https => enforce_https?,
+        :non_www => non_www?,
+        :redirect => redirect,
+        :ip => ip,
+        :hostname => hostname.to_s,
+        :ipv6 => ipv6?,
+        :dnssec => dnssec?,
+        :cdn => cdn,
+        :google_apps => google_apps?,
+        :cloud_provider => cloud_provider,
+        :server => server,
+        :cms => cms,
+        :analytics => analytics,
+        :javascript => javascript,
+        :advertising => advertising,
+        :slash_data => slash_data?,
+        :slash_developer => slash_developer?,
+        :data_dot_json => data_dot_json?,
+        :click_jacking_protection => click_jacking_protection?,
+        :content_security_policy => content_security_policy?,
+        :xss_protection => xss_protection?,
+        :secure_cookies => secure_cookies?,
+        :strict_transport_security => strict_transport_security?,
+        :headers => headers
+      }
+    end
   end
 end
