@@ -5,7 +5,8 @@ class TestSiteInspectorBin < Minitest::Test
     assert `bundle exec site-inspector` =~ /usage/i
   end
 
-  should "output the hash" do
-    assert `bundle exec site-inspector whitehouse.gov` =~ /"government":true/i
-  end
+  # requires hitting the network, don't run it by default
+  # should "output the hash" do
+  #   assert `bundle exec site-inspector whitehouse.gov` =~ /"government":true/i
+  # end
 end
