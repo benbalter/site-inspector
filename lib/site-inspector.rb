@@ -309,8 +309,13 @@ class SiteInspector
       uri_original = URI(ultimate_response.request.url)
       uri_eventual = URI(ultimate_response.effective_url)
 
+      # compare base domain names
+      base_original = PublicSuffix.parse(uri_original.hostname).domain
+      base_eventual = PublicSuffix.parse(uri_eventual.hostname).domain
+
       details[:redirect_to] = uri_eventual.to_s
       details[:redirect_away] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
+      details[:redirect_external] = (base_original != base_eventual)
       details[:redirect_to_https] = (uri_eventual.scheme == "https")
 
       details[:live] = ultimate_response.success?
@@ -319,6 +324,7 @@ class SiteInspector
     else
       details[:redirect] = false
       details[:redirect_away] = false
+      details[:redirect_external] = false
       details[:redirect_to_https] = false
       details[:live] = response.success?
     end
