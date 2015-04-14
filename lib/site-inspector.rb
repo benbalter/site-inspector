@@ -150,24 +150,24 @@ class SiteInspector
 
     combos = details[:endpoints]
 
-    details[:live] = (
+    details[:live] = !!(
       combos[:https][:www][:live] or
       combos[:https][:root][:live] or
       combos[:http][:www][:live] or
       combos[:http][:root][:live]
     )
 
-    details[:broken_root] = (
+    details[:broken_root] = !!(
       (combos[:https][:root][:status] == 0) and
       (combos[:http][:root][:status] == 0)
     )
 
-    details[:broken_www] = (
+    details[:broken_www] = !!(
       (combos[:https][:www][:status] == 0) and
       (combos[:http][:www][:status] == 0)
     )
 
-    details[:enforce_https] = (
+    details[:enforce_https] = !!(
       (
         (combos[:http][:www][:status] == 0) ||
         (combos[:http][:www][:redirect_to_https])
@@ -182,7 +182,7 @@ class SiteInspector
       )
     )
 
-    details[:redirect] = (
+    details[:redirect] = !!(
       combos[:http][:www][:redirect_to_external] and
       combos[:http][:root][:redirect_to_external] and
       combos[:https][:www][:redirect_to_external] and
@@ -190,17 +190,17 @@ class SiteInspector
     )
 
     # HSTS on the canonical domain? (valid HTTPS checked in endpoint)
-    details[:hsts] = combos[:https][details[:canonical_endpoint]][:hsts]
+    details[:hsts] = !!combos[:https][details[:canonical_endpoint]][:hsts]
     details[:hsts_header] = combos[:https][details[:canonical_endpoint]][:hsts_header]
 
     # HSTS on the entire domain?
-    details[:hsts_entire_domain] = (
+    details[:hsts_entire_domain] = !!(
       combos[:https][:root][:hsts] and
       combos[:https][:root][:hsts_header].downcase.include?("includesubdomains")
     )
 
     # HSTS preload --ready?
-    details[:hsts_entire_domain_preload] = (
+    details[:hsts_entire_domain_preload] = !!(
       details[:hsts_entire_domain] and
       combos[:https][:root][:hsts_header].downcase.include?("preload")
     )
