@@ -168,15 +168,21 @@ class SiteInspector
     )
 
     # HTTPS is enforced if one of the HTTPS endpoints is "live",
-    # and if both HTTP endpoints are either down or redirect.
+    # and if both *HTTP* endpoints are either:
+    #
+    #  * down, or
+    #  * redirect immediately to HTTPS.
+    #
+    # This allows an HTTP redirect to go to HTTPS on another domain,
+    # as long as it's immediate.
     details[:enforce_https] = !!(
       (
         (combos[:http][:www][:status] == 0) ||
-        (combos[:http][:www][:redirect_to_https])
+        (combos[:http][:www][:redirect_immediately_to_https])
       ) and
       (
         (combos[:http][:root][:status] == 0) or
-        (combos[:http][:root][:redirect_to_https])
+        (combos[:http][:root][:redirect_immediately_to_https])
       ) and
       (
         combos[:https][:www][:live] or
@@ -304,6 +310,7 @@ class SiteInspector
     location_header = headers["location"]
     if redirect_code and location_header
       details[:redirect] = true
+      details[:redirect_immediately_to_https] = location_header.start_with?("https://")
 
       ultimate_response = request(ssl, www, true, !details[:https_bad_chain], !details[:https_bad_name])
       uri_original = URI(ultimate_response.request.url)
@@ -316,16 +323,17 @@ class SiteInspector
       details[:redirect_to] = uri_eventual.to_s
       details[:redirect_away] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
       details[:redirect_external] = (base_original != base_eventual)
-      details[:redirect_to_https] = (uri_eventual.scheme == "https")
 
       details[:live] = ultimate_response.success?
 
     # otherwise, judge it here
     else
       details[:redirect] = false
+      details[:redirect_immediately_to_https] = false
+
       details[:redirect_away] = false
       details[:redirect_external] = false
-      details[:redirect_to_https] = false
+
       details[:live] = response.success?
     end
 
