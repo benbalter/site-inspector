@@ -300,8 +300,15 @@ class SiteInspector
     details[:headers] = headers
 
 
-    # HSTS only takes effect when delivered over valid HTTPS.
-    details[:hsts] = !!(ssl and details[:https_valid] and headers["strict-transport-security"])
+    # HSTS only takes effect when delivered over valid HTTPS, and
+    # when the max-age is > 0. max-age=0 disables HSTS.
+    details[:hsts] = !!(
+      ssl and
+      details[:https_valid] and
+      headers["strict-transport-security"] and
+      !(headers["strict-transport-security"] =~ /max-age=0\b/)
+    )
+
     details[:hsts_header] = headers["strict-transport-security"]
 
 
