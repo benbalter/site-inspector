@@ -182,12 +182,34 @@ class SiteInspector
       )
     )
 
+    # The domain is a redirect if it's live, and each endpoint
+    # is *either* an external redirect or down entirely.
     details[:redirect] = !!(
-      combos[:http][:www][:redirect_to_external] and
-      combos[:http][:root][:redirect_to_external] and
-      combos[:https][:www][:redirect_to_external] and
-      combos[:https][:root][:redirect_to_external]
+      details[:live] and
+      (
+        combos[:http][:www][:redirect_to_external] or
+        (combos[:http][:www][:status] == 0)
+      ) and
+      (
+        combos[:http][:root][:redirect_to_external] or
+        (combos[:http][:root][:status] == 0)
+      ) and
+      (
+        combos[:https][:www][:redirect_to_external] or
+        (combos[:https][:www][:status] == 0)
+      ) and
+      (
+        combos[:https][:root][:redirect_to_external] or
+        (combos[:https][:root][:status] == 0)
+      )
     )
+
+    if details[:redirect]
+      canon = combos[details[:canonical_protocol]][details[:canonical_endpoint]]
+      details[:redirect_to] = canon[:redirect_to]
+    else
+      details[:redirect_to] = nil
+    end
 
     # HSTS on the canonical domain? (valid HTTPS checked in endpoint)
     details[:hsts] = !!combos[:https][details[:canonical_endpoint]][:hsts]
