@@ -3,6 +3,8 @@
 vendor
 Gemfile.lock
 
+/.env
+
 # rack-cache
 cache
 
