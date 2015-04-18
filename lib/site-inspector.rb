@@ -167,10 +167,12 @@ class SiteInspector
       ) and (
         (
           combos[:https][:root][:redirect] or
-          !combos[:https][:root][:up]
+          !combos[:https][:root][:up] or
+          !combos[:https][:root][:status].to_s.start_with?("2")
         ) and (
           combos[:http][:root][:redirect] or
           !combos[:http][:root][:up]
+          !combos[:http][:root][:status].to_s.start_with?("2")
         )
       ) and (
         (
@@ -215,10 +217,12 @@ class SiteInspector
       ) and (
         (
           combos[:http][:root][:redirect] or
-          !combos[:http][:root][:up]
+          !combos[:http][:root][:up] or
+          !combos[:http][:root][:status].to_s.start_with?("2")
         ) and (
           combos[:http][:www][:redirect] or
-          !combos[:http][:www][:up]
+          !combos[:http][:www][:up] or
+          !combos[:http][:www][:status].to_s.start_with?("2")
         )
       ) and (
         (
@@ -436,7 +440,14 @@ class SiteInspector
 
       ultimate_response = request(ssl, www, true, !details[:https_bad_chain], !details[:https_bad_name])
       uri_original = URI(ultimate_response.request.url)
-      uri_immediate = URI(location_header)
+
+      # treat relative Location headers as having the original hostname
+      if location_header.start_with?("http:") or location_header.start_with?("https:")
+        uri_immediate = URI(location_header)
+      else
+        uri_immediate = uri_original
+      end
+
       uri_eventual = URI(ultimate_response.effective_url)
 
       # compare base domain names
@@ -453,9 +464,7 @@ class SiteInspector
       details[:redirect_away] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
       details[:redirect_external] = (base_original != base_eventual)
 
-      details[:live] = ultimate_response.success?
-
-    # otherwise, judge it here
+    # otherwise, mark all the redirect fields as false/null
     else
       details[:redirect] = false
       details[:redirect_immediately_to] = nil
@@ -466,8 +475,6 @@ class SiteInspector
       details[:redirect_to] = nil
       details[:redirect_away] = false
       details[:redirect_external] = false
-
-      details[:live] = response.success?
     end
 
     details
