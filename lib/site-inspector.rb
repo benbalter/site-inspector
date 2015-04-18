@@ -273,6 +273,19 @@ class SiteInspector
       )
     )
 
+    # HTTPS is "downgraded" if both:
+    #
+    # * HTTPS is supported, and
+    # * The 'canonical' endpoint gets an immediate redirect to HTTP.
+
+    details[:downgrade_https] = !!(
+      details[:support_https] and
+      (
+        combos[:https][details[:canonical_endpoint]][:redirect] and
+        !combos[:https][details[:canonical_endpoint]][:redirect_immediately_to_https]
+      )
+    )
+
     # HTTPS is enforced if one of the HTTPS endpoints is "live",
     # and if both *HTTP* endpoints are either:
     #
