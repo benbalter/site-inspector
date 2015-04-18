@@ -148,7 +148,7 @@ class SiteInspector
 
     # A domain is "canonically" at www if:
     #  * at least one of its www endpoints responds
-    #  * both root endpoints redirect *somewhere*
+    #  * both root endpoints are either down or redirect *somewhere*
     #  * at least one root endpoint redirects immediately to
     #    an *internal* www endpoint
     # This is meant to affirm situations like:
@@ -165,8 +165,13 @@ class SiteInspector
         combos[:https][:www][:up] or
         combos[:http][:www][:up]
       ) and (
-        combos[:https][:www][:redirect] and
-        combos[:http][:www][:redirect]
+        (
+          combos[:https][:root][:redirect] or
+          !combos[:https][:root][:up]
+        ) and (
+          combos[:http][:root][:redirect] or
+          !combos[:http][:root][:up]
+        )
       ) and (
         (
           combos[:https][:www][:redirect_immediately_to_www] and
@@ -182,7 +187,7 @@ class SiteInspector
     # A domain is "canonically" at https if:
     #  * at least one of its https endpoints is live and
     #    doesn't have an invalid hostname
-    #  * both http endpoints redirect *somewhere*
+    #  * both http endpoints are either down or redirect *somewhere*
     #  * at least one http endpoint redirects immediately to
     #    an *internal* https endpoint
     # This is meant to affirm situations like:
@@ -208,8 +213,13 @@ class SiteInspector
           !combos[:https][:root][:https_bad_name]
         )
       ) and (
-        combos[:http][:root][:redirect] and
-        combos[:http][:www][:redirect]
+        (
+          combos[:http][:root][:redirect] or
+          !combos[:http][:root][:up]
+        ) and (
+          combos[:http][:www][:redirect] or
+          !combos[:http][:www][:up]
+        )
       ) and (
         (
           combos[:http][:root][:redirect_immediately_to_https] and
