@@ -112,7 +112,7 @@ class SiteInspector
   end
 
   def www?
-    response && response.effective_url && !!response.effective_url.match(/https?:\/\/www\./)
+    response && response.effective_url && !!response.effective_url.match(/^https?:\/\/www\./)
   end
 
   def non_www?
@@ -140,31 +140,123 @@ class SiteInspector
 
   def http
     details = {
-      # site-inspector's best guess
-      canonical: uri.to_s,
-      canonical_protocol: https? ? :https : :http,
-      canonical_endpoint: www? ? :www : :root,
-
       endpoints: endpoints
     }
 
+    # convenient shorthand for the extensive statements to come
     combos = details[:endpoints]
 
-    details[:live] = !!(
-      combos[:https][:www][:live] or
-      combos[:https][:root][:live] or
-      combos[:http][:www][:live] or
-      combos[:http][:root][:live]
+    # A domain is "canonically" at www if:
+    #  * at least one of its www endpoints responds
+    #  * both root endpoints redirect *somewhere*
+    #  * at least one root endpoint redirects immediately to
+    #    an *internal* www endpoint
+    # This is meant to affirm situations like:
+    #   http:// -> https:// -> https://www
+    #   https:// -> http:// -> https://www
+    # and meant to avoid affirming situations like:
+    #   http:// -> http://non-www,
+    #   http://www -> http://non-www
+    # or like:
+    #   https:// -> 200, http:// -> http://www
+
+    www = !!(
+      (
+        combos[:https][:www][:up] or
+        combos[:http][:www][:up]
+      ) and (
+        combos[:https][:www][:redirect] and
+        combos[:http][:www][:redirect]
+      ) and (
+        (
+          combos[:https][:www][:redirect_immediately_to_www] and
+          !combos[:https][:www][:redirect_immediately_away]
+        ) or
+        (
+          combos[:http][:www][:redirect_immediately_to_www] and
+          !combos[:http][:www][:redirect_immediately_away]
+        )
+      )
     )
 
+    # A domain is "canonically" at https if:
+    #  * at least one of its https endpoints is live and
+    #    doesn't have an invalid hostname
+    #  * both http endpoints redirect *somewhere*
+    #  * at least one http endpoint redirects immediately to
+    #    an *internal* https endpoint
+    # This is meant to affirm situations like:
+    #   http:// -> http://www -> https://
+    #   https:// -> http:// -> https://www
+    # and meant to avoid affirming situations like:
+    #   http:// -> http://non-www
+    #   http://www -> http://non-www
+    # or:
+    #   http:// -> 200, http://www -> https://www
+    #
+    # It allows a site to be canonically HTTPS if the cert has
+    # a valid hostname but invalid chain issues.
+
+    https = !!(
+      (
+        (
+          combos[:https][:root][:up] and
+          !combos[:https][:root][:https_bad_name]
+        ) or
+        (
+          combos[:https][:www][:up] and
+          !combos[:https][:root][:https_bad_name]
+        )
+      ) and (
+        combos[:http][:root][:redirect] and
+        combos[:http][:www][:redirect]
+      ) and (
+        (
+          combos[:http][:root][:redirect_immediately_to_https] and
+          !combos[:http][:root][:redirect_immediately_away]
+        ) or (
+          combos[:http][:www][:redirect_immediately_to_https] and
+          !combos[:http][:www][:redirect_immediately_away]
+        )
+      )
+    )
+
+    details[:canonical_endpoint] = www ? :www : :root
+    details[:canonical_protocol] = https ? :https : :http
+    details[:canonical] = uri(https, www).to_s
+
+    # If any endpoint is up, the domain is up.
+    details[:up] = !!(
+      combos[:https][:www][:up] and
+      combos[:https][:root][:up] or
+      combos[:http][:www][:up] or
+      combos[:http][:root][:up]
+    )
+
+    # A domain's root is broken if neither protocol can connect.
     details[:broken_root] = !!(
-      (combos[:https][:root][:status] == 0) and
-      (combos[:http][:root][:status] == 0)
+      !combos[:https][:root][:up] and
+      !combos[:http][:root][:up]
     )
 
+    # A domain's www is broken if neither protocol can connect.
     details[:broken_www] = !!(
-      (combos[:https][:www][:status] == 0) and
-      (combos[:http][:www][:status] == 0)
+      !combos[:https][:www][:up] and
+      !combos[:http][:www][:up]
+    )
+
+    # HTTPS is "supported" (different than "canonical" or "enforced") if:
+    #
+    # * Either of the HTTPS endpoints is listening, and doesn't have
+    #   an invalid hostname.
+    details[:support_https] = !!(
+      (
+        (combos[:https][:root][:status] != 0) and
+        !combos[:https][:root][:https_bad_name]
+      ) or (
+        (combos[:https][:www][:status] != 0) and
+        !combos[:https][:www][:https_bad_name]
+      )
     )
 
     # HTTPS is enforced if one of the HTTPS endpoints is "live",
@@ -173,45 +265,50 @@ class SiteInspector
     #  * down, or
     #  * redirect immediately to HTTPS.
     #
-    # This allows an HTTP redirect to go to HTTPS on another domain,
-    # as long as it's immediate.
+    # This is different than whether a domain is "canonically" HTTPS.
+    #
+    # * an HTTP redirect can go to HTTPS on another domain, as long
+    #   as it's immediate.
+    # * a domain with an invalid cert can still be enforcing HTTPS.
     details[:enforce_https] = !!(
       (
-        (combos[:http][:www][:status] == 0) ||
+        !combos[:http][:www][:up] or
         (combos[:http][:www][:redirect_immediately_to_https])
       ) and
       (
-        (combos[:http][:root][:status] == 0) or
+        !combos[:http][:root][:up] or
         (combos[:http][:root][:redirect_immediately_to_https])
       ) and
       (
-        combos[:https][:www][:live] or
-        combos[:https][:root][:live]
+        combos[:https][:www][:up] or
+        combos[:https][:root][:up]
       )
     )
 
-    # The domain is a redirect if it's live, and each endpoint
-    # is *either* an external redirect or down entirely.
+    # The domain is a redirect if at least one endpoint is up,
+    # and each one is *either* an external redirect or down entirely.
     details[:redirect] = !!(
-      details[:live] and
+      details[:up] and
       (
         combos[:http][:www][:redirect_away] or
-        (combos[:http][:www][:status] == 0)
+        !combos[:http][:www][:up]
       ) and
       (
         combos[:http][:root][:redirect_away] or
-        (combos[:http][:root][:status] == 0)
+        !combos[:http][:root][:up]
       ) and
       (
         combos[:https][:www][:redirect_away] or
-        (combos[:https][:www][:status] == 0)
+        !combos[:https][:www][:up]
       ) and
       (
         combos[:https][:root][:redirect_away] or
-        (combos[:https][:root][:status] == 0)
+        !combos[:https][:root][:up]
       )
     )
 
+    # OK, we've said a domain is a "redirect" domain.
+    # What does the domain redirect to?
     if details[:redirect]
       canon = combos[details[:canonical_protocol]][details[:canonical_endpoint]]
       details[:redirect_to] = canon[:redirect_to]
@@ -268,6 +365,8 @@ class SiteInspector
     if ssl
       if response.return_code == :ok
         details[:https_valid] = true
+        details[:https_bad_chain] = false
+        details[:https_bad_name] = false
 
       # Bad certificate chain.
       elsif response.return_code == :ssl_cacert
@@ -279,6 +378,7 @@ class SiteInspector
           details[:https_bad_name] = true
           response = request(ssl, www, false, false, false)
         end
+
       # Bad hostname.
       elsif response.return_code == :peer_failed_verification
         details[:https_valid] = false
@@ -289,12 +389,18 @@ class SiteInspector
           details[:https_bad_chain] = true
           response = request(ssl, www, false, false, false)
         end
+
+      # not sure what else would happen
+      elsif response.response_code != 0
+        details[:https_valid] = false
+        details[:https_unknown_issue] = response.return_code
       end
     end
 
     # If we ended up with a failure, return it.
     details[:status] = response.response_code
-    return details if response.response_code == 0
+    details[:up] = (response.response_code != 0)
+    return details if !details[:up]
 
     headers = Hash[response.headers.map{ |k,v| [k.downcase,v] }]
     details[:headers] = headers
@@ -317,15 +423,21 @@ class SiteInspector
     location_header = headers["location"]
     if redirect_code and location_header
       details[:redirect] = true
-      details[:redirect_immediately_to_https] = location_header.start_with?("https://")
 
       ultimate_response = request(ssl, www, true, !details[:https_bad_chain], !details[:https_bad_name])
       uri_original = URI(ultimate_response.request.url)
+      uri_immediate = URI(location_header)
       uri_eventual = URI(ultimate_response.effective_url)
 
       # compare base domain names
       base_original = PublicSuffix.parse(uri_original.hostname).domain
+      base_immediate = PublicSuffix.parse(uri_immediate.hostname).domain
       base_eventual = PublicSuffix.parse(uri_eventual.hostname).domain
+
+      details[:redirect_immediately_to] = location_header
+      details[:redirect_immediately_to_www] = !!location_header.match(/^https?:\/\/www\./)
+      details[:redirect_immediately_to_https] = location_header.start_with?("https://")
+      details[:redirect_immediately_away] = (base_original != base_immediate)
 
       details[:redirect_to] = uri_eventual.to_s
       details[:redirect_away] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
@@ -336,8 +448,12 @@ class SiteInspector
     # otherwise, judge it here
     else
       details[:redirect] = false
+      details[:redirect_immediately_to] = nil
+      details[:redirect_immediately_to_www] = false
       details[:redirect_immediately_to_https] = false
+      details[:redirect_immediately_away] = false
 
+      details[:redirect_to] = nil
       details[:redirect_away] = false
       details[:redirect_external] = false
 
