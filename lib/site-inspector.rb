@@ -336,7 +336,7 @@ class SiteInspector
       combos[:https][:root][:hsts_header].downcase.include?("includesubdomains")
     )
 
-    # HSTS preload --ready?
+    # HSTS preload-ready?
     details[:hsts_entire_domain_preload] = !!(
       details[:hsts_entire_domain] and
       combos[:https][:root][:hsts_header].downcase.include?("preload")
