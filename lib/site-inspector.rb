@@ -456,7 +456,7 @@ class SiteInspector
 
       # treat relative Location headers as having the original hostname
       if location_header.start_with?("http:") or location_header.start_with?("https:")
-        uri_immediate = URI(location_header)
+        uri_immediate = URI(URI.escape(location_header))
       else
         uri_immediate = uri_original
       end
