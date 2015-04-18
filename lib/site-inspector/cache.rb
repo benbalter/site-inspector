@@ -24,7 +24,13 @@ class SiteInspectorDiskCache
 
   def fetch(request)
     if File.exist?(path(request))
-      Marshal.load(File.read(path(request)))
+      contents = File.read(path(request))
+      begin
+        Marshal.load(contents)
+      rescue ArgumentError
+        FileUtils.rm(path(request))
+        nil
+      end
     end
   end
 
