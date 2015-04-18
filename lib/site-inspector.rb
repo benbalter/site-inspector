@@ -465,8 +465,21 @@ class SiteInspector
 
       # compare base domain names
       base_original = PublicSuffix.parse(uri_original.hostname).domain
-      base_immediate = PublicSuffix.parse(uri_immediate.hostname).domain
-      base_eventual = PublicSuffix.parse(uri_eventual.hostname).domain
+
+      # if the redirects aren't to valid hostnames (e.g. IP addresses)
+      # then fine just compare them directly, they're not going to be
+      # identical anyway.
+      base_immediate = begin
+        PublicSuffix.parse(uri_immediate.hostname).domain
+      rescue PublicSuffix::DomainInvalid
+        uri_immediate.to_s
+      end
+
+      base_eventual = begin
+        PublicSuffix.parse(uri_eventual.hostname).domain
+      rescue PublicSuffix::DomainInvalid
+        uri_eventual.to_s
+      end
 
       details[:redirect_immediately_to] = location_header
       details[:redirect_immediately_to_www] = !!location_header.match(/^https?:\/\/www\./)
