@@ -17,7 +17,7 @@ end
 #   * don't follow redirects
 #   * shorter timeout
 if http_mode
-  site = SiteInspector.new(domain, {timeout: 10})
+  site = SiteInspector.new(domain)
   details = site.http
 
 # Normal mode: autodetect canonical domain, sweep every attribute.
