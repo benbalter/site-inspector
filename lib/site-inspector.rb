@@ -171,17 +171,17 @@ class SiteInspector
           !combos[:https][:root][:status].to_s.start_with?("2")
         ) and (
           combos[:http][:root][:redirect] or
-          !combos[:http][:root][:up]
+          !combos[:http][:root][:up] or
           !combos[:http][:root][:status].to_s.start_with?("2")
         )
       ) and (
         (
-          combos[:https][:www][:redirect_immediately_to_www] and
-          !combos[:https][:www][:redirect_immediately_away]
+          combos[:https][:root][:redirect_immediately_to_www] and
+          !combos[:https][:root][:redirect_immediately_away]
         ) or
         (
-          combos[:http][:www][:redirect_immediately_to_www] and
-          !combos[:http][:www][:redirect_immediately_away]
+          combos[:http][:root][:redirect_immediately_to_www] and
+          !combos[:http][:root][:redirect_immediately_away]
         )
       )
     )
@@ -272,6 +272,11 @@ class SiteInspector
         !combos[:https][:www][:https_bad_name]
       )
     )
+
+    # we can say that a canonical HTTPS site "defaults" to HTTPS,
+    # even if it doesn't *strictly* enforce it (e.g. having a www
+    # subdomain first to go HTTP root before HTTPS root).
+    details[:default_https] = https
 
     # HTTPS is "downgraded" if both:
     #
