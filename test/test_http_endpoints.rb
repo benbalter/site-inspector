@@ -48,6 +48,16 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, endpoint[:redirect_external]
   end
 
+  should "treat domains as case-insensitive" do
+    endpoint = SiteInspector.new("searanchlakesflorida.gov").http_endpoint(false, false)
+
+    assert_equal true, endpoint[:redirect]
+    assert_equal false, endpoint[:redirect_external]
+    assert_equal false, endpoint[:redirect_immediately_external]
+    assert_equal true, endpoint[:redirect_immediately_to_https]
+    assert_equal false, endpoint[:redirect_immediately_to_www]
+  end
+
   should "ignore HSTS with max-age=0" do
     endpoint = SiteInspector.new("c3.gov").http_endpoint(true, true)
 

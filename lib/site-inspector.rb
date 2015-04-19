@@ -462,12 +462,12 @@ class SiteInspector
 
       # treat relative Location headers as having the original hostname
       if location_header.start_with?("http:") or location_header.start_with?("https:")
-        uri_immediate = URI(URI.escape(location_header.downcase))
+        uri_immediate = URI(URI.escape(location_header))
       else
         uri_immediate = uri_original
       end
 
-      uri_eventual = URI(ultimate_response.effective_url)
+      uri_eventual = URI(ultimate_response.effective_url.downcase)
 
       # compare base domain names
       base_original = PublicSuffix.parse(uri_original.hostname).domain
