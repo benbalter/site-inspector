@@ -96,9 +96,17 @@ class TestSiteInspector < Minitest::Test
     # TODO: http example, esp http://www example
   end
 
-  # TODO
   should "detect default support for HTTPS even when not strictly enforced" do
+    # ecpic.gov is so good but redirects http:// -> http://www first
+    details = SiteInspector.new("ecpic.gov").http
 
+    assert_equal true, details[:up]
+    assert_equal :https, details[:canonical_protocol]
+
+    assert_equal true, details[:support_https]
+    assert_equal false, details[:downgrade_https]
+    assert_equal true, details[:default_https]
+    assert_equal false, details[:enforce_https]
   end
 
 
