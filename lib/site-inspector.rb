@@ -252,7 +252,7 @@ class SiteInspector
 
     # If any endpoint is up, the domain is up.
     details[:up] = !!(
-      combos[:https][:www][:up] and
+      combos[:https][:www][:up] or
       combos[:https][:root][:up] or
       combos[:http][:www][:up] or
       combos[:http][:root][:up]

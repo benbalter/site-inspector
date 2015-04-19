@@ -163,4 +163,16 @@ class TestSiteInspector < Minitest::Test
     assert_equal true, details[:enforce_https]
   end
 
+  should "only need one endpoint up to be up" do
+    # intelink.gov is only up at https://www
+    details = SiteInspector.new("intelink.gov").http
+
+    assert_equal true, details[:endpoints][:https][:www][:up]
+    assert_equal false, details[:endpoints][:http][:www][:up]
+    assert_equal false, details[:endpoints][:https][:root][:up]
+    assert_equal false, details[:endpoints][:http][:root][:up]
+
+    assert_equal true, details[:up]
+  end
+
 end
