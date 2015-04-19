@@ -1,57 +1,67 @@
-require File.join(File.dirname(__FILE__), 'helper')
+require "./" + File.join(File.dirname(__FILE__), 'helper')
 
 class TestSiteInspector < Minitest::Test
+
+  # Until we migrate to a non-curl-based HTTP library, this
+  # will hit the network.
 
   def setup
     Typhoeus::Config.cache = SiteInspectorCache.new
   end
 
-  should "detect the redirect surface of an HTTPS WWW site" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      domain = SiteInspector.new("whitehouse.gov").http
-      endpoints = domain[:endpoints]
+  should "handle a www, enforced HSTS site" do
+    endpoint = SiteInspector.new("whitehouse.gov").http_endpoint(true, true)
+    assert_equal false, endpoint[:redirect]
+    assert_equal true, endpoint[:hsts]
+    assert_equal true, endpoint[:https_valid]
+    assert_equal 200, endpoint[:status]
 
-      # http:// -> https://www
-      assert endpoints[:http][:root][:redirect]
-      assert endpoints[:http][:root][:redirect_away]
-      assert !endpoints[:http][:root][:redirect_external]
-
-      # http://www -> https://www
-      assert endpoints[:http][:www][:redirect]
-      assert endpoints[:http][:www][:redirect_away]
-      assert !endpoints[:http][:www][:redirect_external]
-
-      # https:// -> https://www
-      assert endpoints[:https][:root][:redirect]
-      assert endpoints[:https][:root][:redirect_away]
-      assert !endpoints[:https][:root][:redirect_external]
-
-      assert !endpoints[:https][:www][:redirect]
-    end
+    # https:// => https://www.
+    endpoint = SiteInspector.new("whitehouse.gov").http_endpoint(true, false)
+    assert_equal true, endpoint[:redirect]
+    assert_equal true, endpoint[:redirect_immediately_to_https]
+    assert_equal true, endpoint[:redirect_immediately_to_www]
+    assert_equal false, endpoint[:redirect_immediately_external]
+    assert_equal false, endpoint[:redirect_external]
   end
 
-  should "detect a totally forced HTTPS site" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      domain = SiteInspector.new("whitehouse.gov").http
-      endpoints = domain[:endpoints]
+  should "handle external redirector" do
+    # http:// => http://www.whitehouse => https://www.whitehouse
+    endpoint = SiteInspector.new("save.gov").http_endpoint(false, false)
+    assert_equal true, endpoint[:redirect]
+    assert_equal false, endpoint[:redirect_immediately_to_https]
+    assert_equal true, endpoint[:redirect_immediately_to_www]
+    assert_equal true, endpoint[:redirect_immediately_external]
+    assert_equal true, endpoint[:redirect_external]
 
-      assert domain[:support_https]
-      assert domain[:default_https]
-      assert !domain[:downgrade_https]
-      assert domain[:enforce_https]
-    end
+    # while we're here, make sure HSTS not recognized over http://
+    assert_equal false, endpoint[:hsts]
   end
 
-  should "detect the base HSTS header of a WWW site" do
-    VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
-      domain = SiteInspector.new("whitehouse.gov").http
-      endpoints = domain[:endpoints]
-
-      assert domain[:hsts]
-      assert domain[:https][:root][:hsts]
-      assert_equal "www", domain[:canonical_endpoint]
-      assert domain[:hsts_entire_domain]
-      assert domain[:hsts_entire_domain_preload]
-    end
+  should "handle relative redirect headers" do
+    endpoint = SiteInspector.new("gsa.gov").http_endpoint(false, true)
+    assert_equal true, endpoint[:redirect]
+    assert endpoint[:headers]['location'].start_with?("/")
+    assert_equal false, endpoint[:redirect_immediately_to_https]
+    assert_equal false, endpoint[:redirect_immediately_to_www]
+    assert_equal false, endpoint[:redirect_immediately_external]
+    assert_equal false, endpoint[:redirect_external]
   end
+
+  should "ignore HSTS with max-age=0" do
+    endpoint = SiteInspector.new("c3.gov").http_endpoint(true, true)
+
+    assert_equal "max-age=0", endpoint[:hsts_header]
+    assert_equal false, endpoint[:hsts]
+  end
+
+  should "handle bad Location headers with grace and aplomb" do
+    # Location: "//?"
+    endpoint = SiteInspector.new("walkersvillemd.gov").http_endpoint(true, true)
+
+    assert_equal "//?", endpoint[:redirect_immediately_to]
+    assert_equal false, endpoint[:redirect_immediately_to_www]
+    assert_equal false, endpoint[:redirect_immediately_to_https]
+  end
+
 end
