@@ -185,4 +185,13 @@ class TestSiteInspector < Minitest::Test
     assert_equal "http://business.usa.gov/", details[:redirect_to]
   end
 
+  should "be a redirect even if the HTTPS endpoints are busted" do
+    # atvsafety.gov redirects on HTTP, misconfigured on HTTPS
+
+    details = SiteInspector.new("atvsafety.gov").http
+
+    assert_equal true, details[:redirect]
+    assert_equal true, details[:redirect_to].start_with?("http://www.cpsc.gov")
+  end
+
 end
