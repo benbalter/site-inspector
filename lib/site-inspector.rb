@@ -169,6 +169,7 @@ class SiteInspector
         (
           combos[:https][:root][:redirect] or
           !combos[:https][:root][:up] or
+          combos[:https][:root][:https_bad_name] or
           !combos[:https][:root][:status].to_s.start_with?("2")
         ) and (
           combos[:http][:root][:redirect] or
@@ -179,6 +180,7 @@ class SiteInspector
         (
           (
             !combos[:https][:root][:up] or
+            combos[:https][:root][:https_bad_name] or
             !combos[:https][:root][:status].to_s.start_with?("2")
           ) and
           (
@@ -346,11 +348,13 @@ class SiteInspector
       (
         combos[:https][:www][:redirect_external] or
         !combos[:https][:www][:up] or
+        combos[:https][:www][:https_bad_name] or
         combos[:https][:www][:status] >= 400
       ) and
       (
         combos[:https][:root][:redirect_external] or
         !combos[:https][:root][:up] or
+        combos[:https][:www][:https_bad_name] or
         combos[:https][:root][:status] >= 400
       )
     )
