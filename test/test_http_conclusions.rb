@@ -194,4 +194,26 @@ class TestSiteInspector < Minitest::Test
     assert_equal true, details[:redirect_to].start_with?("http://www.cpsc.gov")
   end
 
+  should "be considered at www even if https root is busted" do
+    # base case -- normal www canonical domain
+    details = SiteInspector.new("whitehouse.gov").http
+
+    assert_equal true, details[:endpoints][:https][:root][:redirect]
+    assert_equal true, details[:endpoints][:https][:root][:redirect_immediately_to_www]
+
+    assert_equal true, details[:endpoints][:http][:root][:redirect]
+    assert_equal true, details[:endpoints][:http][:root][:redirect_immediately_to_www]
+
+    # esc.gov redirects http:// -> http://www, but https:// is misconfigured
+    details = SiteInspector.new("esc.gov").http
+
+    assert_equal 200, details[:endpoints][:https][:root][:status]
+    assert_equal true, details[:endpoints][:https][:root][:https_bad_name]
+
+    assert_equal true, details[:endpoints][:http][:root][:redirect]
+    assert_equal true, details[:endpoints][:http][:root][:redirect_immediately_to_www]
+
+    assert_equal :www, details[:canonical_endpoint]
+  end
+
 end
