@@ -476,7 +476,7 @@ class SiteInspector
       if location_header.start_with?("http:") or location_header.start_with?("https:")
         uri_immediate = URI(URI.escape(location_header))
       else
-        uri_immediate = uri_original
+        uri_immediate = URI.join(uri_original, URI.escape(location_header))
       end
 
       uri_eventual = URI(ultimate_response.effective_url.downcase)
@@ -499,9 +499,9 @@ class SiteInspector
         uri_eventual.to_s
       end
 
-      details[:redirect_immediately_to] = location_header
-      details[:redirect_immediately_to_www] = !!location_header.match(/^https?:\/\/www\./)
-      details[:redirect_immediately_to_https] = location_header.start_with?("https://")
+      details[:redirect_immediately_to] = uri_immediate.to_s
+      details[:redirect_immediately_to_www] = !!uri_immediate.to_s.match(/^https?:\/\/www\./)
+      details[:redirect_immediately_to_https] = uri_immediate.to_s.start_with?("https://")
       details[:redirect_immediately_external] = (base_original != base_immediate)
 
       details[:redirect_to] = uri_eventual.to_s
