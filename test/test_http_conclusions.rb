@@ -51,4 +51,88 @@ class TestSiteInspector < Minitest::Test
     assert_equal :http, details[:canonical_protocol]
   end
 
+  should "detect apathetic support for HTTPS" do
+    # nist.gov supports HTTPS but 404's on root and www
+    details = SiteInspector.new("nist.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :http, details[:canonical_protocol]
+
+    assert_equal true, details[:support_https]
+    assert_equal false, details[:downgrade_https]
+    assert_equal false, details[:default_https]
+    assert_equal false, details[:enforce_https]
+  end
+
+  should "detect downgraded support for HTTPS" do
+    # aoc.gov downgrades all HTTPS to http://www
+    details = SiteInspector.new("aoc.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :http, details[:canonical_protocol]
+
+    assert_equal true, details[:support_https]
+    assert_equal true, details[:downgrade_https]
+    assert_equal false, details[:default_https]
+    assert_equal false, details[:enforce_https]
+  end
+
+  should "detect default support for HTTPS even when not strictly enforced" do
+
+  end
+
+
+  should "detect strictly enforced valid HTTPS" do
+    # uspsoig.gov is perfect
+    details = SiteInspector.new("uspsoig.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :https, details[:canonical_protocol]
+
+    assert_equal true, details[:support_https]
+    assert_equal false, details[:downgrade_https]
+    assert_equal true, details[:default_https]
+    assert_equal true, details[:enforce_https]
+  end
+
+  should "detect strictly enforced but invalid HTTPS" do
+    # clinicaltrial.gov redirects everything to https://
+    # but its cert is only good for clinicaltrials.gov (plural)
+    # strictly enforced but not supported!
+    details = SiteInspector.new("clinicaltrial.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :http, details[:canonical_protocol]
+
+    assert_equal false, details[:support_https]
+    assert_equal false, details[:downgrade_https]
+    assert_equal false, details[:default_https]
+    assert_equal true, details[:enforce_https]
+  end
+
+  should "conclude that a domain forces HTTPS even if its HTTPS endpoints downgrade" do
+
+    # nationalserviceresources.gov redirects HTTP->HTTPS, but then
+    # its HTTPS endpoints redirect to external HTTP endpoints. (nationalservice.gov)
+    # Under our current definition, this domain enforces HTTPS.
+    #
+    # This makes sense if you consider each domain as responsible for
+    # itself: if nationalservice.gov implemented HSTS, then an informed
+    # client redirected to it over HTTP would not be exposed.
+    #
+    # It's still obviously not ideal. But a redirector domain shouldn't
+    # be "punished" for doing its job as securely as it can, if the domain
+    # it redirects to doesn't use HTTPS/HSTS.
+    details = SiteInspector.new("nationalserviceresources.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :https, details[:canonical_protocol]
+    assert_equal :www, details[:canonical_endpoint]
+
+    assert_equal true, details[:support_https]
+    assert_equal false, details[:downgrade_https]
+    assert_equal true, details[:default_https]
+    assert_equal true, details[:enforce_https]
+  end
+
 end
