@@ -192,6 +192,17 @@ class TestSiteInspector < Minitest::Test
 
     assert_equal true, details[:redirect]
     assert_equal true, details[:redirect_to].start_with?("http://www.cpsc.gov")
+
+    # cancernet.gov redirects to cancer.gov on HTTP,
+    # but its HTTPS www is down, and its HTTPS root endpoint busted
+    details = SiteInspector.new("cancernet.gov").http
+
+    assert_equal false, details[:endpoints][:https][:www][:up]
+    assert_equal true, details[:endpoints][:https][:root][:https_bad_name]
+
+    assert_equal true, details[:redirect]
+    assert_equal true, details[:redirect_to].include?("cancer.gov")
+
   end
 
   should "be considered at www even if https root is busted" do
