@@ -175,4 +175,14 @@ class TestSiteInspector < Minitest::Test
     assert_equal true, details[:up]
   end
 
+  should "be a redirect even if one endpoint is a 403" do
+    # businessusa.gov redirects to business.usa.gov,
+    # except on https:// where it's a 403 (and bad cert)
+
+    details = SiteInspector.new("businessusa.gov").http
+
+    assert_equal true, details[:redirect]
+    assert_equal "http://business.usa.gov/", details[:redirect_to]
+  end
+
 end

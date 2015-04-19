@@ -335,19 +335,23 @@ class SiteInspector
       details[:up] and
       (
         combos[:http][:www][:redirect_external] or
-        !combos[:http][:www][:up]
+        !combos[:http][:www][:up] or
+        combos[:http][:www][:status] >= 400
       ) and
       (
         combos[:http][:root][:redirect_external] or
-        !combos[:http][:root][:up]
+        !combos[:http][:root][:up] or
+        combos[:http][:root][:status] >= 400
       ) and
       (
         combos[:https][:www][:redirect_external] or
-        !combos[:https][:www][:up]
+        !combos[:https][:www][:up] or
+        combos[:https][:www][:status] >= 400
       ) and
       (
         combos[:https][:root][:redirect_external] or
-        !combos[:https][:root][:up]
+        !combos[:https][:root][:up] or
+        combos[:https][:root][:status] >= 400
       )
     )
 
