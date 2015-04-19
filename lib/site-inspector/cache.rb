@@ -13,9 +13,10 @@ class SiteInspectorCache
 end
 
 class SiteInspectorDiskCache
-  def initialize(dir = nil)
+  def initialize(dir = nil, replace = false)
     @dir = dir
     @memory = {}
+    @replace = replace
   end
 
   def path(request)
@@ -24,12 +25,19 @@ class SiteInspectorDiskCache
 
   def fetch(request)
     if File.exist?(path(request))
-      contents = File.read(path(request))
-      begin
-        Marshal.load(contents)
-      rescue ArgumentError
+
+      if @replace
+        puts "Deleting cache file."
         FileUtils.rm(path(request))
         nil
+      else
+        contents = File.read(path(request))
+        begin
+          Marshal.load(contents)
+        rescue ArgumentError
+          FileUtils.rm(path(request))
+          nil
+        end
       end
     end
   end

@@ -18,7 +18,7 @@ require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/headers'
 
 if ENV['CACHE']
-  Typhoeus::Config.cache = SiteInspectorDiskCache.new(ENV['CACHE'])
+  Typhoeus::Config.cache = SiteInspectorDiskCache.new(ENV['CACHE'], ENV['CACHE_REPLACE'])
 else
   Typhoeus::Config.cache = SiteInspectorCache.new
 end
