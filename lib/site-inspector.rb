@@ -149,7 +149,8 @@ class SiteInspector
     # A domain is "canonically" at www if:
     #  * at least one of its www endpoints responds
     #  * both root endpoints are either down or redirect *somewhere*
-    #  * at least one root endpoint redirects immediately to
+    #  * either both root endpoints are down, *or* at least one
+    #    root endpoint redirect should immediately go to
     #    an *internal* www endpoint
     # This is meant to affirm situations like:
     #   http:// -> https:// -> https://www
@@ -175,6 +176,16 @@ class SiteInspector
           !combos[:http][:root][:status].to_s.start_with?("2")
         )
       ) and (
+        (
+          (
+            !combos[:https][:root][:up] or
+            !combos[:https][:root][:status].to_s.start_with?("2")
+          ) and
+          (
+            !combos[:http][:root][:up] or
+            !combos[:http][:root][:status].to_s.start_with?("2")
+          )
+        ) or
         (
           combos[:https][:root][:redirect_immediately_to_www] and
           !combos[:https][:root][:redirect_immediately_external]
@@ -212,7 +223,7 @@ class SiteInspector
         ) or
         (
           combos[:https][:www][:up] and
-          !combos[:https][:root][:https_bad_name]
+          !combos[:https][:www][:https_bad_name]
         )
       ) and (
         (

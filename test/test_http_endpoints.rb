@@ -6,7 +6,8 @@ class TestSiteInspector < Minitest::Test
   # will hit the network.
 
   def setup
-    Typhoeus::Config.cache = SiteInspectorCache.new
+    # allow network disk cache
+    # Typhoeus::Config.cache = SiteInspectorCache.new
   end
 
   should "handle a www, enforced HSTS site" do
@@ -39,11 +40,15 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "handle relative redirect headers" do
+    # http://www.gsa.gov
     endpoint = SiteInspector.new("gsa.gov").http_endpoint(false, true)
     assert_equal true, endpoint[:redirect]
     assert endpoint[:headers]['location'].start_with?("/")
     assert_equal false, endpoint[:redirect_immediately_to_https]
+
+    # TODO: this should be true, since it's staying www
     assert_equal false, endpoint[:redirect_immediately_to_www]
+
     assert_equal false, endpoint[:redirect_immediately_external]
     assert_equal false, endpoint[:redirect_external]
   end
@@ -55,6 +60,16 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, endpoint[:redirect_external]
     assert_equal false, endpoint[:redirect_immediately_external]
     assert_equal true, endpoint[:redirect_immediately_to_https]
+    assert_equal false, endpoint[:redirect_immediately_to_www]
+  end
+
+  should "handle IP address redirects" do
+    endpoint = SiteInspector.new("greensboro-ga.gov").http_endpoint(false, false)
+
+    assert_equal true, endpoint[:redirect]
+    assert_equal true, endpoint[:redirect_external]
+    assert_equal true, endpoint[:redirect_immediately_external]
+    assert_equal false, endpoint[:redirect_immediately_to_https]
     assert_equal false, endpoint[:redirect_immediately_to_www]
   end
 
