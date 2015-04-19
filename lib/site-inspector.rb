@@ -177,11 +177,11 @@ class SiteInspector
       ) and (
         (
           combos[:https][:root][:redirect_immediately_to_www] and
-          !combos[:https][:root][:redirect_immediately_away]
+          !combos[:https][:root][:redirect_immediately_external]
         ) or
         (
           combos[:http][:root][:redirect_immediately_to_www] and
-          !combos[:http][:root][:redirect_immediately_away]
+          !combos[:http][:root][:redirect_immediately_external]
         )
       )
     )
@@ -227,10 +227,10 @@ class SiteInspector
       ) and (
         (
           combos[:http][:root][:redirect_immediately_to_https] and
-          !combos[:http][:root][:redirect_immediately_away]
+          !combos[:http][:root][:redirect_immediately_external]
         ) or (
           combos[:http][:www][:redirect_immediately_to_https] and
-          !combos[:http][:www][:redirect_immediately_away]
+          !combos[:http][:www][:redirect_immediately_external]
         )
       )
     )
@@ -322,19 +322,19 @@ class SiteInspector
     details[:redirect] = !!(
       details[:up] and
       (
-        combos[:http][:www][:redirect_away] or
+        combos[:http][:www][:redirect_external] or
         !combos[:http][:www][:up]
       ) and
       (
-        combos[:http][:root][:redirect_away] or
+        combos[:http][:root][:redirect_external] or
         !combos[:http][:root][:up]
       ) and
       (
-        combos[:https][:www][:redirect_away] or
+        combos[:https][:www][:redirect_external] or
         !combos[:https][:www][:up]
       ) and
       (
-        combos[:https][:root][:redirect_away] or
+        combos[:https][:root][:redirect_external] or
         !combos[:https][:root][:up]
       )
     )
@@ -489,10 +489,9 @@ class SiteInspector
       details[:redirect_immediately_to] = location_header
       details[:redirect_immediately_to_www] = !!location_header.match(/^https?:\/\/www\./)
       details[:redirect_immediately_to_https] = location_header.start_with?("https://")
-      details[:redirect_immediately_away] = (base_original != base_immediate)
+      details[:redirect_immediately_external] = (base_original != base_immediate)
 
       details[:redirect_to] = uri_eventual.to_s
-      details[:redirect_away] = ((uri_original.hostname != uri_eventual.hostname) or (uri_original.scheme != uri_eventual.scheme))
       details[:redirect_external] = (base_original != base_eventual)
 
     # otherwise, mark all the redirect fields as false/null
@@ -501,10 +500,9 @@ class SiteInspector
       details[:redirect_immediately_to] = nil
       details[:redirect_immediately_to_www] = false
       details[:redirect_immediately_to_https] = false
-      details[:redirect_immediately_away] = false
+      details[:redirect_immediately_external] = false
 
       details[:redirect_to] = nil
-      details[:redirect_away] = false
       details[:redirect_external] = false
     end
 
