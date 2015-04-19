@@ -348,7 +348,7 @@ class SiteInspector
       (
         combos[:https][:root][:redirect_external] or
         !combos[:https][:root][:up] or
-        combos[:https][:www][:https_bad_name] or
+        combos[:https][:root][:https_bad_name] or
         combos[:https][:root][:status] >= 400
       )
     )
