@@ -1,21 +1,16 @@
-require 'nokogiri'
+
+# needed for HTTP analysis
 require 'open-uri'
-require 'public_suffix'
-require 'gman'
-require 'net/http'
-require "dnsruby"
-require 'yaml'
-require 'sniffles'
 require "addressable/uri"
+require 'public_suffix'
 require 'typhoeus'
-require 'json'
-require 'resolv'
 
 require_relative 'site-inspector/cache'
+require_relative 'site-inspector/headers'
 require_relative 'site-inspector/sniffer'
 require_relative 'site-inspector/dns'
 require_relative 'site-inspector/compliance'
-require_relative 'site-inspector/headers'
+
 
 if ENV['CACHE']
   Typhoeus::Config.cache = SiteInspectorDiskCache.new(ENV['CACHE'], ENV['CACHE_REPLACE'])
@@ -26,6 +21,7 @@ end
 class SiteInspector
 
   def self.load_data(name)
+    require 'yaml'
     YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
 
@@ -83,6 +79,7 @@ class SiteInspector
   end
 
   def doc
+    require 'nokogiri'
     @doc ||= Nokogiri::HTML response.body if response
   end
 
@@ -91,6 +88,7 @@ class SiteInspector
   end
 
   def government?
+    require 'gman'
     Gman.valid? domain.to_s
   end
 
@@ -132,10 +130,6 @@ class SiteInspector
     rescue
       nil
     end
-  end
-
-  def to_json
-    to_hash.to_json
   end
 
   def http
@@ -543,6 +537,8 @@ class SiteInspector
         :headers => headers
       }
     else
+      init! # load non-HTTP dependencies
+
       {
         :domain => domain.to_s,
         :uri => uri.to_s,

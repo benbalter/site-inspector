@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), 'helper')
 
+require 'dnsruby'
+
 class TestSiteInspectorDns < Minitest::Test
   should "retrieve a site's DNS records" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
