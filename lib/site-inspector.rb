@@ -454,6 +454,7 @@ class SiteInspector
     redirect_code = response.response_code.to_s.start_with?("3")
     location_header = headers["location"]
     if redirect_code and location_header
+      location_header = location_header.downcase
       details[:redirect] = true
 
       ultimate_response = request(ssl, www, true, !details[:https_bad_chain], !details[:https_bad_name])
@@ -461,7 +462,7 @@ class SiteInspector
 
       # treat relative Location headers as having the original hostname
       if location_header.start_with?("http:") or location_header.start_with?("https:")
-        uri_immediate = URI(URI.escape(location_header))
+        uri_immediate = URI(URI.escape(location_header.downcase))
       else
         uri_immediate = uri_original
       end
