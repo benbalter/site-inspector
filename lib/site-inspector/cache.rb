@@ -27,7 +27,6 @@ class SiteInspectorDiskCache
     if File.exist?(path(request))
 
       if @replace
-        puts "Deleting cache file."
         FileUtils.rm(path(request))
         nil
       else
