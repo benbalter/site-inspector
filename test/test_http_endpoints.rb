@@ -44,11 +44,9 @@ class TestSiteInspector < Minitest::Test
     endpoint = SiteInspector.new("gsa.gov").http_endpoint(false, true)
     assert_equal true, endpoint[:redirect]
     assert endpoint[:headers]['location'].start_with?("/")
+
     assert_equal false, endpoint[:redirect_immediately_to_https]
-
-    # TODO: this should be true, since it's staying www
-    assert_equal false, endpoint[:redirect_immediately_to_www]
-
+    assert_equal true, endpoint[:redirect_immediately_to_www]
     assert_equal false, endpoint[:redirect_immediately_external]
     assert_equal false, endpoint[:redirect_external]
   end
@@ -84,9 +82,9 @@ class TestSiteInspector < Minitest::Test
     # Location: "//?"
     endpoint = SiteInspector.new("walkersvillemd.gov").http_endpoint(true, true)
 
-    assert_equal "//?", endpoint[:redirect_immediately_to]
-    assert_equal false, endpoint[:redirect_immediately_to_www]
-    assert_equal false, endpoint[:redirect_immediately_to_https]
+    assert_equal "//?", endpoint[:headers]["location"]
+    assert_equal true, endpoint[:redirect_immediately_to_www]
+    assert_equal true, endpoint[:redirect_immediately_to_https]
   end
 
 end

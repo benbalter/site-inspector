@@ -77,6 +77,26 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, details[:enforce_https]
   end
 
+  should "associate relative redirects with its domain's properties" do
+    # dap.digitalgov.gov redirects relatively, stays HTTPS and not www
+    details = SiteInspector.new("dap.digitalgov.gov").http
+
+    assert_equal true, details[:up]
+    assert_equal :https, details[:canonical_protocol]
+
+    endpoint = details[:endpoints][:https][:root]
+    assert_equal true, endpoint[:redirect]
+    assert_equal true, endpoint[:headers]["location"].start_with?("/")
+    assert_equal false, endpoint[:redirect_immediately_to_www]
+    assert_equal true, endpoint[:redirect_immediately_to_https]
+
+    assert_equal false, details[:redirect]
+    assert_equal false, details[:downgrade_https]
+
+    # TODO: http example, esp http://www example
+  end
+
+  # TODO
   should "detect default support for HTTPS even when not strictly enforced" do
 
   end
