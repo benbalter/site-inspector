@@ -12,6 +12,18 @@ require 'rake'
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
+end
+
+Rake::TestTask.new(:http) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_http*.rb'
+  test.verbose = true
+end
+
+Rake::TestTask.new(:site) do |test|
+  test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_site_inspector*.rb'
   test.verbose = true
 end
