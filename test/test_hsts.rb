@@ -160,9 +160,18 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, hsts[:enabled]
     assert_equal false, hsts[:preload_ready]
 
-
     # not observed - neither is just one quote
     header = "max-age=\"31536000; includeSubDomains; preload"
+    hsts = SiteInspector.hsts_parse(header)
+
+    assert_equal nil, hsts[:max_age]
+    assert_equal false, hsts[:include_subdomains]
+    assert_equal false, hsts[:preload]
+    assert_equal false, hsts[:enabled]
+    assert_equal false, hsts[:preload_ready]
+
+    # not observed - no quotes on max-age
+    header = "\"max-age\"=31536000; includeSubDomains; preload"
     hsts = SiteInspector.hsts_parse(header)
 
     assert_equal nil, hsts[:max_age]
