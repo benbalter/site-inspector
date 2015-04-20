@@ -421,13 +421,15 @@ class SiteInspector
     # HSTS on the entire domain?
     details[:hsts_entire_domain] = !!(
       combos[:https][:root][:hsts] and
-      combos[:https][:root][:hsts_header].downcase.include?("includesubdomains")
+      combos[:https][:root][:hsts_details][:include_subdomains]
     )
 
-    # HSTS preload-ready?
+    # HSTS preload-ready for the entire domain?
+    # Re-checks :hsts_entire_domain in case the :preload_ready
+    # flag ever changes its definition to not require subdomains.
     details[:hsts_entire_domain_preload] = !!(
       details[:hsts_entire_domain] and
-      combos[:https][:root][:hsts_header].downcase.include?("preload")
+      combos[:https][:root][:hsts_details][:preload_ready]
     )
 
     details
@@ -504,16 +506,17 @@ class SiteInspector
     details[:headers] = headers
 
 
-    # HSTS only takes effect when delivered over valid HTTPS, and
-    # when the max-age is > 0. max-age=0 disables HSTS.
+    # HSTS only takes effect when delivered over valid HTTPS.
+    hsts = SiteInspector.hsts_parse(headers["strict-transport-security"])
+
     details[:hsts] = !!(
       ssl and
       details[:https_valid] and
-      headers["strict-transport-security"] and
-      !(headers["strict-transport-security"] =~ /max-age=0\b/)
+      hsts[:enabled]
     )
 
     details[:hsts_header] = headers["strict-transport-security"]
+    details[:hsts_details] = hsts
 
 
     # If it's a redirect, go find the ultimate response starting from this combo.
@@ -589,8 +592,6 @@ class SiteInspector
         :headers => headers
       }
     else
-      init! # load non-HTTP dependencies
-
       {
         :domain => domain.to_s,
         :uri => uri.to_s,

@@ -11,9 +11,8 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "evaluate hsts preload" do
-    details = SiteInspector.new("uspsoig.gov").http
-
     # full subdomains and preload
+    details = SiteInspector.new("uspsoig.gov").http
     assert_equal true, details[:hsts]
     assert_equal true, details[:hsts_entire_domain]
     assert_equal true, details[:hsts_entire_domain_preload]
@@ -22,6 +21,19 @@ class TestSiteInspector < Minitest::Test
     details = SiteInspector.new("healthcare.gov").http
     assert_equal true, details[:hsts]
     assert_equal false, details[:hsts_entire_domain]
+    assert_equal false, details[:hsts_entire_domain_preload]
+
+    # max-age=0 doesn't get you hsts
+    details = SiteInspector.new("c3.gov").http
+    assert_equal false, details[:hsts]
+    assert_equal false, details[:hsts_entire_domain]
+    assert_equal false, details[:hsts_entire_domain_preload]
+
+    # wh.gov uses "max-age=3600;includeSubDomains;preload"
+    # not long enough!
+    details = SiteInspector.new("wh.gov").http
+    assert_equal true, details[:hsts]
+    assert_equal true, details[:hsts_entire_domain]
     assert_equal false, details[:hsts_entire_domain_preload]
   end
 
