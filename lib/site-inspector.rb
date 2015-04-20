@@ -25,6 +25,64 @@ class SiteInspector
     YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
 
+  # Utility parser for HSTS headers.
+  # RFC: http://tools.ietf.org/html/rfc6797
+  def self.hsts_parse(header)
+    # no hsts for you
+    nothing = {
+      max_age: nil,
+      include_subdomains: false,
+      preload: false,
+      enabled: false,
+      preload_ready: false
+    }
+
+    return nothing unless header and header.is_a?(String)
+
+    directives = header.split(/\s*;\s*/)
+
+    pairs = []
+    directives.each do |directive|
+      name, value = directive.downcase.split("=")
+
+      if value and value.start_with?("\"") and value.end_with?("\"")
+        value = value.sub(/^\"/, '')
+        value = value.sub(/\"$/, '')
+      end
+
+      pairs.push([name, value])
+    end
+
+    # reject invalid directives
+    fatal = pairs.any? do |name, value|
+      # TODO: more comprehensive rejection of characters
+      invalid_chars = /[\s\'\"]/
+      (name =~ invalid_chars) or (value =~ invalid_chars)
+    end
+
+    # good DAY, sir
+    return nothing if fatal
+
+    max_age_directive = pairs.find {|n, v| n == "max-age"}
+    max_age = max_age_directive ? max_age_directive[1].to_i : nil
+    include_subdomains = !!pairs.find {|n, v| n == "includesubdomains"}
+    preload = !!pairs.find {|n, v| n == "preload"}
+
+    enabled = !!(max_age and (max_age > 0))
+
+    # Google's minimum max-age for automatic preloading
+    eighteen_weeks = !!(max_age and (max_age >= 10886400))
+    preload_ready = !!(eighteen_weeks and include_subdomains and preload)
+
+    {
+      max_age: max_age,
+      include_subdomains: include_subdomains,
+      preload: preload,
+      enabled: enabled,
+      preload_ready: preload_ready
+    }
+  end
+
   # makes no network requests
   def initialize(domain, options = {})
     domain = domain.downcase
@@ -369,13 +427,17 @@ class SiteInspector
     # HSTS on the entire domain?
     details[:hsts_entire_domain] = !!(
       combos[:https][:root][:hsts] and
-      combos[:https][:root][:hsts_header].downcase.include?("includesubdomains")
+      combos[:https][:root][:hsts_details][:include_subdomains]
     )
 
-    # HSTS preload-ready?
+    # HSTS preload-ready for the entire domain?
+    #
+    # Re-checks :hsts_entire_domain in case the :preload_ready
+    # flag ever changes its definition to not require include_subdomains.
+
     details[:hsts_entire_domain_preload] = !!(
       details[:hsts_entire_domain] and
-      combos[:https][:root][:hsts_header].downcase.include?("preload")
+      combos[:https][:root][:hsts_details][:preload_ready]
     )
 
     details
@@ -452,16 +514,17 @@ class SiteInspector
     details[:headers] = headers
 
 
-    # HSTS only takes effect when delivered over valid HTTPS, and
-    # when the max-age is > 0. max-age=0 disables HSTS.
+    # HSTS only takes effect when delivered over valid HTTPS.
+    hsts = SiteInspector.hsts_parse(headers["strict-transport-security"])
+
     details[:hsts] = !!(
       ssl and
       details[:https_valid] and
-      headers["strict-transport-security"] and
-      !(headers["strict-transport-security"] =~ /max-age=0\b/)
+      hsts[:enabled]
     )
 
     details[:hsts_header] = headers["strict-transport-security"]
+    details[:hsts_details] = hsts
 
 
     # If it's a redirect, go find the ultimate response starting from this combo.
@@ -537,8 +600,6 @@ class SiteInspector
         :headers => headers
       }
     else
-      init! # load non-HTTP dependencies
-
       {
         :domain => domain.to_s,
         :uri => uri.to_s,
