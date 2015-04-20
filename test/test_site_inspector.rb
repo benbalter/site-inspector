@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), 'helper')
 
+require 'oj'
+
 class TestSiteInspector < Minitest::Test
 
   def setup
@@ -112,7 +114,7 @@ class TestSiteInspector < Minitest::Test
   should "output json" do
     VCR.use_cassette "whitehouse.gov", :record => :new_episodes do
       site = SiteInspector.new "whitehouse.gov"
-      assert_equal Hash, JSON.parse(site.to_json).class
+      assert_equal Hash, Oj.load(Oj.dump(site.to_hash)).class
     end
   end
 
