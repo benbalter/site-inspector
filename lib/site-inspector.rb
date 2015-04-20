@@ -89,6 +89,7 @@ class SiteInspector
     domain = domain.sub /^https?\:/, ""
     domain = domain.sub /^\/+/, ""
     domain = domain.sub /^www\./, ""
+    @sld = PublicSuffix.parse(domain).is_a_domain?
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
     @timeout = options[:timeout] || 10
@@ -431,9 +432,14 @@ class SiteInspector
     )
 
     # HSTS preload-ready for the entire domain?
+    #
+    # Note: currently only flagging this for second-level domains.
+    #
     # Re-checks :hsts_entire_domain in case the :preload_ready
-    # flag ever changes its definition to not require subdomains.
+    # flag ever changes its definition to not require include_subdomains.
+
     details[:hsts_entire_domain_preload] = !!(
+      @sld and
       details[:hsts_entire_domain] and
       combos[:https][:root][:hsts_details][:preload_ready]
     )
