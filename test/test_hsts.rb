@@ -23,6 +23,17 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "parse other valid hsts headers" do
+    # not observed - allow quoted strings
+    gold = "max-age=\"31536000\"; includeSubDomains; preload"
+    hsts = SiteInspector.hsts_parse(gold)
+
+    assert_equal 31536000, hsts[:max_age]
+    assert_equal true, hsts[:include_subdomains]
+    assert_equal true, hsts[:preload]
+    assert_equal true, hsts[:enabled]
+    assert_equal true, hsts[:preload_ready]
+
+
     # observed on uspsoig.gov - long, lowercase 'Subdomains'
     header = "max-age=63072000; includeSubdomains; preload"
     hsts = SiteInspector.hsts_parse(header)
@@ -138,6 +149,28 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, hsts[:preload]
     assert_equal false, hsts[:enabled]
     assert_equal false, hsts[:preload_ready]
+
+    # not observed - single quotes are not allowed
+    header = "max-age='31536000'; includeSubDomains; preload"
+    hsts = SiteInspector.hsts_parse(header)
+
+    assert_equal nil, hsts[:max_age]
+    assert_equal false, hsts[:include_subdomains]
+    assert_equal false, hsts[:preload]
+    assert_equal false, hsts[:enabled]
+    assert_equal false, hsts[:preload_ready]
+
+
+    # not observed - neither is just one quote
+    header = "max-age=\"31536000; includeSubDomains; preload"
+    hsts = SiteInspector.hsts_parse(header)
+
+    assert_equal nil, hsts[:max_age]
+    assert_equal false, hsts[:include_subdomains]
+    assert_equal false, hsts[:preload]
+    assert_equal false, hsts[:enabled]
+    assert_equal false, hsts[:preload_ready]
+
 
     # fuzzing!
     ["312384761283746", 0, nil, "", "-1", "$!#@%!#}"].each do |header|

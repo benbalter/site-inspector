@@ -44,13 +44,19 @@ class SiteInspector
     pairs = []
     directives.each do |directive|
       name, value = directive.downcase.split("=")
+
+      if value and value.start_with?("\"") and value.end_with?("\"")
+        value = value.sub(/^\"/, '')
+        value = value.sub(/\"$/, '')
+      end
+
       pairs.push([name, value])
     end
 
     # reject invalid directives
     fatal = pairs.any? do |name, value|
       # TODO: more comprehensive rejection of characters
-      invalid_chars = /[\s]/
+      invalid_chars = /[\s\'\"]/
       (name =~ invalid_chars) or (value =~ invalid_chars)
     end
 
