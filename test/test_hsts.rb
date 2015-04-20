@@ -94,6 +94,15 @@ class TestSiteInspector < Minitest::Test
     # judgment call: preload-ready means *automatically* preload-ready
     assert_equal false, hsts[:preload_ready]
 
+    # observed on jamesmadison.gov - just includeSubDomains
+    header = "includeSubDomains"
+    hsts = SiteInspector.hsts_parse(header)
+
+    assert_equal nil, hsts[:max_age]
+    assert_equal true, hsts[:include_subdomains]
+    assert_equal false, hsts[:preload]
+    assert_equal false, hsts[:enabled]
+    assert_equal false, hsts[:preload_ready]
   end
 
   should "handle invalid hsts headers" do
@@ -129,5 +138,15 @@ class TestSiteInspector < Minitest::Test
     assert_equal false, hsts[:preload]
     assert_equal false, hsts[:enabled]
     assert_equal false, hsts[:preload_ready]
+
+    # fuzzing!
+    ["312384761283746", 0, nil, "", "-1", "$!#@%!#}"].each do |header|
+      hsts = SiteInspector.hsts_parse(header)
+      assert_equal nil, hsts[:max_age], header
+      assert_equal false, hsts[:include_subdomains], header
+      assert_equal false, hsts[:preload], header
+      assert_equal false, hsts[:enabled], header
+      assert_equal false, hsts[:preload_ready], header
+    end
   end
 end

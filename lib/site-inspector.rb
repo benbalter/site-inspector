@@ -28,6 +28,17 @@ class SiteInspector
   # Utility parser for HSTS headers.
   # RFC: http://tools.ietf.org/html/rfc6797
   def self.hsts_parse(header)
+    # no hsts for you
+    nothing = {
+      max_age: nil,
+      include_subdomains: false,
+      preload: false,
+      enabled: false,
+      preload_ready: false
+    }
+
+    return nothing unless header and header.is_a?(String)
+
     directives = header.split(/\s*;\s*/)
 
     pairs = []
@@ -37,23 +48,14 @@ class SiteInspector
     end
 
     # reject invalid directives
-
     fatal = pairs.any? do |name, value|
       # TODO: more comprehensive rejection of characters
       invalid_chars = /[\s]/
       (name =~ invalid_chars) or (value =~ invalid_chars)
     end
 
-    if fatal
-      # good DAY, sir
-      return {
-        max_age: nil,
-        include_subdomains: false,
-        preload: false,
-        enabled: false,
-        preload_ready: false
-      }
-    end
+    # good DAY, sir
+    return nothing if fatal
 
     max_age_directive = pairs.find {|n, v| n == "max-age"}
     max_age = max_age_directive ? max_age_directive[1].to_i : nil
