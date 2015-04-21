@@ -13,11 +13,7 @@ require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/hsts'
 
 
-if ENV['CACHE']
-  Typhoeus::Config.cache = SiteInspectorDiskCache.new(ENV['CACHE'], ENV['CACHE_REPLACE'])
-else
-  Typhoeus::Config.cache = SiteInspectorCache.new
-end
+
 
 class SiteInspector
 
@@ -25,8 +21,6 @@ class SiteInspector
     require 'yaml'
     YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
   end
-
-
 
   # makes no network requests
   def initialize(domain, options = {})
@@ -37,6 +31,15 @@ class SiteInspector
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
     @timeout = options[:timeout] || 10
+    Typhoeus::Config.cache = SiteInspector.cache
+  end
+
+  def cache
+    @cache ||= if ENV['CACHE']
+      SiteInspector::DiskCache.new
+    else
+      SiteInspector::Cache.new
+    end
   end
 
   def inspect
