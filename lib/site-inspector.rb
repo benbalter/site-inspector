@@ -49,8 +49,8 @@ class SiteInspector
   # Builds a URI for the given domain
   #
   # Options
-  #  - :https - should the protocal be https?
-  #  - :www   - should the URI be prefixed with www?
+  #  - :https - should the protocal be https? (defaults to false)
+  #  - :www   - should the URI be prefixed with www? (defaults to false)
   #
   # Returns the URI as an Addressable::URI object
   def uri(options={})
@@ -78,15 +78,15 @@ class SiteInspector
   def request(options)
     options[:timeout] ||= timeout
     options[:ssl_verifyhost] = (options[:ssl_verifyhost] ? 2 : 0)
-    Typhoeus.get(uri(ssl, www), options)
+    Typhoeus.get(uri(options), options)
   end
 
   def response
     @response ||= begin
-      if response = request(false, false) and response.success?
+      if response = request and response.success?
         @non_www = true
         response
-      elsif response = request(false, true) and response.success?
+      elsif response = request(www: true) and response.success?
         @non_www = false
         response
       else
@@ -114,14 +114,14 @@ class SiteInspector
   end
 
   def https?
-    @https ||= request(true, www?).success?
+    @https ||= request(https: true, www: www?).success?
   end
   alias_method :ssl?, :https?
 
   def enforce_https?
     return false unless https?
     @enforce_https ||= begin
-      response = request(false, www?)
+      response = request(https: false, www: www?)
       if response.effective_url
         Addressable::URI.parse(response.effective_url).scheme == "https"
       else
@@ -144,7 +144,7 @@ class SiteInspector
 
   def redirect
     @redirect ||= begin
-      if location = request(https?, www?, false).headers["location"]
+      if location = request(https: https?, www: www?, followlocations: true).headers["location"]
         redirect_domain = SiteInspector.new(location).domain
         redirect_domain.to_s if redirect_domain.to_s != domain.to_s
       end
