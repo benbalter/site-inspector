@@ -10,6 +10,7 @@ require_relative 'site-inspector/headers'
 require_relative 'site-inspector/sniffer'
 require_relative 'site-inspector/dns'
 require_relative 'site-inspector/compliance'
+require_relative 'site-inspector/hsts'
 
 
 if ENV['CACHE']

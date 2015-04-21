@@ -1,59 +1,81 @@
 class SiteInspector
   # Utility parser for HSTS headers.
   # RFC: http://tools.ietf.org/html/rfc6797
-  def self.hsts_parse(header)
-    # no hsts for you
-    nothing = {
-      max_age: nil,
-      include_subdomains: false,
-      preload: false,
-      enabled: false,
-      preload_ready: false
-    }
+  class HSTS
 
-    return nothing unless header and header.is_a?(String)
+    attr_accessor :header
 
-    directives = header.split(/\s*;\s*/)
-
-    pairs = []
-    directives.each do |directive|
-      name, value = directive.downcase.split("=")
-
-      if value and value.start_with?("\"") and value.end_with?("\"")
-        value = value.sub(/^\"/, '')
-        value = value.sub(/\"$/, '')
-      end
-
-      pairs.push([name, value])
+    def initialize(header)
+      raise ArugmentError unless header.is_a?(String)
+      @header = header
     end
 
-    # reject invalid directives
-    fatal = pairs.any? do |name, value|
-      # TODO: more comprehensive rejection of characters
+    def valid?
       invalid_chars = /[\s\'\"]/
-      (name =~ invalid_chars) or (value =~ invalid_chars)
+      pairs.none? do |name, value|
+        (name =~ invalid_chars) or (value =~ invalid_chars)
+      end
     end
 
-    # good DAY, sir
-    return nothing if fatal
+    def max_age
+      pairs[:"max-age"][1].to_i if pairs[:"max-age"]
+    end
 
-    max_age_directive = pairs.find {|n, v| n == "max-age"}
-    max_age = max_age_directive ? max_age_directive[1].to_i : nil
-    include_subdomains = !!pairs.find {|n, v| n == "includesubdomains"}
-    preload = !!pairs.find {|n, v| n == "preload"}
+    def include_subdomains?
+      !!pairs[:includesubdomains]
+    end
 
-    enabled = !!(max_age and (max_age > 0))
+    def preload?
+      !!pairs[:preload]
+    end
+
+    def [](key)
+      pairs[key]
+    end
+
+    def enabled?
+      return false unless max_age
+      max_age > 0
+    end
 
     # Google's minimum max-age for automatic preloading
-    eighteen_weeks = !!(max_age and (max_age >= 10886400))
-    preload_ready = !!(eighteen_weeks and include_subdomains and preload)
+    def preload_ready?
+      return false unless include_subdomains? and preload?
+      return false unless max_age
+      max_age >= 10886400
+    end
 
-    {
-      max_age: max_age,
-      include_subdomains: include_subdomains,
-      preload: preload,
-      enabled: enabled,
-      preload_ready: preload_ready
-    }
+    def to_h
+      {
+        max_age: max_age,
+        include_subdomains: include_subdomains?,
+        preload: preload?,
+        enabled: enabled?,
+        preload_ready: preaload_ready?
+      }
+    end
+
+    private
+
+    def directives
+      header.split(/\s*;\s*/)
+    end
+
+    def pairs
+      @pairs ||= begin
+        pairs = {}
+        directives.each do |directive|
+          key, value = directive.downcase.split("=")
+
+          if value and value.start_with?("\"") and value.end_with?("\"")
+            value = value.sub(/^\"/, '')
+            value = value.sub(/\"$/, '')
+          end
+
+          pairs[key.to_sym] = value
+        end
+        pairs
+      end
+    end
   end
 end
