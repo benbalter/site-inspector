@@ -15,6 +15,8 @@ require_relative 'site-inspector/hsts'
 
 class SiteInspector
 
+  attr_accessor :timeout
+
   def self.load_data(name)
     require 'yaml'
     YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
@@ -44,10 +46,17 @@ class SiteInspector
     "<SiteInspector domain=\"#{domain}\">"
   end
 
-  def uri(ssl=enforce_https?,www=www?)
+  # Builds a URI for the given domain
+  #
+  # Options
+  #  - :https - should the protocal be https?
+  #  - :www   - should the URI be prefixed with www?
+  #
+  # Returns the URI as an Addressable::URI object
+  def uri(options={})
     uri = @uri.clone
-    uri.host = www ? "www.#{uri.host}" : uri.host
-    uri.scheme = ssl ? "https" : "http"
+    uri.host = options[:www] ? "www.#{uri.host}" : uri.host
+    uri.scheme = options[:https] ? "https" : "http"
     uri
   end
 
@@ -55,10 +64,21 @@ class SiteInspector
     www? ? PublicSuffix.parse("www.#{@uri.host}") : @domain
   end
 
-  def request(ssl=false, www=false, followlocation=true, ssl_verifypeer=true, ssl_verifyhost=true)
-    to_get = uri(ssl, www)
-
-    Typhoeus.get(to_get, followlocation: followlocation, ssl_verifypeer: ssl_verifypeer, ssl_verifyhost: (ssl_verifyhost ? 2 : 0), timeout: @timeout)
+  # Makes a GET request of the given domain
+  #
+  # Options:
+  #  - https - should the protocal be htps?
+  #  - www   - should the domain be prefixed by www?
+  #  - followlocation - should the request follow redirects (defaults to true)
+  #  - ssl_verifypeer - should the request verify SSL peers (defaults to true)
+  #  - ssl_verifyhost - should the request veiryf the SSL host (defaults to true)
+  #  - timeout        - the maximum timeout for the connection
+  #
+  # Retutns the Typhoeus::Response object
+  def request(options)
+    options[:timeout] ||= timeout
+    options[:ssl_verifyhost] = (options[:ssl_verifyhost] ? 2 : 0)
+    Typhoeus.get(uri(ssl, www), options)
   end
 
   def response
