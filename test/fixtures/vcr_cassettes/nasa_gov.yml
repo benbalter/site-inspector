@@ -20,7 +20,7 @@ http_interactions:
     http_version: 
     adapter_metadata:
       effective_url: http://nasa.gov/
-  recorded_at: Mon, 13 Apr 2015 02:14:04 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:18 GMT
 - request:
     method: get
     uri: http://www.nasa.gov
@@ -36,9 +36,9 @@ http_interactions:
       message: OK
     headers:
       x-amz-id-2:
-      - fe9DRthdq7vdf/VRS8u136VHFghEcu4uuueCiTTSh3/yKoFL6jbgXgHVe6ZPIjIh
+      - 6hXD/AaTxRhgX7guPTTuq+nKBgSlBNSUDKA3WVOdMK45ZxuiaThtyHLlWiDXFtEf
       x-amz-request-id:
-      - 2622721A5EAECF54
+      - A7557F7907BF88AF
       x-amz-meta-md5_hash:
       - 2c5f1a3d00864ee015f51e69103ef354
       Cache-Control:
@@ -47,12 +47,14 @@ http_interactions:
       - text/html
       Server:
       - AmazonS3
+      Age:
+      - '76'
       Date:
-      - Mon, 13 Apr 2015 02:14:05 GMT
+      - Mon, 13 Apr 2015 02:30:18 GMT
       Last-Modified:
       - Fri, 10 Apr 2015 20:57:45 GMT
       Expires:
-      - Mon, 13 Apr 2015 02:19:05 GMT
+      - Mon, 13 Apr 2015 02:34:02 GMT
       Content-Length:
       - '33351'
       Connection:
@@ -805,5 +807,5 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://www.nasa.gov/
-  recorded_at: Mon, 13 Apr 2015 02:14:05 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:18 GMT
 recorded_with: VCR 2.9.3

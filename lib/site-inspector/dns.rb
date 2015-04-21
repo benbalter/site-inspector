@@ -1,6 +1,7 @@
 class SiteInspector
 
   def resolver
+    require "dnsruby"
     @resolver ||= begin
       resolver = Dnsruby::Resolver.new
       resolver.config.nameserver = ["8.8.8.8", "8.8.4.4"]
@@ -72,12 +73,14 @@ class SiteInspector
   end
 
   def ip
+    require 'resolv'
     @ip ||= Resolv.getaddress domain.to_s
   rescue Resolv::ResolvError
     nil
   end
 
   def hostname
+    require 'resolv'
     @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
   rescue Exception => e
     nil

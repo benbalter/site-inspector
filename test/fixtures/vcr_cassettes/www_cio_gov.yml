@@ -15,7 +15,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 13 Apr 2015 02:13:37 GMT
+      - Mon, 13 Apr 2015 02:30:48 GMT
       Server:
       - Apache
       Strict-Transport-Security:
@@ -36,7 +36,7 @@ http_interactions:
       - CP="CAO DSP CURa ADMa DEVa TAIa PSAa PSDa IVAi IVDi HISa OUR IND PHY ONL UNI
         COM NAV INT CNT STA LOC GOV"
       Set-Cookie:
-      - PHPSESSID=8na6g32hf79b5q5cbtolf7qou3; path=/; Secure
+      - PHPSESSID=445i4o0vubmbm7v81lj1sdik96; path=/; Secure
       Transfer-Encoding:
       - chunked
     body:
@@ -699,7 +699,7 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: https://cio.gov/
-  recorded_at: Mon, 13 Apr 2015 02:13:38 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:49 GMT
 - request:
     method: get
     uri: http://cio.gov
@@ -715,7 +715,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 13 Apr 2015 02:13:37 GMT
+      - Mon, 13 Apr 2015 02:30:48 GMT
       Server:
       - Apache
       Strict-Transport-Security:
@@ -736,7 +736,7 @@ http_interactions:
       - CP="CAO DSP CURa ADMa DEVa TAIa PSAa PSDa IVAi IVDi HISa OUR IND PHY ONL UNI
         COM NAV INT CNT STA LOC GOV"
       Set-Cookie:
-      - PHPSESSID=8na6g32hf79b5q5cbtolf7qou3; path=/; Secure
+      - PHPSESSID=445i4o0vubmbm7v81lj1sdik96; path=/; Secure
       Transfer-Encoding:
       - chunked
     body:
@@ -1399,5 +1399,5 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: https://cio.gov/
-  recorded_at: Mon, 13 Apr 2015 02:13:38 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:49 GMT
 recorded_with: VCR 2.9.3

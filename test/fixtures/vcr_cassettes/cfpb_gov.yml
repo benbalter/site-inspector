@@ -11,6 +11,27 @@ http_interactions:
       - Typhoeus - https://github.com/typhoeus/typhoeus
   response:
     status:
+      code: 0
+      message: 
+    headers: {}
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+    adapter_metadata:
+      effective_url: http://cfpb.gov/
+  recorded_at: Mon, 13 Apr 2015 02:30:29 GMT
+- request:
+    method: get
+    uri: http://www.cfpb.gov
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+  response:
+    status:
       code: 200
       message: OK
     headers:
@@ -25,7 +46,7 @@ http_interactions:
       Content-Length:
       - '24135'
       Date:
-      - Mon, 13 Apr 2015 02:24:57 GMT
+      - Mon, 13 Apr 2015 02:30:29 GMT
       Connection:
       - keep-alive
     body:
@@ -571,7 +592,7 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://www.consumerfinance.gov/
-  recorded_at: Mon, 13 Apr 2015 02:24:57 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:29 GMT
 - request:
     method: get
     uri: https://www.cfpb.gov
@@ -592,7 +613,7 @@ http_interactions:
     http_version: 
     adapter_metadata:
       effective_url: https://www.cfpb.gov/
-  recorded_at: Mon, 13 Apr 2015 02:25:03 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:34 GMT
 - request:
     method: get
     uri: http://www.cfpb.gov
@@ -614,7 +635,7 @@ http_interactions:
       Location:
       - http://www.consumerfinance.gov/
       Date:
-      - Mon, 13 Apr 2015 02:25:03 GMT
+      - Mon, 13 Apr 2015 02:30:34 GMT
       Connection:
       - keep-alive
     body:
@@ -623,7 +644,7 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://www.cfpb.gov/
-  recorded_at: Mon, 13 Apr 2015 02:25:03 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:34 GMT
 - request:
     method: get
     uri: http://consumerfinance.gov/
@@ -649,7 +670,7 @@ http_interactions:
       Content-Length:
       - '24135'
       Date:
-      - Mon, 13 Apr 2015 02:25:08 GMT
+      - Mon, 13 Apr 2015 02:30:35 GMT
       Connection:
       - keep-alive
     body:
@@ -1195,5 +1216,5 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://www.consumerfinance.gov/
-  recorded_at: Mon, 13 Apr 2015 02:25:08 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:35 GMT
 recorded_with: VCR 2.9.3

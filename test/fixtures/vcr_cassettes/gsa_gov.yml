@@ -1226,7 +1226,7 @@ http_interactions:
     http_version: '1.1'
     adapter_metadata:
       effective_url: http://gsa.gov/portal/category/100000
-  recorded_at: Mon, 13 Apr 2015 02:21:10 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:18 GMT
 - request:
     method: get
     uri: https://gsa.gov
@@ -1247,5 +1247,5 @@ http_interactions:
     http_version: 
     adapter_metadata:
       effective_url: https://gsa.gov/
-  recorded_at: Mon, 13 Apr 2015 02:22:09 GMT
+  recorded_at: Mon, 13 Apr 2015 02:30:47 GMT
 recorded_with: VCR 2.9.3

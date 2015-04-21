@@ -3,8 +3,11 @@
 vendor
 Gemfile.lock
 
+/.env
+/env
+
 # rack-cache
-cache
+/cache*
 
 #bower bloat
 public/vendor/bootstrap/grunt
