@@ -31,7 +31,7 @@ class SiteInspector
     @uri = Addressable::URI.parse "//#{domain}"
     @domain = PublicSuffix.parse @uri.host
     @timeout = options[:timeout] || 10
-    Typhoeus::Config.cache = SiteInspector.cache
+    Typhoeus::Config.cache = cache
   end
 
   def cache

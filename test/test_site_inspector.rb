@@ -5,7 +5,7 @@ require 'oj'
 class TestSiteInspector < Minitest::Test
 
   def setup
-    Typhoeus::Config.cache = SiteInspectorCache.new
+    Typhoeus::Config.cache = SiteInspector::Cache.new
   end
 
   should "parse a domain" do

@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'helper')
 class TestSiteInspector < Minitest::Test
 
   def setup
-    Typhoeus::Config.cache = SiteInspectorCache.new
+    Typhoeus::Config.cache = SiteInspector::Cache.new
   end
 
   # Official HSTS RFC:
