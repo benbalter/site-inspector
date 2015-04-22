@@ -21,11 +21,6 @@ class SiteInspector
 
     attr_writer :timeout, :cache
 
-    def load_data(name)
-      require 'yaml'
-      YAML.load_file File.expand_path "./data/#{name}.yml", File.dirname(__FILE__)
-    end
-
     def cache
       @cache ||= if ENV['CACHE']
         SiteInspector::DiskCache.new
