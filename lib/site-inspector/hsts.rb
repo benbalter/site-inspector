@@ -1,7 +1,7 @@
 class SiteInspector
   # Utility parser for HSTS headers.
   # RFC: http://tools.ietf.org/html/rfc6797
-  class HSTS
+  class Hsts
 
     attr_accessor :header
 

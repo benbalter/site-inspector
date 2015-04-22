@@ -21,9 +21,9 @@ class SiteInspector
       ]
     end
 
-    def connonical_endpoint
-      @connonical_endpoint ||= endpoints.find do |e|
-        e.https? == connonically_https? && e.www? == connonically_www?
+    def canonical_endpoint
+      @canonical_endpoint ||= endpoints.find do |e|
+        e.https? == canonically_https? && e.www? == canonically_www?
       end
     end
 
@@ -52,7 +52,7 @@ class SiteInspector
     # * Either of the HTTPS endpoints is listening, and doesn't have
     #   an invalid hostname.
     def https?
-      endpoints.any? { |e| e.https? && e.up && e.https_valid? }
+      endpoints.any? { |e| e.https? && e.up? && e.https_valid? }
     end
 
     # HTTPS is enforced if one of the HTTPS endpoints is "live",
@@ -68,7 +68,7 @@ class SiteInspector
     # * a domain with an invalid cert can still be enforcing HTTPS.
     def enforces_https?
       return false unless https?
-      endpoints.select? { |e| e.http? }.all? { |e| e.down? || (e.redirect && e.redirect.https?) }
+      endpoints.select { |e| e.http? }.all? { |e| e.down? || (e.redirect && e.redirect.https?) }
     end
 
     # we can say that a canonical HTTPS site "defaults" to HTTPS,
@@ -84,7 +84,7 @@ class SiteInspector
     # * The 'canonical' endpoint gets an immediate internal redirect to HTTP.
     def downgrades_https?
       return false unless https?
-      connonical_endpoint.redirect && connonical_endpoint.redirect.http?
+      canonical_endpoint.redirect && canonical_endpoint.redirect.http?
     end
 
     # A domain is "canonically" at www if:
@@ -160,7 +160,7 @@ class SiteInspector
 
     # HSTS on the canonical domain?
     def hsts?
-      connonical_endpoint.hsts && connonical_endpoint.hsts.enabled?
+      canonical_endpoint.hsts && canonical_endpoint.hsts.enabled?
     end
 
     def hsts_subdomains?
@@ -170,6 +170,14 @@ class SiteInspector
     def hsts_preload_ready?
       return false unless hsts_subdomains?
       endpoints.find { |e| e.root? && e.https? }.hsts.preload_ready?
+    end
+
+    def to_s
+      host
+    end
+
+    def inspect
+      "#<SiteInspector::Domain host=\"#{host}\">"
     end
   end
 end

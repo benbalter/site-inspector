@@ -1,5 +1,4 @@
 class SiteInspector
-
   # Every domain has four possible "endpoints" to evaluate
   #
   # For example, if you had `example.com` you'd have:
@@ -22,7 +21,7 @@ class SiteInspector
     end
 
     def www?
-      @host =~ /^www\./
+      !!(@host =~ /^www\./)
     end
 
     def root?
@@ -39,13 +38,6 @@ class SiteInspector
 
     def scheme
       @uri.scheme
-    end
-
-    def uri
-      uri = Addressable::URI.new
-      uri.host = www? ? "www.#{host}" : host
-      uri.scheme = https? ? "https" : "http"
-      uri
     end
 
     def request(options = {})
@@ -77,7 +69,7 @@ class SiteInspector
     end
 
     def headers
-      @headers ||= Hash[response.headers.map{ |k,v| [k.downcase,v] }
+      @headers ||= Hash[response.headers.map { |k,v| [k.downcase,v] }]
     end
 
     def timed_out?
@@ -97,7 +89,7 @@ class SiteInspector
     end
 
     def hsts
-      @hsts ||= Hsts.new(headers["strict-transport-security"]) if https_valid?
+      @hsts ||= SiteInspector::Hsts.new(headers["strict-transport-security"]) if https_valid?
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
@@ -128,9 +120,9 @@ class SiteInspector
 
     # What's the effective URL of a request to this domain?
     def resolves_to
-      return unless redirect?
+      return self unless redirect?
       @resolves_to ||= begin
-        url = request(:followlocations => true).effective_url
+        url = request(:followlocation => true).effective_url
         Endpoint.new(url)
       end
     end
@@ -146,6 +138,14 @@ class SiteInspector
 
     def body
       doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
+    end
+
+    def to_s
+      uri.to_s
+    end
+
+    def inspect
+      "#<SiteInspector::Endpoint uri=\"#{uri.to_s}\">"
     end
   end
 end
