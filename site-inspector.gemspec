@@ -1,7 +1,9 @@
+require File.expand_path "./lib/site-inspector/version", File.dirname(__FILE__)
+
 Gem::Specification.new do |s|
 
   s.name                  = "site-inspector"
-  s.version               = "1.0.1"
+  s.version               = SiteInspector::VERSION
   s.summary               = "A Ruby port and v2 of Site Inspector (http://github.com/benbalter/site-inspector)"
   s.description           = "Returns information about a domain's technology and capabilities"
   s.authors               = "Ben Balter"

@@ -41,11 +41,7 @@ class SiteInspector
     end
 
     def request(options = {})
-      options = {
-        :timeout        => SiteInspector.timeout,
-        :followlocation => false
-      }.merge(options)
-      Typhoeus.get(uri, options)
+      Typhoeus.get(uri, SiteInspector.typhoeus_defaults.merge(options))
     end
 
     # Makes a GET request of the given host

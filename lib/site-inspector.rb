@@ -14,11 +14,12 @@ require_relative 'site-inspector/endpoint'
 require_relative 'site-inspector/headers'
 require_relative 'site-inspector/hsts'
 require_relative 'site-inspector/sniffer'
+require_relative 'site-inspector/version'
 
 class SiteInspector
   class << self
 
-    attr_writer :timeout
+    attr_writer :timeout, :cache
 
     def load_data(name)
       require 'yaml'
@@ -39,6 +40,16 @@ class SiteInspector
 
     def inspect(domain)
       Domain.new(domain)
+    end
+
+    def typhoeus_defaults
+      {
+        :followlocation => false,
+        :timeout => SiteInspector.timeout,
+        :headers => {
+          "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector-ruby)"
+        }
+      }
     end
   end
 end
