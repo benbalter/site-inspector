@@ -17,7 +17,7 @@ class SiteInspector
     end
 
     def query(type="ANY")
-      SiteInspetor::DNS.resolver.query(host.to_s, type).answer
+      SiteInspector::Dns.resolver.query(host.to_s, type).answer
     rescue
       []
     end
@@ -36,25 +36,6 @@ class SiteInspector
 
     def ipv6?
       @ipv6 ||= has_record? "AAAA"
-    end
-
-    def detect_by_hostname(type)
-
-      haystack = load_data(type)
-      needle = haystack.find do |name, domain|
-        cnames.any? do |cname|
-          domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"
-        end
-      end
-
-      return needle[0] if needle
-      return false unless hostname
-
-      needle = haystack.find do |name, domain|
-        domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
-      end
-
-      needle ? needle[0] : false
     end
 
     def cdn
@@ -94,11 +75,13 @@ class SiteInspector
     end
 
     def cnames
-      @cnames ||= records.select do |record|
-        record.type == "CNAME" }.map do |record|
-          PublicSuffix.parse(record.cname.to_s)
-        end
+      @cnames ||= records.select { |record| record.type == "CNAME" }.map do |record|
+        PublicSuffix.parse(record.cname.to_s)
       end
+    end
+
+    def inspect
+      "#<SiteInspector::Dns host=\"#{host}\">"
     end
 
     private
@@ -106,6 +89,25 @@ class SiteInspector
     def load_data(name)
       require 'yaml'
       YAML.load_file File.expand_path "../data/#{name}.yml", File.dirname(__FILE__)
+    end
+
+    def detect_by_hostname(type)
+
+      haystack = load_data(type)
+      needle = haystack.find do |name, domain|
+        cnames.any? do |cname|
+          domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"
+        end
+      end
+
+      return needle[0] if needle
+      return nil unless hostname
+
+      needle = haystack.find do |name, domain|
+        domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
+      end
+
+      needle ? needle[0] : nil
     end
   end
 end

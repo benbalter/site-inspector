@@ -136,6 +136,10 @@ class SiteInspector
       doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
     end
 
+    def dns
+      @dns ||= SiteInspector::Dns.new(uri.host)
+    end
+
     def to_s
       uri.to_s
     end
