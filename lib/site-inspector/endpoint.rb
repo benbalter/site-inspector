@@ -64,10 +64,6 @@ class SiteInspector
       response.response_code.to_s if response
     end
 
-    def headers
-      @headers ||= Headers.new(response)
-    end
-
     def timed_out?
       response && response.timed_out?
     end
@@ -127,17 +123,16 @@ class SiteInspector
       uri != resolves_to.uri
     end
 
-    def doc
-      require 'nokogiri'
-      @doc ||= Nokogiri::HTML response.body if response
-    end
-
-    def body
-      doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
-    end
-
     def dns
       @dns ||= Dns.new(uri.host)
+    end
+
+    def sniffer
+      @sniffer ||= Sniffer.new(response)
+    end
+
+    def headers
+      @headers ||= Headers.new(response)
     end
 
     def to_s
