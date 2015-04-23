@@ -18,9 +18,7 @@ class SiteInspector
       end
 
       def query(type="ANY")
-        SiteInspector::Dns.resolver.query(host.to_s, type).answer
-      rescue
-        []
+        SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
       end
 
       def records
@@ -89,7 +87,7 @@ class SiteInspector
 
       def load_data(name)
         require 'yaml'
-        YAML.load_file File.expand_path "../data/#{name}.yml", File.dirname(__FILE__)
+        YAML.load_file File.expand_path "../../data/#{name}.yml", File.dirname(__FILE__)
       end
 
       def detect_by_hostname(type)

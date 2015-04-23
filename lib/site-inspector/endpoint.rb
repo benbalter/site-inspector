@@ -21,7 +21,7 @@ class SiteInspector
     end
 
     def www?
-      !!(@host =~ /^www\./)
+      !!(uri.host =~ /^www\./)
     end
 
     def root?
