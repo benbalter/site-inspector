@@ -65,7 +65,7 @@ class SiteInspector
     end
 
     def headers
-      @headers ||= Hash[response.headers.map { |k,v| [k.downcase,v] }]
+      @headers ||= Headers.new(response)
     end
 
     def timed_out?

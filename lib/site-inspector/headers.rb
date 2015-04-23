@@ -1,59 +1,78 @@
 class SiteInspector
+  class Endpoint
+    class Headers
 
-  # cookies can have multiple set-cookie headers, so this detects
-  # whether cookies are set, but not all their values.
-  def has_cookies?
-    !!headers["set-cookie"]
-  end
+      attr_reader :response
 
-  def strict_transport_security?
-    !!strict_transport_security
-  end
+      def initialize(response)
+        @response = response
+      end
 
-  def content_security_policy?
-    !!content_security_policy
-  end
+      # cookies can have multiple set-cookie headers, so this detects
+      # whether cookies are set, but not all their values.
+      def has_cookies?
+        !!headers["set-cookie"]
+      end
 
-  def click_jacking_protection?
-    !!click_jacking_protection
-  end
+      def strict_transport_security?
+        !!strict_transport_security
+      end
 
-  # return the found header value
+      def content_security_policy?
+        !!content_security_policy
+      end
 
-  def strict_transport_security
-    headers["strict-transport-security"]
-  end
+      def click_jacking_protection?
+        !!click_jacking_protection
+      end
 
-  def content_security_policy
-    headers["content-security-policy"]
-  end
+      # return the found header value
 
-  def click_jacking_protection
-    headers["x-frame-options"]
-  end
+      def strict_transport_security
+        headers["strict-transport-security"]
+      end
 
-  def server
-    headers["server"]
-  end
+      def content_security_policy
+        headers["content-security-policy"]
+      end
 
-  def xss_protection
-    headers["x-xss-protection"]
-  end
+      def click_jacking_protection
+        headers["x-frame-options"]
+      end
 
-  # more specific checks than presence of headers
-  def xss_protection?
-    xss_protection == "1; mode=block"
-  end
+      def server
+        headers["server"]
+      end
 
-  def secure_cookies?
-    return false if !has_cookies?
-    cookie = headers["set-cookie"]
-    cookie = cookie.first if cookie.is_a?(Array)
-    !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
-  end
+      def xss_protection
+        headers["x-xss-protection"]
+      end
 
-  # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
-  def headers
-    @headers ||= response ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
+      # more specific checks than presence of headers
+      def xss_protection?
+        xss_protection == "1; mode=block"
+      end
+
+      def secure_cookies?
+        return false if !has_cookies?
+        cookie = headers["set-cookie"]
+        cookie = cookie.first if cookie.is_a?(Array)
+        !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
+      end
+
+      # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
+      def all
+        @all ||= response ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
+      end
+      alias_method :headers, :all
+
+      def [](header)
+        headers[header]
+      end
+
+      def inspect
+        "<SiteInspector::Endpoint::Headers endpoint=\"#{response.effective_url}\">"
+      end
+    end
   end
 end
