@@ -85,7 +85,7 @@ class SiteInspector
     end
 
     def hsts
-      @hsts ||= SiteInspector::Hsts.new(headers["strict-transport-security"]) if https_valid?
+      @hsts ||= SiteInspector::Endpoint::Hsts.new(headers["strict-transport-security"]) if https_valid?
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
