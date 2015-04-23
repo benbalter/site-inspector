@@ -137,7 +137,7 @@ class SiteInspector
     end
 
     def dns
-      @dns ||= SiteInspector::Dns.new(uri.host)
+      @dns ||= Dns.new(uri.host)
     end
 
     def to_s
