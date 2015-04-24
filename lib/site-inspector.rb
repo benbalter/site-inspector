@@ -1,7 +1,5 @@
-
-# needed for HTTP analysis
 require 'open-uri'
-require "addressable/uri"
+require 'addressable/uri'
 require 'public_suffix'
 require 'typhoeus'
 

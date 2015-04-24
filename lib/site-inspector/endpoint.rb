@@ -51,9 +51,14 @@ class SiteInspector
       @response ||= request
     end
 
-    # Does the endpoint return a response code between 200 and 300?
+    # Does the server return any response? (including 50x)
+    def response?
+      !!response
+    end
+
+    # Does the endpoint return a 2xx or 3xx response code?
     def up?
-      response && response_code.start_with?("2")
+      response && response_code.start_with?("2") || response_code.start_with?("3")
     end
 
     def down?
