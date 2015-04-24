@@ -6,10 +6,6 @@ class SiteInspector
       @memory  = {}
     end
 
-    def path(request)
-      File.join(@dir, request.cache_key)
-    end
-
     def get(request)
       return unless File.exist?(path(request))
       return @memory[request] if @memory[request]
@@ -31,6 +27,12 @@ class SiteInspector
     def set(request, response)
       File.write(path(request), Marshal.dump(response))
       @memory[request] = response
+    end
+
+    private
+
+    def path(request)
+      File.join(@dir, request)
     end
   end
 end
