@@ -52,7 +52,7 @@ class SiteInspector
     # * Either of the HTTPS endpoints is listening, and doesn't have
     #   an invalid hostname.
     def https?
-      endpoints.any? { |e| e.https? && e.up? && e.https_valid? }
+      endpoints.any? { |e| e.https? && e.up? && e.https.valid? }
     end
 
     # HTTPS is enforced if one of the HTTPS endpoints is "live",

@@ -31,7 +31,7 @@ class SiteInspector
       private
 
       def scheme
-        @scheme ||= Addressable::URI.parse(response.effective_url).scheme
+        @scheme ||= response.request.base_url.scheme
       end
 
     end
