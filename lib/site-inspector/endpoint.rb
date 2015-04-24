@@ -56,6 +56,14 @@ class SiteInspector
       !!response
     end
 
+    def response_code
+      response.response_code.to_s if response
+    end
+
+    def timed_out?
+      response && response.timed_out?
+    end
+
     # Does the endpoint return a 2xx or 3xx response code?
     def up?
       response && response_code.start_with?("2") || response_code.start_with?("3")
@@ -63,14 +71,6 @@ class SiteInspector
 
     def down?
       !up?
-    end
-
-    def response_code
-      response.response_code.to_s if response
-    end
-
-    def timed_out?
-      response && response.timed_out?
     end
 
     def https_valid?
