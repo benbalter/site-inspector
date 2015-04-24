@@ -11,6 +11,7 @@ require_relative 'site-inspector/endpoint'
 require_relative 'site-inspector/endpoint/dns'
 require_relative 'site-inspector/endpoint/headers'
 require_relative 'site-inspector/endpoint/hsts'
+require_relative 'site-inspector/endpoint/https'
 require_relative 'site-inspector/endpoint/sniffer'
 require_relative 'site-inspector/version'
 

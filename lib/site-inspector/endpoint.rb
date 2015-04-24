@@ -29,7 +29,7 @@ class SiteInspector
     end
 
     def https?
-      @uri.scheme == "https"
+      https.scheme?
     end
 
     def http?
@@ -73,20 +73,9 @@ class SiteInspector
       !up?
     end
 
-    def https_valid?
-      https? && response && response.return_code == :ok
-    end
-
-    def https_bad_chain?
-      https? && response && response.return_code == :ssl_cacert
-    end
-
-    def https_bad_name?
-      https? && response && response.return_code == :peer_failed_verification
-    end
-
     def hsts
-      @hsts ||= SiteInspector::Endpoint::Hsts.new(headers["strict-transport-security"]) if https_valid?
+      return unless https.valid?
+      @hsts ||= SiteInspector::Endpoint::Hsts.new(headers["strict-transport-security"])
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
@@ -138,6 +127,10 @@ class SiteInspector
 
     def headers
       @headers ||= Headers.new(response)
+    end
+
+    def https
+      @https ||= Https.new(response)
     end
 
     def to_s
