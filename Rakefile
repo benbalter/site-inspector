@@ -1,31 +1,8 @@
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'rake'
+require 'site-inspector'
+require 'rspec/core/rake_task'
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+desc "Run specs"
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = 'spec/**/*_spec.rb'
+  t.rspec_opts = ["--order", "rand", "--color"]
 end
-
-Rake::TestTask.new(:http) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_http*.rb'
-  test.verbose = true
-end
-
-Rake::TestTask.new(:site) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_site_inspector*.rb'
-  test.verbose = true
-end
-
-task :default => [:test]

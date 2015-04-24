@@ -10,18 +10,12 @@ Gem::Specification.new do |s|
   s.email                 = "ben@balter.com"
   s.homepage              = "https://github.com/benbalter/site-inspector-ruby"
   s.license               = "MIT"
-  s.executable            = "site-inspector"
-  s.files = [
-    "lib/site-inspector.rb",
-    "lib/data/cdn.yml",
-    "lib/data/cloud.yml",
-    "lib/site-inspector/cache.rb",
-    "lib/site-inspector/compliance.rb",
-    "lib/site-inspector/dns.rb",
-    "lib/site-inspector/headers.rb",
-    "lib/site-inspector/sniffer.rb",
-    "LICENSE"
-  ]
+
+  s.files                 = `git ls-files -z`.split("\x0")
+  s.executables           = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files            = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths         = ["lib"]
+
   s.add_dependency("nokogiri", "~> 1.6")
   s.add_dependency("public_suffix", "~> 1.4")
   s.add_dependency("gman", "~> 4.1")
@@ -31,11 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency("oj", "~> 2.11")
   s.add_development_dependency("pry", "~> 0.10")
   s.add_development_dependency( "rake", "~> 10.4" )
-  s.add_development_dependency( "shoulda", "~> 3.5" )
-  s.add_development_dependency( "rdoc", "~> 4.1" )
+  s.add_development_dependency( "rspec", "~> 3.2")
   s.add_development_dependency( "bundler", "~> 1.6" )
-  s.add_development_dependency( "rerun", "~> 0.10" )
-  s.add_development_dependency( "vcr", "~> 2.9" )
   s.add_development_dependency( "webmock", "~> 1.2" )
-  s.add_development_dependency( "guard-rake", "~> 1.0")
 end

@@ -2,6 +2,6 @@
 
 set -e
 
-bundle exec rake test
+bundle exec rake spec
 
 gem build site-inspector.gemspec
