@@ -41,7 +41,8 @@ class SiteInspector
     end
 
     def request(options = {})
-      Typhoeus.get(uri, SiteInspector.typhoeus_defaults.merge(options))
+      target = options[:uri] || uri
+      Typhoeus.get(target, SiteInspector.typhoeus_defaults.merge(options))
     end
 
     # Makes a GET request of the given host
