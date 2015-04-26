@@ -150,7 +150,7 @@ class SiteInspector
     # 2. All endpoints are either down or an external redirect
     def redirect?
       return false unless redirect
-      endpoints.all? { |e| e.down || e.external_redirect? }
+      endpoints.all? { |e| e.down? || e.external_redirect? }
     end
 
     # The first endpoint to respond with a redirect
