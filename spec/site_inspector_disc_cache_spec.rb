@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe 'SiteInspector::DiskCache' do
+describe SiteInspector::DiskCache do
+  subject { SiteInspector::DiskCache.new(tmpdir) }
+  
   before do
-    @cache = SiteInspector::DiskCache.new(tmpdir)
     FileUtils.rm_rf(tmpdir)
     Dir.mkdir(tmpdir)
   end
@@ -11,8 +12,8 @@ describe 'SiteInspector::DiskCache' do
     path = File.expand_path "foo", tmpdir
     expect(File.exists?(path)).to eql(false)
 
-    @cache.set "foo", "bar"
-    
+    subject.set "foo", "bar"
+
     expect(File.exists?(path)).to eql(true)
     expect(File.open(path).read).to eql("I\"bar:ET")
   end
@@ -20,11 +21,11 @@ describe 'SiteInspector::DiskCache' do
   it "should read a value from disk" do
     path = File.expand_path "foo", tmpdir
     File.write(path, "I\"bar:ET")
-    expect(@cache.get("foo")).to eql("bar")
+    expect(subject.get("foo")).to eql("bar")
   end
 
   it "should calculate a file's path" do
     path = File.expand_path "foo", tmpdir
-    expect(@cache.send(:path, "foo")).to eql(path)
+    expect(subject.send(:path, "foo")).to eql(path)
   end
 end

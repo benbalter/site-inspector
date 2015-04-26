@@ -1,12 +1,6 @@
 class SiteInspector
   class Endpoint
-    class Headers
-
-      attr_reader :response
-
-      def initialize(response)
-        @response = response
-      end
+    class Headers < Check
 
       # cookies can have multiple set-cookie headers, so this detects
       # whether cookies are set, but not all their values.
@@ -68,10 +62,6 @@ class SiteInspector
 
       def [](header)
         headers[header]
-      end
-
-      def inspect
-        "<SiteInspector::Endpoint::Headers endpoint=\"#{response.effective_url}\">"
       end
     end
   end

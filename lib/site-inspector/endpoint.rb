@@ -18,6 +18,7 @@ class SiteInspector
     def initialize(host)
       @uri = Addressable::URI.parse(host.downcase)
       @host = uri.host.sub(/^www\./, "")
+      @checks = {}
     end
 
     def www?
@@ -41,7 +42,7 @@ class SiteInspector
     end
 
     def request(options = {})
-      target = options[:uri] || uri
+      target = options[:path] ? URI.join(uri, options.delete(:path)) : uri
       Typhoeus.get(target, SiteInspector.typhoeus_defaults.merge(options))
     end
 
@@ -54,7 +55,7 @@ class SiteInspector
 
     # Does the server return any response? (including 50x)
     def response?
-      !!response
+       response.code != 0 && !timed_out?
     end
 
     def response_code
@@ -72,11 +73,6 @@ class SiteInspector
 
     def down?
       !up?
-    end
-
-    def hsts
-      return unless https.valid?
-      @hsts ||= SiteInspector::Endpoint::Hsts.new(headers["strict-transport-security"])
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
@@ -109,29 +105,25 @@ class SiteInspector
     def resolves_to
       return self unless redirect?
       @resolves_to ||= begin
-        url = request(:followlocation => true).effective_url
+        response = request(:followlocation => true)
+
+        # Workaround for Webmock not playing nicely with Typhoeus redirects
+        if response.mock?
+          if response.headers["Location"]
+            url = response.headers["Location"]
+          else
+            url = response.request.url
+          end
+        else
+          url = response.effective_url
+        end
+
         Endpoint.new(url)
       end
     end
 
     def external_redirect?
-      uri != resolves_to.uri
-    end
-
-    def dns
-      @dns ||= Dns.new(uri.host)
-    end
-
-    def sniffer
-      @sniffer ||= Sniffer.new(response)
-    end
-
-    def headers
-      @headers ||= Headers.new(response)
-    end
-
-    def https
-      @https ||= Https.new(response)
+      host != resolves_to.host
     end
 
     def to_s
@@ -140,6 +132,26 @@ class SiteInspector
 
     def inspect
       "#<SiteInspector::Endpoint uri=\"#{uri.to_s}\">"
+    end
+
+    def self.checks
+      ObjectSpace.each_object(Class).select { |klass| klass < Check }
+    end
+
+    def method_missing(method_sym, *arguments, &block)
+      if check = SiteInspector::Endpoint.checks.find { |c| c.name == method_sym }
+        @checks[method_sym] ||= check.new(response)
+      else
+        super
+      end
+    end
+
+    def respond_to?(method_sym, include_private = false)
+      if checks.keys.include?(method_sym)
+        true
+      else
+        super
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'SiteInspector' do
+describe SiteInspector do
 
   before do
     SiteInspector.instance_variable_set("@cache", nil)

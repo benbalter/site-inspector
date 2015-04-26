@@ -17,7 +17,6 @@ class SiteInspector
 
   # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
   def path_exists?(path)
-    uri = URI.join canonical_endpoint.uri, path
-    canonical_endpoint.request(uri: uri, followlocation: true).success?
+    canonical_endpoint.request(path: path, followlocation: true).success?
   end
 end

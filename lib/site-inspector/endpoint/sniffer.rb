@@ -1,12 +1,6 @@
 class SiteInspector
   class Endpoint
-    class Sniffer
-
-      attr_reader :response
-
-      def initialize(response)
-        @response = response
-      end
+    class Sniffer < Check
 
       def doc
         require 'nokogiri'
@@ -31,10 +25,6 @@ class SiteInspector
 
       def advertising
         sniff :advertising
-      end
-
-      def inspect
-        "#<SiteInspector::Endpoint::Sniffer endpoint=\"#{response.effective_url}\">"
       end
 
       private

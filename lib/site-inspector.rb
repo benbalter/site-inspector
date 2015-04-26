@@ -7,12 +7,13 @@ require_relative 'site-inspector/cache'
 require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/disk_cache'
 require_relative 'site-inspector/domain'
-require_relative 'site-inspector/endpoint'
+require_relative 'site-inspector/endpoint/check'
 require_relative 'site-inspector/endpoint/dns'
 require_relative 'site-inspector/endpoint/headers'
 require_relative 'site-inspector/endpoint/hsts'
 require_relative 'site-inspector/endpoint/https'
 require_relative 'site-inspector/endpoint/sniffer'
+require_relative 'site-inspector/endpoint'
 require_relative 'site-inspector/version'
 
 class SiteInspector
@@ -49,3 +50,4 @@ class SiteInspector
 end
 
 Typhoeus::Config.cache = SiteInspector.cache
+#Typhoeus::Config.memoize = true

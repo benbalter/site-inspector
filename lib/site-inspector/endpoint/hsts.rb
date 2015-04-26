@@ -2,14 +2,7 @@ class SiteInspector
   class Endpoint
     # Utility parser for HSTS headers.
     # RFC: http://tools.ietf.org/html/rfc6797
-    class Hsts
-
-      attr_accessor :header
-
-      def initialize(header)
-        raise ArugmentError unless header.is_a?(String)
-        @header = header
-      end
+    class Hsts < Check
 
       def valid?
         invalid_chars = /[\s\'\"]/
@@ -58,8 +51,16 @@ class SiteInspector
 
       private
 
+      def headers
+        @headers ||= Header.new(response)
+      end
+
+      def header
+        @header ||= headers["strict-transport-security"]
+      end
+
       def directives
-        header.split(/\s*;\s*/)
+        @directives ||= header.split(/\s*;\s*/)
       end
 
       def pairs

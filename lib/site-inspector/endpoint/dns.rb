@@ -1,12 +1,6 @@
 class SiteInspector
   class Endpoint
-    class Dns
-
-      attr_reader :host
-
-      def initialize(host)
-        @host = host.to_s
-      end
+    class Dns < Check
 
       def self.resolver
         require "dnsruby"

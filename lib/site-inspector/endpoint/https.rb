@@ -1,12 +1,6 @@
 class SiteInspector
   class Endpoint
-    class Https
-
-      attr_reader :response
-
-      def initialize(response)
-        @response = response
-      end
+    class Https < Check
 
       def scheme?
         scheme == "https"
@@ -31,7 +25,7 @@ class SiteInspector
       private
 
       def scheme
-        @scheme ||= response.request.base_url.scheme
+        @scheme ||= request.base_url.scheme
       end
 
     end
