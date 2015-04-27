@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Headers do
 
   subject do
-    url = Addressable::URI.parse("http://github.com")
+    url = Addressable::URI.parse("http://example.com")
     response = Typhoeus::Response.new({
       :headers => {
         :foo => "bar"

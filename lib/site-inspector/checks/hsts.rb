@@ -5,26 +5,19 @@ class SiteInspector
     class Hsts < Check
 
       def valid?
-        invalid_chars = /[\s\'\"]/
-        pairs.none? do |name, value|
-          (name =~ invalid_chars) or (value =~ invalid_chars)
-        end
+        pairs.none? { |key, value| "#{key}#{value}" =~ /[\s\'\"]/ }
       end
 
       def max_age
-        pairs[:"max-age"][1].to_i if pairs[:"max-age"]
+        pairs[:"max-age"].to_i
       end
 
       def include_subdomains?
-        !!pairs[:includesubdomains]
+        pairs.keys.include? :includesubdomains
       end
 
       def preload?
-        !!pairs[:preload]
-      end
-
-      def [](key)
-        pairs[key]
+        pairs.keys.include? :preload
       end
 
       def enabled?
@@ -34,9 +27,7 @@ class SiteInspector
 
       # Google's minimum max-age for automatic preloading
       def preload_ready?
-        return false unless include_subdomains? and preload?
-        return false unless max_age
-        max_age >= 10886400
+        include_subdomains? and preload? and max_age >= 10886400
       end
 
       def to_h
@@ -52,7 +43,7 @@ class SiteInspector
       private
 
       def headers
-        @headers ||= Header.new(response)
+        @headers ||= SiteInspector::Endpoint::Headers.new(response)
       end
 
       def header
@@ -69,13 +60,14 @@ class SiteInspector
           directives.each do |directive|
             key, value = directive.downcase.split("=")
 
-            if value and value.start_with?("\"") and value.end_with?("\"")
+            if value =~ /\".*\"/
               value = value.sub(/^\"/, '')
               value = value.sub(/\"$/, '')
             end
 
             pairs[key.to_sym] = value
           end
+
           pairs
         end
       end
