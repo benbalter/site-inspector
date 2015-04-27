@@ -22,6 +22,13 @@ class SiteInspector
         "#<SiteInspector::Endpoint::Https valid=#{valid?}>"
       end
 
+      def to_h
+        {
+          valid: valid,
+          return_code: response.return_code,
+        }
+      end
+
       private
 
       def scheme
