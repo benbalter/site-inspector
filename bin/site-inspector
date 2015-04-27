@@ -43,6 +43,7 @@ Mercenary.program(:"site-inspector") do |p|
       data = Oj.load Oj.dump(hash, indent: 2, mode: :compat)
       yaml = YAML.dump(data)
 
+      # Colorize bools
       yaml.gsub! /\: (true|ok)$/, ": " + "true".green
       yaml.gsub! /\: false$/, ": " + "false".red
 
