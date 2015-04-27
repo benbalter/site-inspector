@@ -179,5 +179,18 @@ class SiteInspector
     def inspect
       "#<SiteInspector::Domain host=\"#{host}\">"
     end
+
+    def to_h
+      {
+        :https => {
+          :root => endpoints[0].to_h,
+          :www => endpoints[1].to_h
+        },
+        :http => {
+          :root => endpoints[2].to_h,
+          :www => endpoints[3].to_h
+        }
+      }
+    end
   end
 end

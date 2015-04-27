@@ -134,6 +134,24 @@ class SiteInspector
       "#<SiteInspector::Endpoint uri=\"#{uri.to_s}\">"
     end
 
+    def to_h
+      hash = {
+        uri: uri,
+        host: host,
+        www: www?,
+        https: https?,
+        scheme: scheme,
+        up: up?,
+        timeed_out: timed_out?,
+        redirect: redirect?,
+        external_redirect: external_redirect?,
+      }
+      SiteInspector::Endpoint.checks.each do |check|
+        hash[check.name] = self.send(check.name).to_h
+      end
+      hash
+    end
+
     def self.checks
       ObjectSpace.each_object(Class).select { |klass| klass < Check }
     end

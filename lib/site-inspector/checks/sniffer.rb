@@ -27,6 +27,10 @@ class SiteInspector
         sniff :advertising
       end
 
+      def to_h
+        { }
+      end
+
       private
 
       def sniff(type)

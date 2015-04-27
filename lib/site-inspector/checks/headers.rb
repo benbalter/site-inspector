@@ -48,7 +48,7 @@ class SiteInspector
       end
 
       def secure_cookies?
-        return false if !has_cookies?
+        return false if !cookies?
         cookie = headers["set-cookie"]
         cookie = cookie.first if cookie.is_a?(Array)
         !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)

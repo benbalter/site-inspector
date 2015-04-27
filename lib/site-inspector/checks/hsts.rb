@@ -5,6 +5,7 @@ class SiteInspector
     class Hsts < Check
 
       def valid?
+        return false unless header
         pairs.none? { |key, value| "#{key}#{value}" =~ /[\s\'\"]/ }
       end
 
@@ -37,7 +38,7 @@ class SiteInspector
           include_subdomains: include_subdomains?,
           preload: preload?,
           enabled: enabled?,
-          preload_ready: preaload_ready?
+          preload_ready: preload_ready?
         }
       end
 
@@ -52,7 +53,7 @@ class SiteInspector
       end
 
       def directives
-        @directives ||= header.split(/\s*;\s*/)
+        @directives ||= header ? header.split(/\s*;\s*/) : []
       end
 
       def pairs
