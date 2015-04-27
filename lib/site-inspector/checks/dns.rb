@@ -49,22 +49,18 @@ class SiteInspector
 
       def google_apps?
         @google ||= records.any? do |record|
-          record.type == "MX" && record.exchange =~ /google(mail)?\.com\.?$/
+          record.type == "MX" && record.exchange.to_s =~ /google(mail)?\.com\.?$/
         end
       end
 
       def ip
         require 'resolv'
         @ip ||= Resolv.getaddress host
-      rescue Resolv::ResolvError
-        nil
       end
 
       def hostname
         require 'resolv'
         @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
-      rescue Exception => e
-        nil
       end
 
       def cnames
@@ -79,13 +75,21 @@ class SiteInspector
 
       private
 
+      def data
+        @data ||= {}
+      end
+
+      def data_path(name)
+        File.expand_path "../../data/#{name}.yml", File.dirname(__FILE__)
+      end
+
       def load_data(name)
         require 'yaml'
-        YAML.load_file File.expand_path "../../data/#{name}.yml", File.dirname(__FILE__)
+        path = data_path(name)
+        data[name] ||= YAML.load_file(path)
       end
 
       def detect_by_hostname(type)
-
         haystack = load_data(type)
         needle = haystack.find do |name, domain|
           cnames.any? do |cname|
@@ -93,14 +97,14 @@ class SiteInspector
           end
         end
 
-        return needle[0] if needle
+        return needle[0].to_sym if needle
         return nil unless hostname
 
         needle = haystack.find do |name, domain|
           domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
         end
 
-        needle ? needle[0] : nil
+        needle ? needle[0].to_sym : nil
       end
     end
   end
