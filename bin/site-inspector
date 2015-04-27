@@ -1,16 +1,54 @@
 #!/usr/bin/env ruby
 
+require "mercenary"
+require "oj"
+require 'yaml'
+require 'colorator'
 require_relative "../lib/site-inspector"
 
-require "oj"
-
-domain = ARGV[0]
-
-if domain.to_s.empty?
-  puts "Usage: site-inspector [DOMAIN]"
-  exit 1
+def stringify_keys_deep!(h)
+    h.keys.each do |k|
+        ks    = k.respond_to?(:to_s) ? k.to_s : k
+        h[ks] = h.delete k # Preserve order even when k == ks
+        stringify_keys_deep! h[ks] if h[ks].kind_of? Hash
+    end
 end
 
-site = SiteInspector.inspect(domain)
-details = site.to_h
-puts Oj.dump(details, indent: 2, mode: :compat)
+Mercenary.program(:"site-inspector") do |p|
+  p.version SiteInspector::VERSION
+  p.description "Returns information about a domain's technology and capabilities"
+  p.syntax "site-inspector <command> <domain> [options]"
+
+  p.command(:inspect) do |c|
+    c.syntax "inspect <domain> [options]"
+    c.description "inspects a domain"
+    c.option 'json', '-j', '--json', 'JSON encode the output'
+    c.option 'all', '-a', '--all', 'return results for all endpoints (defaults to only the canonical endpoint)'
+
+    SiteInspector::Endpoint.checks.each do |check|
+      c.option check.name, "--#{check.name}", "return results for the #{check.name} check (defaults to all checks unless one or more checks are specified)"
+    end
+
+    c.action do |args, options|
+      next c.logger.fatal "Must specify a domain" if args.length != 1
+
+      # Build our domain hash as requested
+      domain = SiteInspector.inspect(args[0])
+      hash = domain.to_h(options)
+
+      # Dump the JSON and run
+      next puts Oj.dump(hash, indent: 2, mode: :compat) if options["json"]
+
+      # This is a dirty, dirty hack, but it's a simple way to stringify keys recursively
+      data = Oj.load Oj.dump(hash, indent: 2, mode: :compat)
+      yaml = YAML.dump(data)
+
+      yaml.gsub! /\: (true|ok)$/, ": " + "true".green
+      yaml.gsub! /\: false$/, ": " + "false".red
+
+      puts yaml
+    end
+  end
+
+  p.default_command(:inspect)
+end

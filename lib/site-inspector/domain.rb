@@ -180,18 +180,51 @@ class SiteInspector
       "#<SiteInspector::Domain host=\"#{host}\">"
     end
 
-    def to_h
-      {
-        :https => {
-          :root => endpoints[0].to_h,
-          :www => endpoints[1].to_h
-        },
-        :http => {
-          :root => endpoints[2].to_h,
-          :www => endpoints[3].to_h
-        }
-        # TODO: the basic domain-level results.
+    # Converts the domain to a hash
+    #
+    # By default, it only returns domain-wide information and
+    # information about the canonical endpoint
+    #
+    # It will also pass options allong to each endpoint's to_h method
+    #
+    # options:
+    #  :all - return information about all endpoints
+    #
+    # Returns a complete hash of the domain's information
+    def to_h(options={})
+      hash = {
+        host:               host,
+        up:                 up?,
+        www:                www?,
+        root:               root?,
+        https:              https?,
+        enforces_https:     enforces_https?,
+        downgrades_https:   downgrades_https?,
+        canonically_www:    canonically_www?,
+        canonically_https:  canonically_https?,
+        redirect:           redirect?,
+        hsts:               hsts?,
+        hsts_subdomains:    hsts_subdomains?,
+        hsts_preload_ready: hsts_preload_ready?,
+        canoncial_endpoint: canonical_endpoint.to_h(options)
       }
+
+      if options["all"]
+        hash.merge!({
+          endpoints: {
+            https: {
+              root: endpoints[0].to_h(options),
+              www:  endpoints[1].to_h(options)
+            },
+            http: {
+              root: endpoints[2].to_h(options),
+              www:  endpoints[3].to_h(options)
+            }
+          }
+        })
+      end
+
+      hash
     end
   end
 end

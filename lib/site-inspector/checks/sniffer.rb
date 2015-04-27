@@ -21,7 +21,7 @@ class SiteInspector
       def to_h
         {
           :cms         => cms,
-          :analytics   => analytcs,
+          :analytics   => analytics,
           :javascript  => javascript,
           :advertising => advertising
         }

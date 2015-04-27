@@ -69,12 +69,12 @@ class SiteInspector
       def to_h
         {
           :cookies => cookies?,
-          :strict_transport_security => strict_transport_security,
-          :content_security_policy => content_security_policy,
-          :click_jacking_protection => click_jacking_protection,
-          :click_jacking_protection => click_jacking_protection,
+          :strict_transport_security => strict_transport_security || false,
+          :content_security_policy => content_security_policy || false,
+          :click_jacking_protection => click_jacking_protection || false,
+          :click_jacking_protection => click_jacking_protection || false,
           :server => server,
-          :xss_protection => xss_protection,
+          :xss_protection => xss_protection || false,
           :secure_cookies => secure_cookies?
         }
       end

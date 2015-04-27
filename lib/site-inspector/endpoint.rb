@@ -134,9 +134,18 @@ class SiteInspector
       "#<SiteInspector::Endpoint uri=\"#{uri.to_s}\">"
     end
 
-    def to_h
+    # Returns information about the endpoint
+    #
+    # By default, all checks are run. If one or more check names are passed
+    # in the options hash, only those checks will be run.
+    #
+    # options:
+    #   a hash of check symbols and bools representing which checks should be run
+    #
+    # Returns the hash representing the endpoint and its checks
+    def to_h(options={})
       hash = {
-        uri: uri,
+        uri: uri.to_s,
         host: host,
         www: www?,
         https: https?,
@@ -146,9 +155,15 @@ class SiteInspector
         redirect: redirect?,
         external_redirect: external_redirect?,
       }
-      SiteInspector::Endpoint.checks.each do |check|
+
+      # Either they've specifically asked for a check, or we throw everything at them
+      checks = SiteInspector::Endpoint.checks.select { |c| options.keys.include?(c.name) }
+      checks = SiteInspector::Endpoint.checks if checks.empty?
+
+      checks.each do |check|
         hash[check.name] = self.send(check.name).to_h
       end
+
       hash
     end
 
