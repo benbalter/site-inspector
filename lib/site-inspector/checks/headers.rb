@@ -4,7 +4,7 @@ class SiteInspector
 
       # cookies can have multiple set-cookie headers, so this detects
       # whether cookies are set, but not all their values.
-      def has_cookies?
+      def cookies?
         !!headers["set-cookie"]
       end
 
