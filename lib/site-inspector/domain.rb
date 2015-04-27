@@ -190,6 +190,7 @@ class SiteInspector
           :root => endpoints[2].to_h,
           :www => endpoints[3].to_h
         }
+        # TODO: the basic domain-level results.
       }
     end
   end
