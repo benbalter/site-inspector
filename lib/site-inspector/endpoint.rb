@@ -142,7 +142,7 @@ class SiteInspector
         https: https?,
         scheme: scheme,
         up: up?,
-        timeed_out: timed_out?,
+        timed_out: timed_out?,
         redirect: redirect?,
         external_redirect: external_redirect?,
       }
