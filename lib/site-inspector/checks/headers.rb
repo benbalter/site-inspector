@@ -8,6 +8,7 @@ class SiteInspector
         !!headers["set-cookie"]
       end
 
+      # TODO: kill this
       def strict_transport_security?
         !!strict_transport_security
       end
@@ -22,6 +23,7 @@ class SiteInspector
 
       # return the found header value
 
+      # TODO: kill this
       def strict_transport_security
         headers["strict-transport-security"]
       end
