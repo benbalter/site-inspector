@@ -73,6 +73,18 @@ class SiteInspector
         "#<SiteInspector::Domain::Dns host=\"#{host}\">"
       end
 
+      def to_h
+        {
+          :dnssec => dnssec?,
+          :ipv6   => ipv6?,
+          :cdn    => cdn,
+          :cloud_provider => cloud_provider,
+          :google_apps => google_apps?,
+          :hostname => hostname,
+          :ip => ip
+        }
+      end
+
       private
 
       def data

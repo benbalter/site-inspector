@@ -32,6 +32,7 @@ class SiteInspector
 
       def to_h
         {
+          valid: valid?,
           max_age: max_age,
           include_subdomains: include_subdomains?,
           preload: preload?,

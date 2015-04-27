@@ -72,4 +72,7 @@ describe SiteInspector::Endpoint::Headers do
     expect(subject.cookies?).to eql(true)
   end
 
+  it "knows if the cookies are secure" do
+
+  end
 end

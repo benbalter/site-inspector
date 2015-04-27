@@ -63,6 +63,19 @@ class SiteInspector
       def [](header)
         headers[header]
       end
+
+      def to_h
+        {
+          :cookies => cookies?,
+          :strict_transport_security => strict_transport_security,
+          :content_security_policy => content_security_policy,
+          :click_jacking_protection => click_jacking_protection,
+          :click_jacking_protection => click_jacking_protection,
+          :server => server,
+          :xss_protection => xss_protection,
+          :secure_cookies => secure_cookies?
+        }
+      end
     end
   end
 end
