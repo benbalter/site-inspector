@@ -35,13 +35,14 @@ Mercenary.program(:"site-inspector") do |p|
       # Build our domain hash as requested
       domain = SiteInspector.inspect(args[0])
       hash = domain.to_h(options)
+      json = Oj.dump(hash, indent: 2, mode: :compat)
 
       # Dump the JSON and run
-      next puts Oj.dump(hash, indent: 2, mode: :compat) if options["json"]
+      next puts json if options["json"]
 
       # This is a dirty, dirty hack, but it's a simple way to stringify keys recursively
-      data = Oj.load Oj.dump(hash, indent: 2, mode: :compat)
-      yaml = YAML.dump(data)
+      # And format the output in a human-readable way
+      yaml = YAML.dump Oj.load(json)
 
       # Colorize bools
       yaml.gsub! /\: (true|ok)$/, ": " + "true".green
