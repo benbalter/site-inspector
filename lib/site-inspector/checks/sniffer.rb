@@ -2,15 +2,6 @@ class SiteInspector
   class Endpoint
     class Sniffer < Check
 
-      def doc
-        require 'nokogiri'
-        @doc ||= Nokogiri::HTML response.body if response
-      end
-
-      def body
-        doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
-      end
-
       def cms
         sniff :cms
       end
@@ -28,10 +19,24 @@ class SiteInspector
       end
 
       def to_h
-        { }
+        {
+          :cms         => cms,
+          :analytics   => analytcs,
+          :javascript  => javascript,
+          :advertising => advertising
+        }
       end
 
       private
+
+      def doc
+        require 'nokogiri'
+        @doc ||= Nokogiri::HTML response.body if response
+      end
+
+      def body
+        doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
+      end
 
       def sniff(type)
         require 'sniffles'
