@@ -1,4 +1,4 @@
-require 'site-inspector'
+require './lib/site-inspector'
 require 'rspec/core/rake_task'
 
 desc "Run specs"
