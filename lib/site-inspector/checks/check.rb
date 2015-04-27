@@ -6,6 +6,9 @@ class SiteInspector
 
       # A check is an abstract class that takes a response object
       # and is extended to preform the specific site inspector checks
+      #
+      # It is automatically accessable within the endpoint object
+      # by virtue of extending the Check class
       def initialize(response)
         @response = response
       end
