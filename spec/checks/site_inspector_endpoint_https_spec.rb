@@ -20,7 +20,6 @@ describe SiteInspector::Endpoint::Https do
   end
 
   it "knows if it's valid" do
-    puts subject.response
     expect(subject.valid?).to eql(true)
   end
 

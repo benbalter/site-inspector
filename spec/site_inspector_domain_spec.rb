@@ -133,6 +133,7 @@ describe SiteInspector::Domain do
       stub_request(:get, "https://www.example.com/").to_return(:status => 200)
       stub_request(:get, "http://example.com/").to_return(:status => 200)
       stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
       expect(subject.https?).to eql(true)
     end
@@ -201,6 +202,7 @@ describe SiteInspector::Domain do
         stub_request(:get, "https://www.example.com/").to_return(:status => 200)
         stub_request(:get, "http://example.com/").to_return(:status => 500)
         stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+        allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
         expect(subject.canonically_https?).to eql(true)
       end
@@ -211,6 +213,7 @@ describe SiteInspector::Domain do
         stub_request(:get, "http://example.com/").
           to_return(:status => 301, :headers => { :location => "https://example.com" } )
         stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+        allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
         expect(subject.canonically_https?).to eql(true)
       end
