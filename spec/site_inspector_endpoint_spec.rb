@@ -199,7 +199,7 @@ describe SiteInspector::Endpoint do
 
   context "checks" do
     it "identifies checks" do
-      expect(SiteInspector::Endpoint.checks.count).to eql(5)
+      expect(SiteInspector::Endpoint.checks.count).to eql(6)
     end
 
     SiteInspector::Endpoint.checks.each do |check|

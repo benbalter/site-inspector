@@ -29,17 +29,6 @@ describe SiteInspector::Endpoint::Sniffer do
     SiteInspector::Endpoint::Sniffer.new(endpoint)
   end
 
-  it "returns the doc" do
-    doc = subject.send(:doc)
-    expect(doc.class).to eql(Nokogiri::HTML::Document)
-    expect(doc.css("h1").text).to eql("Some page")
-  end
-
-  it "returns the body" do
-    body = subject.send(:body)
-    expect(body).to match("<h1>Some page</h1>")
-  end
-
   it "sniffs" do
     sniff = subject.send(:sniff, :cms)
     expect(sniff.keys.first).to eql(:wordpress)

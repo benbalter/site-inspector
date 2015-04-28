@@ -14,9 +14,4 @@ class SiteInspector
   end
 
   private
-
-  # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
-  def path_exists?(path)
-    canonical_endpoint.request(path: path, followlocation: true).success?
-  end
 end

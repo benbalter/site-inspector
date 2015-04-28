@@ -29,18 +29,9 @@ class SiteInspector
 
       private
 
-      def doc
-        require 'nokogiri'
-        @doc ||= Nokogiri::HTML response.body if response
-      end
-
-      def body
-        doc.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
-      end
-
       def sniff(type)
         require 'sniffles'
-        results = Sniffles.sniff(body, type).select { |name, meta| meta[:found] == true }
+        results = Sniffles.sniff(endpoint.content.body, type).select { |name, meta| meta[:found] == true }
         results.each { |name, result| result.delete :found} if results
         results
       rescue
