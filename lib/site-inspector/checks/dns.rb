@@ -56,11 +56,15 @@ class SiteInspector
       def ip
         require 'resolv'
         @ip ||= Resolv.getaddress host
+      rescue Resolv::ResolvError
+        nil
       end
 
       def hostname
         require 'resolv'
         @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
+      rescue Resolv::ResolvError
+        nil
       end
 
       def cnames
