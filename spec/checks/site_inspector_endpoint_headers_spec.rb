@@ -3,14 +3,10 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Headers do
 
   subject do
-    url = Addressable::URI.parse("http://example.com")
-    response = Typhoeus::Response.new({
-      :headers => {
-        :foo => "bar"
-      }
-    })
-    response.request = Typhoeus::Request.new(url)
-    SiteInspector::Endpoint::Headers.new(response)
+    stub_request(:get, "http://example.com/").
+      to_return(:status => 200, :headers => { :foo => "bar" } )
+    endpoint = SiteInspector::Endpoint.new("http://example.com")
+    SiteInspector::Endpoint::Headers.new(endpoint)
   end
 
   def stub_header(header, value)
@@ -19,12 +15,12 @@ describe SiteInspector::Endpoint::Headers do
 
   it "parses the headers" do
     expect(subject.headers.count).to eql(1)
-    expect(subject.headers.keys).to include(:foo)
+    expect(subject.headers.keys).to include("foo")
   end
 
   it "returns a header" do
-    expect(subject[:foo]).to eql("bar")
-    expect(subject.headers[:foo]).to eql("bar")
+    expect(subject["foo"]).to eql("bar")
+    expect(subject.headers["foo"]).to eql("bar")
   end
 
   it "knows the server" do

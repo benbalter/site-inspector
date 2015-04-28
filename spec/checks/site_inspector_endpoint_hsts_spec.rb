@@ -3,14 +3,11 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Hsts do
 
   subject do
-    url = Addressable::URI.parse("http://example.com")
-    response = Typhoeus::Response.new({
-      :headers => {
-        "strict-transport-security" => "max-age=31536000; includeSubDomains;"
-      }
-    })
-    response.request = Typhoeus::Request.new(url)
-    SiteInspector::Endpoint::Hsts.new(response)
+    headers = { "strict-transport-security" => "max-age=31536000; includeSubDomains;" }
+    stub_request(:get, "http://example.com/").
+      to_return(:status => 200, :headers => headers )
+    endpoint = SiteInspector::Endpoint.new("http://example.com")
+    SiteInspector::Endpoint::Hsts.new(endpoint)
   end
 
   def stub_header(value)

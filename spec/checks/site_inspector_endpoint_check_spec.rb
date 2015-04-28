@@ -3,10 +3,13 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Check do
 
   subject do
-    url = Addressable::URI.parse("http://example.com")
-    response = Typhoeus::Response.new
-    response.request = Typhoeus::Request.new(url)
-    SiteInspector::Endpoint::Check.new(response)
+    stub_request(:get, "http://example.com/").to_return(:status => 200)
+    endpoint = SiteInspector::Endpoint.new("http://example.com")
+    SiteInspector::Endpoint::Check.new(endpoint)
+  end
+
+  it "returns the endpoint" do
+    expect(subject.endpoint.class).to eql(SiteInspector::Endpoint)
   end
 
   it "returns the response" do

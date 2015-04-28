@@ -173,7 +173,7 @@ class SiteInspector
 
     def method_missing(method_sym, *arguments, &block)
       if check = SiteInspector::Endpoint.checks.find { |c| c.name == method_sym }
-        @checks[method_sym] ||= check.new(response)
+        @checks[method_sym] ||= check.new(self)
       else
         super
       end

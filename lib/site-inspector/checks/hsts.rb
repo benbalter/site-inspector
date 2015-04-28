@@ -45,7 +45,7 @@ class SiteInspector
       private
 
       def headers
-        @headers ||= SiteInspector::Endpoint::Headers.new(response)
+        endpoint.headers
       end
 
       def header

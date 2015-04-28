@@ -3,10 +3,11 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Https do
 
   subject do
-    url = Addressable::URI.parse("https://example.com")
-    response = Typhoeus::Response.new(:return_code => :ok)
-    response.request = Typhoeus::Request.new(url)
-    SiteInspector::Endpoint::Https.new(response)
+    stub_request(:get, "https://example.com/").
+      to_return(:status => 200 )
+    endpoint = SiteInspector::Endpoint.new("https://example.com")
+    allow(endpoint.response).to receive(:return_code) { :ok }
+    SiteInspector::Endpoint::Https.new(endpoint)
   end
 
   it "knows the scheme" do

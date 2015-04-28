@@ -3,7 +3,6 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Sniffer do
 
   subject do
-    url = Addressable::URI.parse("https://example.com")
     body = <<-eos
       <html>
         <head>
@@ -15,18 +14,19 @@ describe SiteInspector::Endpoint::Sniffer do
             jQuery(); googletag.pubads();
           </script>
           <script>
-          	var _gaq=[['_setAccount','UA-12345678-1'],['_trackPageview']];
-          	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-          	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-          	s.parentNode.insertBefore(g,s)}(document,'script'));
+            var _gaq=[['_setAccount','UA-12345678-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
           </script>
         </body>
       </html>
     eos
-    response = Typhoeus::Response.new(:return_code => :ok, :body => body)
-    response.request = Typhoeus::Request.new(url)
 
-    SiteInspector::Endpoint::Sniffer.new(response)
+    stub_request(:get, "http://example.com/").
+      to_return(:status => 200, :body => body )
+    endpoint = SiteInspector::Endpoint.new("http://example.com")
+    SiteInspector::Endpoint::Sniffer.new(endpoint)
   end
 
   it "returns the doc" do
