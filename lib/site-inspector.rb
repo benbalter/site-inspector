@@ -4,7 +4,6 @@ require 'public_suffix'
 require 'typhoeus'
 
 require_relative 'site-inspector/cache'
-require_relative 'site-inspector/compliance'
 require_relative 'site-inspector/disk_cache'
 require_relative 'site-inspector/domain'
 require_relative 'site-inspector/checks/check'
