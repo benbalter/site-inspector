@@ -6,7 +6,7 @@ A Ruby Gem to sniff information about a domain's technology and capabilities.
 
 ## Demo
 
-[gov-inspector.herokuapp.com](https://gov-inspector.herokuapp.com) ([source](https://github.com/benbalter/site-inspector-demo))
+[site-inspector.herokuapp.com](https://site-inspector.herokuapp.com) ([source](https://github.com/benbalter/site-inspector-demo))
 
 ## Concepts
 
