@@ -41,13 +41,18 @@ class SiteInspector
       {
         :followlocation => false,
         :timeout => SiteInspector.timeout,
+        :accept_encoding => "gzip",
         :headers => {
           "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector-ruby)"
         }
       }
     end
+
+    def hydra
+      @hydra ||= Typhoeus::Hydra.new(max_concurrency: 4)
+    end
   end
 end
 
+Typhoeus::Config.memoize = true
 Typhoeus::Config.cache = SiteInspector.cache
-#Typhoeus::Config.memoize = true

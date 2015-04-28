@@ -34,6 +34,7 @@ describe SiteInspector do
 
   it "returns the typhoeus defaults" do
     expected = {
+      :accept_encoding => "gzip",
       :followlocation => false,
       :timeout => 10,
       :headers => {

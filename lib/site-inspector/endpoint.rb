@@ -43,7 +43,10 @@ class SiteInspector
 
     def request(options = {})
       target = options[:path] ? URI.join(uri, options.delete(:path)) : uri
-      Typhoeus.get(target, SiteInspector.typhoeus_defaults.merge(options))
+      request = Typhoeus::Request.new(target, SiteInspector.typhoeus_defaults.merge(options))
+      hydra.queue(request)
+      hydra.run
+      request.response
     end
 
     # Makes a GET request of the given host
@@ -185,6 +188,12 @@ class SiteInspector
       else
         super
       end
+    end
+
+    private
+
+    def hydra
+      SiteInspector.hydra
     end
   end
 end
