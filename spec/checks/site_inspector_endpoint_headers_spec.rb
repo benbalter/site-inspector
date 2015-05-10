@@ -80,7 +80,7 @@ describe SiteInspector::Endpoint::Headers do
 
   it "knows when an endpoint doesn't return a proper 404" do
     stub_request(:get, /http\:\/\/example.com\/.*/).
-      to_return(:status => 301)
+      to_return(:status => 200)
     expect(subject.proper_404s?).to eql(false)
   end
 end
