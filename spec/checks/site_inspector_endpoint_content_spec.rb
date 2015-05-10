@@ -54,4 +54,16 @@ describe SiteInspector::Endpoint::Content do
       to_return(:status => 404)
     expect(subject.sitemap_xml?).to eql(false)
   end
+
+  it "knows when humans.txt exists" do
+    stub_request(:get, "http://example.com/humans.txt").
+      to_return(:status => 200)
+    expect(subject.humans_txt?).to eql(true)
+  end
+
+  it "knows when humans.txt doesn't exist" do
+    stub_request(:get, "http://example.com/humans.txt").
+      to_return(:status => 200)
+    expect(subject.humans_txt?).to eql(true)
+  end
 end
