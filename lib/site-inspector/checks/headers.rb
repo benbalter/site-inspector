@@ -56,6 +56,14 @@ class SiteInspector
         !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
       end
 
+
+      def proper_404s?
+        @proper_404s ||= begin
+          require 'securerandom'
+          endpoint.request(path: SecureRandom.hex, followlocation: true).response_code == 404
+        end
+      end
+
       # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
       def all
         @all ||= response ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
@@ -75,7 +83,8 @@ class SiteInspector
           :click_jacking_protection => click_jacking_protection || false,
           :server => server,
           :xss_protection => xss_protection || false,
-          :secure_cookies => secure_cookies?
+          :secure_cookies => secure_cookies?,
+          :proper_404s => proper_404s?
         }
       end
     end
