@@ -13,7 +13,7 @@ class SiteInspector
 
       def query(type="ANY")
         SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
-      rescue Dnsruby::ResolvTimeout
+      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail
         []
       end
 
