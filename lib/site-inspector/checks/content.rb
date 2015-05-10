@@ -24,6 +24,10 @@ class SiteInspector
         @sitemap_xml ||= path_exists?("sitemap.xml")
       end
 
+      def humans_txt?
+        @humans_txt ||= path_exists?("humans.txt")
+      end
+
       def doctype
         document.internal_subset.name
       end
@@ -32,7 +36,8 @@ class SiteInspector
         {
           doctype:     doctype,
           sitemap_xml: sitemap_xml?,
-          robots_txt:  robots_txt?
+          robots_txt:  robots_txt?,
+          humans_txt:  humans_txt?
         }
       end
     end
