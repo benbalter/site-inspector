@@ -170,6 +170,13 @@ describe SiteInspector::Endpoint do
       expect(subject.redirect?).to eql(false)
     end
 
+    it "handles relative redirects without a leading slash" do
+      stub_request(:get, "http://example.com/").
+           to_return(:status => 301, :headers => { :location => "foo" } )
+
+      expect(subject.redirect?).to eql(false)
+    end
+
     it "knows what it resolves to" do
       stub_request(:get, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://www.example.com" } )

@@ -87,6 +87,7 @@ class SiteInspector
 
         # This is a relative redirect, but we still need the absolute URI
         if redirect.relative?
+          redirect.path = "/#{redirect.path}" unless redirect.path[0] == "/"
           redirect.host = host
           redirect.scheme = scheme
         end
