@@ -180,6 +180,18 @@ class SiteInspector
       "#<SiteInspector::Domain host=\"#{host}\">"
     end
 
+    # We know most API calls to the domain model are going to require
+    # That the root of all four endpoints are called. Rather than process them
+    # In serial, lets grab them in parallel and cache the results to speed
+    # up later calls.
+    def prefetch
+      endpoints.each do |endpoint|
+        request = Typhoeus::Request.new(endpoint.uri, SiteInspector.typhoeus_defaults)
+        SiteInspector.hydra.queue(request)
+      end
+      SiteInspector.hydra.run
+    end
+
     # Converts the domain to a hash
     #
     # By default, it only returns domain-wide information and
@@ -192,6 +204,8 @@ class SiteInspector
     #
     # Returns a complete hash of the domain's information
     def to_h(options={})
+      prefetch
+      
       hash = {
         host:               host,
         up:                 up?,
