@@ -5,6 +5,7 @@ require 'typhoeus'
 
 require_relative 'site-inspector/cache'
 require_relative 'site-inspector/disk_cache'
+require_relative 'site-inspector/rails_cache'
 require_relative 'site-inspector/domain'
 require_relative 'site-inspector/checks/check'
 require_relative 'site-inspector/checks/content'
@@ -24,6 +25,8 @@ class SiteInspector
     def cache
       @cache ||= if ENV['CACHE']
         SiteInspector::DiskCache.new
+      elsif Object.const_defined?('Rails')
+        SiteInspector::RailsCache.new
       else
         SiteInspector::Cache.new
       end
