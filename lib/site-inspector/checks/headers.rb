@@ -66,7 +66,7 @@ class SiteInspector
 
       # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
       def all
-        @all ||= response ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
+        @all ||= (response && response.headers) ? Hash[response.headers.map{ |k,v| [k.downcase,v] }] : {}
       end
       alias_method :headers, :all
 
