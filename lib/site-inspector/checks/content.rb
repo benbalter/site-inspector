@@ -3,7 +3,7 @@ class SiteInspector
     class Content < Check
       # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
       def path_exists?(path)
-        endpoint.request(path: path, followlocation: true).success?
+        endpoint.up? && endpoint.request(path: path, followlocation: true).success?
       end
 
       def document
