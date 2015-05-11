@@ -33,6 +33,7 @@ class SiteInspector
       end
 
       def prefetch
+        return unless endpoint.up?
         options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
         ["robots.txt", "sitemap.xml", "humans.txt", random_path].each do |path|
           request = Typhoeus::Request.new(URI.join(endpoint.uri, path), options)
