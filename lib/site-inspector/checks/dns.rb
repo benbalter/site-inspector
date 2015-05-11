@@ -65,7 +65,7 @@ class SiteInspector
       def hostname
         require 'resolv'
         @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
-      rescue Resolv::ResolvError
+      rescue Resolv::ResolvError, PublicSuffix::DomainInvalid
         nil
       end
 
