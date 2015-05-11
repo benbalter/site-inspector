@@ -66,4 +66,24 @@ describe SiteInspector::Endpoint::Content do
       to_return(:status => 200)
     expect(subject.humans_txt?).to eql(true)
   end
+
+  context "404s" do
+    it "knows when an endpoint returns a proper 404" do
+      stub_request(:get, /http\:\/\/example.com\/.*/).
+        to_return(:status => 404)
+      expect(subject.proper_404s?).to eql(true)
+    end
+
+    it "knows when an endpoint doesn't return a proper 404" do
+      stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).
+        to_return(:status => 200)
+      expect(subject.proper_404s?).to eql(false)
+    end
+
+    it "generates a random path" do
+      path = subject.send(:random_path)
+      expect(path).to match /[a-z0-9]{32}/i
+      expect(subject.send(:random_path)).to eql(path)
+    end
+  end
 end

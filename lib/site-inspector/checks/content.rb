@@ -32,13 +32,35 @@ class SiteInspector
         document.internal_subset.name
       end
 
+      def prefetch
+        options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
+        ["robots.txt", "sitemap.xml", "humans.txt", random_path].each do |path|
+          request = Typhoeus::Request.new(URI.join(endpoint.uri, path), options)
+          SiteInspector.hydra.queue(request)
+        end
+        SiteInspector.hydra.run
+      end
+
+      def proper_404s?
+        @proper_404s ||= !path_exists?(random_path)
+      end
+
       def to_h
+        prefetch
         {
           doctype:     doctype,
           sitemap_xml: sitemap_xml?,
           robots_txt:  robots_txt?,
-          humans_txt:  humans_txt?
+          humans_txt:  humans_txt?,
+          proper_404s: proper_404s?
         }
+      end
+
+      private
+
+      def random_path
+        require 'securerandom'
+        @random_path ||= SecureRandom.hex
       end
     end
   end

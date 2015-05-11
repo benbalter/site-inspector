@@ -71,16 +71,4 @@ describe SiteInspector::Endpoint::Headers do
   it "knows if the cookies are secure" do
 
   end
-
-  it "knows when an endpoint returns a proper 404" do
-    stub_request(:get, /http\:\/\/example.com\/.*/).
-      to_return(:status => 404)
-    expect(subject.proper_404s?).to eql(true)
-  end
-
-  it "knows when an endpoint doesn't return a proper 404" do
-    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).
-      to_return(:status => 200)
-    expect(subject.proper_404s?).to eql(false)
-  end
 end
