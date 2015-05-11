@@ -17,19 +17,19 @@ class SiteInspector
       end
 
       def robots_txt?
-        @bodts_txt ||= path_exists?("robots.txt")
+        @bodts_txt ||= path_exists?("robots.txt") if proper_404s?
       end
 
       def sitemap_xml?
-        @sitemap_xml ||= path_exists?("sitemap.xml")
+        @sitemap_xml ||= path_exists?("sitemap.xml") if proper_404s?
       end
 
       def humans_txt?
-        @humans_txt ||= path_exists?("humans.txt")
+        @humans_txt ||= path_exists?("humans.txt") if proper_404s?
       end
 
       def doctype
-        document.internal_subset.name
+        document.internal_subset.external_id
       end
 
       def prefetch

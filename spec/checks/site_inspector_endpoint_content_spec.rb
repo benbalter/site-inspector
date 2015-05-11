@@ -4,7 +4,7 @@ describe SiteInspector::Endpoint::Content do
 
   subject do
     body = <<-eos
-      <!DOCTYPE html>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html>
         <body>
           <h1>Some page</h1>
@@ -28,40 +28,52 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it "returns the doctype" do
-    expect(subject.doctype).to eql("html")
+    expect(subject.doctype).to eql("-//W3C//DTD XHTML 1.0 Transitional//EN")
   end
 
   it "knows when robots.txt exists" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/robots.txt").
       to_return(:status => 200)
     expect(subject.robots_txt?).to eql(true)
   end
 
   it "knows when robots.txt doesn't exist" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/robots.txt").
       to_return(:status => 404)
     expect(subject.robots_txt?).to eql(false)
   end
 
   it "knows when sitemap.xml exists" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/sitemap.xml").
       to_return(:status => 200)
     expect(subject.sitemap_xml?).to eql(true)
   end
 
   it "knows when sitemap.xml exists" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/sitemap.xml").
       to_return(:status => 404)
     expect(subject.sitemap_xml?).to eql(false)
   end
 
   it "knows when humans.txt exists" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/humans.txt").
       to_return(:status => 200)
     expect(subject.humans_txt?).to eql(true)
   end
 
   it "knows when humans.txt doesn't exist" do
+    stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 404)
+
     stub_request(:get, "http://example.com/humans.txt").
       to_return(:status => 200)
     expect(subject.humans_txt?).to eql(true)
@@ -84,6 +96,12 @@ describe SiteInspector::Endpoint::Content do
       path = subject.send(:random_path)
       expect(path).to match /[a-z0-9]{32}/i
       expect(subject.send(:random_path)).to eql(path)
+    end
+
+    it "doesn't say something exists when there are no 404s" do
+      stub_request(:get, /http\:\/\/example.com\/[a-z0-9]{32}/i).to_return(:status => 200)
+      stub_request(:get, "http://example.com/humans.txt").to_return(:status => 200)
+      expect(subject.humans_txt?).to eql(nil)
     end
   end
 end
