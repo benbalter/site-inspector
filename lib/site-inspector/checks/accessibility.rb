@@ -5,25 +5,33 @@ class SiteInspector
     class Accessibility < Check
       
       def section508
-        pa11y('Section508')
+        pa11y(:section508)
       end
       
       def wcag2a
-        pa11y('WCAG2A')
+        pa11y(:wcag2a)
       end
       
       def wcag2aa
-        pa11y('WCAG2AA')
+        pa11y(:wcag2aa)
       end
       
       def wcag2aaa
-        pa11y('WCAG2AAA')
+        pa11y(:wcag2aaa)
       end
       
       private
       
-      def pa11y(reporter)
-        json_string = `pa11y https://18f.gsa.gov -s #{reporter} -r json`
+      def pa11y(standard)
+        standards = {
+          section508: 'Section508',
+          wcag2a: 'WCAG2A',
+          wcag2aa: 'WCAG2AA',
+          wcag2aaa: 'WCAG2AAA'
+        }
+        standard = standards[standard]
+                
+        json_string = `pa11y #{host} -s #{standard} -r json`
         JSON.parse(json_string)
       end
       
