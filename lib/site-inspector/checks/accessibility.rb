@@ -1,4 +1,5 @@
 require 'json'
+require 'open3'
 
 class SiteInspector
   class Endpoint
@@ -30,9 +31,21 @@ class SiteInspector
           wcag2aaa: 'WCAG2AAA'
         }
         standard = standards[standard]
-                
-        json_string = `pa11y #{host} -s #{standard} -r json`
-        JSON.parse(json_string)
+                             
+        cmd = "pa11y #{endpoint.uri} -s #{standard} -r json"
+        response = ""
+        error = nil
+        
+        Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+          response = stdout.read
+          error = stderr.read          
+        end    
+        
+        if error
+          raise error
+        end
+        
+        JSON.parse(response) 
       end
       
     end
