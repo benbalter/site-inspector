@@ -68,22 +68,44 @@ describe SiteInspector::Domain do
   end
 
   context "up" do
-    it "considers an domain up if at least one endpoint is up" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
+    it "considers a domain up if at least one endpoint is up" do
+      subject.endpoints.each do |endpoint|
+        unless endpoint.uri.to_s.start_with?("http://www")
+          allow(endpoint).to receive(:response) { Typhoeus::Response.new(code: 0) }
+        end
+      end
+
       stub_request(:get, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.up?).to eql(true)
     end
 
-    it "doesn't consider an endpoint up when all endpoints are down" do
+    it "doesn't consider a domain up when all endpoints are down" do
+      subject.endpoints.each do |endpoint|
+        allow(endpoint).to receive(:response) { Typhoeus::Response.new(code: 0) }
+      end
+
+      expect(subject.up?).to eql(false)
+    end
+  end
+
+  context "live" do
+    it "considers a domain live if at least one endpoint is dead" do
+      stub_request(:get, "https://example.com/").to_return(:status => 500)
+      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:get, "http://example.com/").to_return(:status => 500)
+      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+
+      expect(subject.live?).to eql(true)
+    end
+
+    it "doesn't consider a domain live when all endpoints are dead" do
       stub_request(:get, "https://example.com/").to_return(:status => 500)
       stub_request(:get, "https://www.example.com/").to_return(:status => 500)
       stub_request(:get, "http://example.com/").to_return(:status => 500)
       stub_request(:get, "http://www.example.com/").to_return(:status => 500)
 
-      expect(subject.up?).to eql(false)
+      expect(subject.live?).to eql(false)
     end
   end
 
@@ -166,11 +188,11 @@ describe SiteInspector::Domain do
     end
 
     it "detects when a domain downgrades to http" do
-
+      # TODO
     end
 
     it "detects when a domain enforces https" do
-
+      # TODO
     end
   end
 

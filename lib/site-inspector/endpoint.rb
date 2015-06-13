@@ -70,8 +70,17 @@ class SiteInspector
     end
 
     # Does the endpoint return a 2xx or 3xx response code?
-    def up?
+    def live?
       response && response_code.start_with?("2") || response_code.start_with?("3")
+    end
+
+    def dead?
+      !live?
+    end
+
+    # Does the domain respond to HTTP?
+    def up?
+      response?
     end
 
     def down?
@@ -155,6 +164,7 @@ class SiteInspector
         https: https?,
         scheme: scheme,
         up: up?,
+        live: live?,
         timed_out: timed_out?,
         redirect: redirect?,
         external_redirect: external_redirect?,

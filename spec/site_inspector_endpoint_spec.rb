@@ -119,26 +119,65 @@ describe SiteInspector::Endpoint do
       expect(subject.timed_out?).to eql(true)
     end
 
-    it "considers a 200 response code to be up" do
+    it "considers a 200 response code to be live and up" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 200)
 
+      expect(subject.live?).to eql(true)
+      expect(subject.dead?).to eql(false)
+
       expect(subject.up?).to eql(true)
       expect(subject.down?).to eql(false)
-
     end
 
-    it "considers a 301 response code to be up" do
+    it "considers a 301 response code to be live and up" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 301)
 
+      expect(subject.live?).to eql(true)
+      expect(subject.dead?).to eql(false)
+
       expect(subject.up?).to eql(true)
       expect(subject.down?).to eql(false)
     end
 
-    it "doesn't consider a 500 response code to be up" do
+    it "considers a 404 response code to be dead but up" do
+      stub_request(:get, "http://example.com/").
+           to_return(:status => 404)
+
+      expect(subject.live?).to eql(false)
+      expect(subject.dead?).to eql(true)
+
+      expect(subject.up?).to eql(true)
+      expect(subject.down?).to eql(false)
+    end
+
+    it "considers a 500 response code to be dead but up" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 500)
+
+      expect(subject.live?).to eql(false)
+      expect(subject.dead?).to eql(true)
+
+      expect(subject.up?).to eql(true)
+      expect(subject.down?).to eql(false)
+    end
+
+    it "considers a 0 response code (error) to be dead and down" do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 0) }
+
+      expect(subject.live?).to eql(false)
+      expect(subject.dead?).to eql(true)
+
+      expect(subject.up?).to eql(false)
+      expect(subject.down?).to eql(true)
+    end
+
+    it "considers a timeout to be dead and down" do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(:return_code => :operation_timedout) }
+
+      expect(subject.live?).to eql(false)
+      expect(subject.dead?).to eql(true)
 
       expect(subject.up?).to eql(false)
       expect(subject.down?).to eql(true)
