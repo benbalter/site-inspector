@@ -3,11 +3,11 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Accessibility do
 
   before do
-    stub_request(:get, "https://example.com/").to_return(:status => 200 )
+    stub_request(:get, "http://example.com/").to_return(:status => 200 )
   end
 
   subject do
-    endpoint = SiteInspector::Endpoint.new("https://example.com")
+    endpoint = SiteInspector::Endpoint.new("http://example.com")
     SiteInspector::Endpoint::Accessibility.new(endpoint)
   end
 
