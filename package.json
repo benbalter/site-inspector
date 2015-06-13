@@ -1,0 +1,23 @@
+{
+  "name": "site-inspector",
+  "version": "2.0.0",
+  "description": "Returns information about a domain's technology and capabilities",
+  "main": "site-inspector",
+  "dependencies": {
+    "pa11y": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "script/cibuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benbalter/site-inspector.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benbalter/site-inspector/issues"
+  },
+  "homepage": "https://github.com/benbalter/site-inspector#readme"
+}
