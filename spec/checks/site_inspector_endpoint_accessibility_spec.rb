@@ -79,5 +79,9 @@ describe SiteInspector::Endpoint::Accessibility do
     it "knows when pa11y insn't installed" do
       expect(subject.pa11y?).to eql(false)
     end
+
+    it "fails loudly withouy pa11y" do
+      expect{subject.check}.to raise_error("pa11y not found. To install: [sudo] npm install -g pa11y")
+    end
   end
 end
