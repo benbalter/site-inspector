@@ -32,7 +32,7 @@ class SiteInspector
     private
 
     def path(request)
-      File.join(@dir, request)
+      File.join(@dir, request.cache_key)
     end
   end
 end
