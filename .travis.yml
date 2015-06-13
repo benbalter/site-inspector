@@ -3,5 +3,7 @@ rvm:
   - 2.1
 script: "script/cibuild"
 sudo: false
-cache: bundler
+cache:
+  - bundler
+  - "node_modules"
 before_script: npm install
