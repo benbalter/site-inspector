@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe SiteInspector::Endpoint::Accessibility do
 
-  before do
-    stub_request(:get, "http://example.com/").to_return(:status => 200 )
-  end
-
   subject do
     endpoint = SiteInspector::Endpoint.new("http://example.com")
     SiteInspector::Endpoint::Accessibility.new(endpoint)
@@ -46,6 +42,11 @@ describe SiteInspector::Endpoint::Accessibility do
   end
 
   context "with pa11y installed" do
+
+    before do
+      stub_request(:get, "http://example.com/").to_return(:status => 200 )
+    end
+    
     it "knows if pa11y is installed" do
       expect(subject.pa11y?).to eql(true)
     end
