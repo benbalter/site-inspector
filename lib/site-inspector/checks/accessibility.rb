@@ -43,6 +43,7 @@ class SiteInspector
       def check
         pa11y(standard)
       end
+      alias_method :to_h, :check
 
       def pa11y_version
         output, status = Open3.capture2e("pa11y", "--version")
