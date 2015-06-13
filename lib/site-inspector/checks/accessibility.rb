@@ -20,7 +20,7 @@ class SiteInspector
       end
 
       def level=(level)
-        raise ArgumentError, "Invalid level '#{level}'" unless %w[error, warning, notice].include?(level)
+        raise ArgumentError, "Invalid level '#{level}'" unless %w[error warning notice].include?(level)
         @level = level
       end
 
