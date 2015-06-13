@@ -87,6 +87,15 @@ Options:
 
 Each endpoint also returns the following checks:
 
+#### Accessibility
+
+Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To install `pally`: `[sudo] npm install -g pa11y`.
+
+* `section508` - Tests against the Section508 standard
+* `wcag2a` - Tests against the WCAG2A standard
+* `wcag2aa` - Tests against the WCAG2AA standard
+* `wcag2aaa` - Tests against the WCAG2AAA standard
+
 #### Content
 
 * `doctype` - The HTML doctype returned

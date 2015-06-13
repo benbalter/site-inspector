@@ -5,3 +5,6 @@ Gemfile.lock
 
 /.env
 /tmp
+
+mkmf.log
+node_modules

@@ -2,6 +2,8 @@
 
 set -e
 
+echo "Pa11y version: $(pa11y --version)"
+
 bundle exec rake spec
 
 gem build site-inspector.gemspec
