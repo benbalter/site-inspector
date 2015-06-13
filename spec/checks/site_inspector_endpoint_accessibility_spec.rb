@@ -47,28 +47,31 @@ describe SiteInspector::Endpoint::Accessibility do
       stub_request(:get, "http://example.com/").to_return(:status => 200 )
     end
 
+  end
+
+  context "with pa11y stub'd" do
+
+    before do
+      output = '[{"code":"Section508.L.NoContentAnchor","context":"<a href=\"foo\"></a>","message":"Anchor element found with a valid href attribute, but no link content has been supplied.","selector":"html > body > a","type":"error","typeCode":1}]'
+      allow(subject).to receive(:run_command) { [output, 2] }
+    end
+    
     it "knows if pa11y is installed" do
       expect(subject.pa11y?).to eql(true)
     end
 
     it "knows if a site is valid" do
-      expect(subject.valid?).to eql(true)
+      expect(subject.valid?).to eql(false)
     end
 
     it "runs the check" do
-      expected = {
-        valid: true,
-        results: []
-      }
-      expect(subject.check).to eql(expected)
+      expect(subject.check[:valid]).to eql(false)
+      expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
     end
 
     it "runs a named check" do
-      expected = {
-        valid: true,
-        results: []
-      }
-      expect(subject.section508).to eql(expected)
+      expect(subject.check[:valid]).to eql(false)
+      expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
     end
   end
 
