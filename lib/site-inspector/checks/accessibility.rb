@@ -1,6 +1,5 @@
 require 'json'
 require 'open3'
-require 'mkmf'
 
 class SiteInspector
   class Endpoint
