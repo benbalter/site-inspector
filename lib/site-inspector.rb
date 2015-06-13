@@ -47,7 +47,7 @@ class SiteInspector
         :timeout => SiteInspector.timeout,
         :accept_encoding => "gzip",
         :headers => {
-          "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector-ruby)"
+          "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }
       }
     end

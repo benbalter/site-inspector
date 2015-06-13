@@ -31,8 +31,10 @@ class SiteInspector
 
     private
 
+    # The `request` is a Typhoeus::Request, which provides a
+    # unique `cache_key` string for exactly this sort of thing.
     def path(request)
-      File.join(@dir, request)
+      File.join(@dir, request.cache_key)
     end
   end
 end

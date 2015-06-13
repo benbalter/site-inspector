@@ -2,7 +2,7 @@
 
 A Ruby Gem to sniff information about a domain's technology and capabilities.
 
-[![Gem Version](https://badge.fury.io/rb/site-inspector.svg)](http://badge.fury.io/rb/site-inspector) [![Build Status](https://travis-ci.org/benbalter/site-inspector-ruby.svg)](https://travis-ci.org/benbalter/site-inspector-ruby)
+[![Gem Version](https://badge.fury.io/rb/site-inspector.svg)](http://badge.fury.io/rb/site-inspector) [![Build Status](https://travis-ci.org/benbalter/site-inspector.svg)](https://travis-ci.org/benbalter/site-inspector)
 
 ## Demo
 
@@ -145,7 +145,7 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 
 ## Adding your own check
 
-[Checks](https://github.com/benbalter/site-inspector-ruby/tree/master/lib/site-inspector/checks) are special classes that are children of [`SiteInspector::Endpoint::Check`](https://github.com/benbalter/site-inspector-ruby/blob/master/lib/site-inspector/checks/check.rb). You can implement your own check like this:
+[Checks](https://github.com/benbalter/site-inspector/tree/master/lib/site-inspector/checks) are special classes that are children of [`SiteInspector::Endpoint::Check`](https://github.com/benbalter/site-inspector/blob/master/lib/site-inspector/checks/check.rb). You can implement your own check like this:
 
 ```ruby
 class SiteInspector

@@ -38,7 +38,7 @@ describe SiteInspector do
       :followlocation => false,
       :timeout => 10,
       :headers => {
-        "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector-ruby)"
+        "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
       }
     }
     expect(SiteInspector.typhoeus_defaults).to eql(expected)
