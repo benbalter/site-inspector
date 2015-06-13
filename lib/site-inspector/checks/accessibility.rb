@@ -13,14 +13,14 @@ class SiteInspector
         wcag2aaa:   'WCAG2AAA'
       }
 
-      DEFAULT_LEVEL = "error"
+      DEFAULT_LEVEL = :error
 
       def level
         @level ||= DEFAULT_LEVEL
       end
 
       def level=(level)
-        raise ArgumentError, "Invalid level '#{level}'" unless %w[error warning notice].include?(level)
+        raise ArgumentError, "Invalid level '#{level}'" unless [:error, :warning, :notice].include?(level)
         @level = level
       end
 
@@ -79,7 +79,7 @@ class SiteInspector
         args = [
           "--standard", STANDARDS[standard],
           "--reporter", "json",
-          "--level", level,
+          "--level",    level.to_s,
           endpoint.uri.to_s
         ]
         output, status = Open3.capture2e("pa11y", *args)

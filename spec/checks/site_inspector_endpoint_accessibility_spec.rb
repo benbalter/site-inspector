@@ -16,12 +16,12 @@ describe SiteInspector::Endpoint::Accessibility do
   end
 
   it "knows the level" do
-    expect(subject.level).to eql("error")
+    expect(subject.level).to eql(:error)
   end
 
   it "allows the user to set the level" do
-    subject.level = "warning"
-    expect(subject.level).to eql("warning")
+    subject.level = :warning
+    expect(subject.level).to eql(:warning)
   end
 
   it "errors on invalid levels" do
@@ -46,7 +46,7 @@ describe SiteInspector::Endpoint::Accessibility do
     before do
       stub_request(:get, "http://example.com/").to_return(:status => 200 )
     end
-    
+
     it "knows if pa11y is installed" do
       expect(subject.pa11y?).to eql(true)
     end
