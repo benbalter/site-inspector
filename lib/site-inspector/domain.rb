@@ -205,7 +205,7 @@ class SiteInspector
     # Returns a complete hash of the domain's information
     def to_h(options={})
       prefetch
-      
+
       hash = {
         host:               host,
         up:                 up?,
@@ -220,7 +220,7 @@ class SiteInspector
         hsts:               hsts?,
         hsts_subdomains:    hsts_subdomains?,
         hsts_preload_ready: hsts_preload_ready?,
-        canoncial_endpoint: canonical_endpoint.to_h(options)
+        canonical_endpoint: canonical_endpoint.to_h(options)
       }
 
       if options["all"]
