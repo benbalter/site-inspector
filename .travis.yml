@@ -4,3 +4,4 @@ rvm:
 script: "script/cibuild"
 sudo: false
 cache: bundler
+before_script: npm install -g pa11y
