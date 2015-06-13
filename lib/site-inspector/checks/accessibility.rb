@@ -38,7 +38,11 @@ class SiteInspector
       end
 
       def valid?
-        pa11y(standard)[:status] == :valid
+        check[:valid]
+      end
+
+      def check
+        pa11y(standard)
       end
 
       def pa11y_version
@@ -85,7 +89,7 @@ class SiteInspector
         raise "Command `pa11y #{args.join(" ")}` failed: #{output}" if status == 1
 
         {
-          status:  status == 0 ? :valid : :invalid,
+          valid:   status == 0,
           results: JSON.parse(output)
         }
       end

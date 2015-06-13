@@ -49,11 +49,31 @@ describe SiteInspector::Endpoint::Accessibility do
     it "knows if pa11y is installed" do
       expect(subject.pa11y?).to eql(true)
     end
+
+    it "knows if a site is valid" do
+      expect(subject.valid?).to eql(true)
+    end
+
+    it "runs the check" do
+      expected = {
+        valid: true,
+        results: []
+      }
+      expect(subject.check).to eql(expected)
+    end
+
+    it "runs a named check" do
+      expected = {
+        valid: true,
+        results: []
+      }
+      expect(subject.section508).to eql(expected)
+    end
   end
 
   context "without pa11y installed" do
     before do
-      subject.stub(:pa11y_version) { nil }
+      allow(subject).to receive(:pa11y_version) { nil }
     end
 
     it "knows when pa11y insn't installed" do
