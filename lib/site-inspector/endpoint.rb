@@ -151,7 +151,7 @@ class SiteInspector
         https: https?,
         scheme: scheme,
         up: up?,
-        live: live?,
+        responds: responds?,
         timed_out: timed_out?,
         redirect: redirect?,
         external_redirect: external_redirect?,
