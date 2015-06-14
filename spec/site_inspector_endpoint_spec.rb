@@ -96,15 +96,15 @@ describe SiteInspector::Endpoint do
       stub_request(:get, "http://example.com/").
            to_return(:status => 200, :body => "content")
 
-      expect(subject.response?).to eql(true)
+      expect(subject.responds?).to eql(true)
     end
 
     it "knows when there's not a response" do
       allow(subject).to receive(:response) { Typhoeus::Response.new(code: 0) }
-      expect(subject.response?).to eql(false)
+      expect(subject.responds?).to eql(false)
 
       allow(subject).to receive(:response) { Typhoeus::Response.new(:return_code => :operation_timedout) }
-      expect(subject.response?).to eql(false)
+      expect(subject.responds?).to eql(false)
     end
 
     it "knows the response code" do
@@ -119,29 +119,50 @@ describe SiteInspector::Endpoint do
       expect(subject.timed_out?).to eql(true)
     end
 
-    it "considers a 200 response code to be up" do
+    it "considers a 200 response code to be live and a response" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 200)
 
       expect(subject.up?).to eql(true)
-      expect(subject.down?).to eql(false)
-
+      expect(subject.responds?).to eql(true)
     end
 
-    it "considers a 301 response code to be up" do
+    it "considers a 301 response code to be live and a response" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 301)
 
       expect(subject.up?).to eql(true)
-      expect(subject.down?).to eql(false)
+      expect(subject.responds?).to eql(true)
     end
 
-    it "doesn't consider a 500 response code to be up" do
+    it "considers a 404 response code to be down but a response" do
+      stub_request(:get, "http://example.com/").
+           to_return(:status => 404)
+
+      expect(subject.up?).to eql(false)
+      expect(subject.responds?).to eql(true)
+    end
+
+    it "considers a 500 response code to be down but a response" do
       stub_request(:get, "http://example.com/").
            to_return(:status => 500)
 
       expect(subject.up?).to eql(false)
-      expect(subject.down?).to eql(true)
+      expect(subject.responds?).to eql(true)
+    end
+
+    it "considers a 0 response code (error) to down and unresponsive" do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 0) }
+
+      expect(subject.up?).to eql(false)
+      expect(subject.responds?).to eql(false)
+    end
+
+    it "considers a timeout to be down and unresponsive" do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(:return_code => :operation_timedout) }
+
+      expect(subject.up?).to eql(false)
+      expect(subject.responds?).to eql(false)
     end
   end
 

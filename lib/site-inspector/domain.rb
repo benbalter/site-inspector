@@ -32,12 +32,20 @@ class SiteInspector
       Gman.valid? host
     end
 
-    # Does *any* endpoint return a 200 response code?
+    # Does *any* endpoint return a 200 or 300 response code?
     def up?
       endpoints.any? { |e| e.up? }
     end
 
-    # Does any www endpoint return a 200 response code?
+    # Does *any* endpoint respond to HTTP?
+    # TODO: needs to allow an invalid chain.
+    def responds?
+      endpoints.any? { |e| e.responds? }
+    end
+
+
+    # TODO: These weren't present before, and may not be useful.
+    # Can you connect to www?
     def www?
       endpoints.any? { |e| e.www? && e.up? }
     end
@@ -51,11 +59,13 @@ class SiteInspector
     #
     # * Either of the HTTPS endpoints is listening, and doesn't have
     #   an invalid hostname.
+    #
+    # TODO: needs to allow an invalid chain.
     def https?
       endpoints.any? { |e| e.https? && e.up? && e.https.valid? }
     end
 
-    # HTTPS is enforced if one of the HTTPS endpoints is "live",
+    # HTTPS is enforced if one of the HTTPS endpoints is "up",
     # and if both *HTTP* endpoints are either:
     #
     #  * down, or
@@ -66,14 +76,19 @@ class SiteInspector
     # * an HTTP redirect can go to HTTPS on another domain, as long
     #   as it's immediate.
     # * a domain with an invalid cert can still be enforcing HTTPS.
+    #
+    # TODO: need to ensure the redirect *immediately* goes to HTTPS.
+    # TODO: don't need to require that the HTTPS cert is valid for this purpose.
     def enforces_https?
       return false unless https?
-      endpoints.select { |e| e.http? }.all? { |e| e.down? || (e.redirect && e.redirect.https?) }
+      endpoints.select { |e| e.http? }.all? { |e| !e.up? || (e.redirect && e.redirect.https?) }
     end
 
     # we can say that a canonical HTTPS site "defaults" to HTTPS,
     # even if it doesn't *strictly* enforce it (e.g. having a www
     # subdomain first to go HTTP root before HTTPS root).
+    #
+    # TODO: not implemented.
     def defaults_https?
       raise "Not implemented. Halp?"
     end
@@ -82,6 +97,8 @@ class SiteInspector
     #
     # * HTTPS is supported, and
     # * The 'canonical' endpoint gets an immediate internal redirect to HTTP.
+    #
+    # TODO: the redirect must be internal.
     def downgrades_https?
       return false unless https?
       canonical_endpoint.redirect && canonical_endpoint.redirect.http?
@@ -108,7 +125,7 @@ class SiteInspector
       return false unless www?
 
       # Are both root endpoints down?
-      return true if endpoints.select { |e| e.root? }.all? { |e| e.down? }
+      return true if endpoints.select { |e| e.root? }.all? { |e| !e.up? }
 
       # Does either root endpoint redirect to a www endpoint?
       endpoints.select { |e| e.root? }.any? { |e| e.redirect && e.redirect.www? }
@@ -139,7 +156,7 @@ class SiteInspector
       return false unless https?
 
       # Both http endpoints are down
-      return true if endpoints.select { |e| e.http? }.all? { |e| e.down? }
+      return true if endpoints.select { |e| e.http? }.all? { |e| !e.up? }
 
       # at least one http endpoint redirects immediately to https
       endpoints.select { |e| e.http? }.any? { |e| e.redirect && e.redirect.https? }
@@ -150,7 +167,7 @@ class SiteInspector
     # 2. All endpoints are either down or an external redirect
     def redirect?
       return false unless redirect
-      endpoints.all? { |e| e.down? || e.external_redirect? }
+      endpoints.all? { |e| !e.up? || e.external_redirect? }
     end
 
     # The first endpoint to respond with a redirect
@@ -209,6 +226,7 @@ class SiteInspector
       hash = {
         host:               host,
         up:                 up?,
+        responds:           responds?,
         www:                www?,
         root:               root?,
         https:              https?,

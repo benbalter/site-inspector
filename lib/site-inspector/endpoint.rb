@@ -56,11 +56,6 @@ class SiteInspector
       @response ||= request
     end
 
-    # Does the server return any response? (including 50x)
-    def response?
-       response.code != 0 && !timed_out?
-    end
-
     def response_code
       response.response_code.to_s if response
     end
@@ -74,8 +69,9 @@ class SiteInspector
       response && response_code.start_with?("2") || response_code.start_with?("3")
     end
 
-    def down?
-      !up?
+    # Does the server respond at all?
+    def responds?
+       response.code != 0 && !timed_out?
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
@@ -155,6 +151,7 @@ class SiteInspector
         https: https?,
         scheme: scheme,
         up: up?,
+        live: live?,
         timed_out: timed_out?,
         redirect: redirect?,
         external_redirect: external_redirect?,
