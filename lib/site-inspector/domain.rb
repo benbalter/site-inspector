@@ -32,24 +32,27 @@ class SiteInspector
       Gman.valid? host
     end
 
-    # Does *any* endpoint respond to HTTP?
+    # Does *any* endpoint return a 200 or 300 response code?
     def up?
       endpoints.any? { |e| e.up? }
     end
 
-    # Does *any* endpoint return a 200 or 300 response code?
-    def live?
-      endpoints.any? { |e| e.live? }
+    # Does *any* endpoint respond to HTTP?
+    # TODO: needs to allow an invalid chain.
+    def responds?
+      endpoints.any? { |e| e.responds? }
     end
 
-    # Does the site respond
+
+    # TODO: These weren't present before, and may not be useful.
+    # Can you connect to www?
     def www?
-      endpoints.any? { |e| e.www? && e.live? }
+      endpoints.any? { |e| e.www? && e.up? }
     end
 
     # Can you connect without www?
     def root?
-      endpoints.any? { |e| e.root? && e.live? }
+      endpoints.any? { |e| e.root? && e.up? }
     end
 
     # HTTPS is "supported" (different than "canonical" or "enforced") if:
@@ -59,10 +62,10 @@ class SiteInspector
     #
     # TODO: needs to allow an invalid chain.
     def https?
-      endpoints.any? { |e| e.https? && e.live? && e.https.valid? }
+      endpoints.any? { |e| e.https? && e.up? && e.https.valid? }
     end
 
-    # HTTPS is enforced if one of the HTTPS endpoints is "live",
+    # HTTPS is enforced if one of the HTTPS endpoints is "up",
     # and if both *HTTP* endpoints are either:
     #
     #  * down, or
@@ -78,7 +81,7 @@ class SiteInspector
     # TODO: don't need to require that the HTTPS cert is valid for this purpose.
     def enforces_https?
       return false unless https?
-      endpoints.select { |e| e.http? }.all? { |e| e.dead? || (e.redirect && e.redirect.https?) }
+      endpoints.select { |e| e.http? }.all? { |e| !e.up? || (e.redirect && e.redirect.https?) }
     end
 
     # we can say that a canonical HTTPS site "defaults" to HTTPS,
@@ -116,13 +119,13 @@ class SiteInspector
     #   https:// -> 200, http:// -> http://www
     def canonically_www?
       # Does any endpoint respond?
-      return false unless live?
+      return false unless up?
 
       # Does at least one www endpoint respond?
       return false unless www?
 
       # Are both root endpoints down?
-      return true if endpoints.select { |e| e.root? }.all? { |e| e.dead? }
+      return true if endpoints.select { |e| e.root? }.all? { |e| !e.up? }
 
       # Does either root endpoint redirect to a www endpoint?
       endpoints.select { |e| e.root? }.any? { |e| e.redirect && e.redirect.www? }
@@ -147,13 +150,13 @@ class SiteInspector
     # a valid hostname but invalid chain issues.
     def canonically_https?
       # Does any endpoint respond?
-      return false unless live?
+      return false unless up?
 
       # At least one of its https endpoints is live and doesn't have an invalid hostname
       return false unless https?
 
-      # Both http endpoints are dead
-      return true if endpoints.select { |e| e.http? }.all? { |e| e.dead? }
+      # Both http endpoints are down
+      return true if endpoints.select { |e| e.http? }.all? { |e| !e.up? }
 
       # at least one http endpoint redirects immediately to https
       endpoints.select { |e| e.http? }.any? { |e| e.redirect && e.redirect.https? }
@@ -164,7 +167,7 @@ class SiteInspector
     # 2. All endpoints are either down or an external redirect
     def redirect?
       return false unless redirect
-      endpoints.all? { |e| e.dead? || e.external_redirect? }
+      endpoints.all? { |e| !e.up? || e.external_redirect? }
     end
 
     # The first endpoint to respond with a redirect
@@ -223,7 +226,7 @@ class SiteInspector
       hash = {
         host:               host,
         up:                 up?,
-        live:               live?,
+        responds:           responds?,
         www:                www?,
         root:               root?,
         https:              https?,

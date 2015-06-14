@@ -89,23 +89,23 @@ describe SiteInspector::Domain do
     end
   end
 
-  context "live" do
-    it "considers a domain live if at least one endpoint is dead" do
+  context "up" do
+    it "considers a domain up if at least one endpoint is up" do
       stub_request(:get, "https://example.com/").to_return(:status => 500)
       stub_request(:get, "https://www.example.com/").to_return(:status => 500)
       stub_request(:get, "http://example.com/").to_return(:status => 500)
       stub_request(:get, "http://www.example.com/").to_return(:status => 200)
 
-      expect(subject.live?).to eql(true)
+      expect(subject.up?).to eql(true)
     end
 
-    it "doesn't consider a domain live when all endpoints are dead" do
+    it "doesn't consider a domain up if all endpoints are down" do
       stub_request(:get, "https://example.com/").to_return(:status => 500)
       stub_request(:get, "https://www.example.com/").to_return(:status => 500)
       stub_request(:get, "http://example.com/").to_return(:status => 500)
       stub_request(:get, "http://www.example.com/").to_return(:status => 500)
 
-      expect(subject.live?).to eql(false)
+      expect(subject.up?).to eql(false)
     end
   end
 
@@ -116,7 +116,7 @@ describe SiteInspector::Domain do
       stub_request(:get, "http://example.com/").to_return(:status => 500)
       stub_request(:get, "http://www.example.com/").to_return(:status => 200)
 
-      expect(subject.up?).to eql(true)
+      expect(subject.www?).to eql(true)
     end
 
     it "doesn't consider a site www when no endpoint is www" do
@@ -125,7 +125,7 @@ describe SiteInspector::Domain do
       stub_request(:get, "http://example.com/").to_return(:status => 200)
       stub_request(:get, "http://www.example.com/").to_return(:status => 500)
 
-      expect(subject.up?).to eql(true)
+      expect(subject.www?).to eql(false)
     end
   end
 
