@@ -82,7 +82,7 @@ class SiteInspector
           "--level",    level.to_s,
           endpoint.uri.to_s
         ]
-        output, status = Open3.capture2e("pa11y", *args)
+        output, status = run_command(args)
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
@@ -92,6 +92,10 @@ class SiteInspector
           valid:   status == 0,
           results: JSON.parse(output)
         }
+      end
+
+      def run_command(args)
+        Open3.capture2e("pa11y", *args)
       end
     end
   end
