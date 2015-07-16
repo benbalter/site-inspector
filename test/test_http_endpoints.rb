@@ -72,7 +72,7 @@ class TestSiteInspector < Minitest::Test
   end
 
   should "ignore HSTS with max-age=0" do
-    endpoint = SiteInspector.new("c3.gov").http_endpoint(true, true)
+    endpoint = SiteInspector.new("fws.gov").http_endpoint(true, true)
 
     assert_equal "max-age=0", endpoint[:hsts_header]
     assert_equal false, endpoint[:hsts]
