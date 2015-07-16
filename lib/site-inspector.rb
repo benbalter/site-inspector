@@ -519,7 +519,7 @@ class SiteInspector
 
     details[:hsts] = !!(
       ssl and
-      details[:https_valid] and
+      !details[:https_bad_name] and
       hsts[:enabled]
     )
 
