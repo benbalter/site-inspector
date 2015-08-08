@@ -101,7 +101,7 @@ class SiteInspector
     # TODO: the redirect must be internal.
     def downgrades_https?
       return false unless https?
-      canonical_endpoint.redirect && canonical_endpoint.redirect.http?
+      canonical_endpoint.redirect? && canonical_endpoint.redirect.http?
     end
 
     # A domain is "canonically" at www if:
