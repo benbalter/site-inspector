@@ -160,7 +160,6 @@ class SiteInspector
       # Either they've specifically asked for a check, or we throw everything at them
       checks = SiteInspector::Endpoint.checks.select { |c| options.keys.include?(c.name) }
       checks = SiteInspector::Endpoint.checks if checks.empty?
-      checks.select { |check| check.enabled? }
 
       checks.each do |check|
         hash[check.name] = self.send(check.name).to_h
@@ -170,7 +169,7 @@ class SiteInspector
     end
 
     def self.checks
-      ObjectSpace.each_object(Class).select { |klass| klass < Check }
+      ObjectSpace.each_object(Class).select { |klass| klass < Check }.select { |check| check.enabled? }
     end
 
     def method_missing(method_sym, *arguments, &block)
