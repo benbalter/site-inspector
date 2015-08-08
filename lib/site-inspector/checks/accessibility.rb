@@ -4,6 +4,7 @@ require 'open3'
 class SiteInspector
   class Endpoint
     class Accessibility < Check
+      class Pa11yError < RuntimeError; end
 
       STANDARDS = {
         section508: 'Section508', # Default standard
@@ -49,15 +50,17 @@ class SiteInspector
       end
 
       def valid?
-        check[:valid]
+        check[:valid] if check
       end
 
       def errors
-        check[:results].count { |r| r["type"] == "error" }
+        check[:results].count { |r| r["type"] == "error" } if check
       end
 
       def check
         @check ||= pa11y(standard)
+      rescue Pa11yError
+        nil
       end
       alias_method :to_h, :check
 
@@ -93,12 +96,14 @@ class SiteInspector
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
-        raise "Command `pa11y #{args.join(" ")}` failed: #{output}" if status == 1
+        raise Pa11yError if status == 1
 
         {
           valid:   status == 0,
           results: JSON.parse(output)
         }
+      rescue Pa11yError, JSON::ParserError
+        raise Pa11yError, "Command `pa11y #{args.join(" ")}` failed: #{output}"
       end
 
       def run_command(args)
