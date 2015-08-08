@@ -8,7 +8,7 @@ describe SiteInspector::Endpoint::Accessibility do
   end
 
   it "retrieve's pa11y's version" do
-    expect(subject.pa11y_version).to match(/\d\.\d\.\d/)
+    expect(subject.class.pa11y_version).to match(/\d\.\d\.\d/)
   end
 
   it "responds to valid standards" do
@@ -55,9 +55,9 @@ describe SiteInspector::Endpoint::Accessibility do
       output = '[{"code":"Section508.L.NoContentAnchor","context":"<a href=\"foo\"></a>","message":"Anchor element found with a valid href attribute, but no link content has been supplied.","selector":"html > body > a","type":"error","typeCode":1}]'
       allow(subject).to receive(:run_command) { [output, 2] }
     end
-    
+
     it "knows if pa11y is installed" do
-      expect(subject.pa11y?).to eql(true)
+      expect(subject.class.pa11y?).to eql(true)
     end
 
     it "knows if a site is valid" do
@@ -77,11 +77,11 @@ describe SiteInspector::Endpoint::Accessibility do
 
   context "without pa11y installed" do
     before do
-      allow(subject).to receive(:pa11y_version) { nil }
+      allow(subject.class).to receive(:pa11y_version) { nil }
     end
 
     it "knows when pa11y insn't installed" do
-      expect(subject.pa11y?).to eql(false)
+      expect(subject.class.pa11y?).to eql(false)
     end
 
     it "fails loudly withouy pa11y" do

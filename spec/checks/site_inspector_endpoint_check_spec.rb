@@ -33,6 +33,6 @@ describe SiteInspector::Endpoint::Check do
   end
 
   it "enables the check" do
-    expect(subject.enabled?).to eql(true)
+    expect(SiteInspector::Endpoint::Check.enabled?).to eql(true)
   end
 end
