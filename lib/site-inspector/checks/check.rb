@@ -37,7 +37,7 @@ class SiteInspector
         self.to_s.split('::').last.downcase.to_sym
       end
 
-      def enabled?
+      def self.enabled?
         true
       end
     end

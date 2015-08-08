@@ -14,6 +14,18 @@ class SiteInspector
 
       DEFAULT_LEVEL = :error
 
+      class << self
+        def pa11y_version
+          output, status = Open3.capture2e("pa11y", "--version")
+          output.strip if status == 0
+        end
+
+        def pa11y?
+          !pa11y_version.nil?
+        end
+        alias_method :enabled?, :pa11y?
+      end
+
       def level
         @level ||= DEFAULT_LEVEL
       end
@@ -45,16 +57,6 @@ class SiteInspector
       end
       alias_method :to_h, :check
 
-      def pa11y_version
-        output, status = Open3.capture2e("pa11y", "--version")
-        output.strip if status == 0
-      end
-
-      def pa11y?
-        !pa11y_version.nil?
-      end
-      alias_method :enabled?, :pa11y?
-
       def method_missing(method_sym, *arguments, &block)
         if standard?(method_sym)
           pa11y(method_sym)
@@ -74,7 +76,7 @@ class SiteInspector
       private
 
       def pa11y(standard)
-        raise "pa11y not found. To install: [sudo] npm install -g pa11y" unless pa11y?
+        raise "pa11y not found. To install: [sudo] npm install -g pa11y" unless self.class.pa11y?
         raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
 
         args = [
