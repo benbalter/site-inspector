@@ -64,6 +64,10 @@ describe SiteInspector::Endpoint::Accessibility do
       expect(subject.valid?).to eql(false)
     end
 
+    it "counts the errors" do
+      expect(subject.errors).to eql(1)
+    end
+
     it "runs the check" do
       expect(subject.check[:valid]).to eql(false)
       expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
