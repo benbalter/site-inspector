@@ -53,6 +53,7 @@ class SiteInspector
       def pa11y?
         !pa11y_version.nil?
       end
+      alias_method :enabled?, :pa11y?
 
       def method_missing(method_sym, *arguments, &block)
         if standard?(method_sym)

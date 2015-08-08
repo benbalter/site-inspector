@@ -36,6 +36,10 @@ class SiteInspector
       def self.name
         self.to_s.split('::').last.downcase.to_sym
       end
+
+      def enabled?
+        true
+      end
     end
   end
 end

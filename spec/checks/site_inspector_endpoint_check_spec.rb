@@ -31,4 +31,8 @@ describe SiteInspector::Endpoint::Check do
   it "returns the instance name" do
     expect(SiteInspector::Endpoint::Check.name).to eql(:check)
   end
+
+  it "enables the check" do
+    expect(subject.enabled).to eql(true)
+  end
 end
