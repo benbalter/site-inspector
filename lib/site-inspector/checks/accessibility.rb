@@ -52,8 +52,12 @@ class SiteInspector
         check[:valid]
       end
 
+      def errors
+        check[:results].count { |r| r["type"] == "error" }
+      end
+
       def check
-        pa11y(standard)
+        @check ||= pa11y(standard)
       end
       alias_method :to_h, :check
 
