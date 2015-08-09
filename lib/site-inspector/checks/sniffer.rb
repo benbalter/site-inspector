@@ -12,7 +12,8 @@ class SiteInspector
 
         # Internal
         :php,
-        :expression_engine
+        :expression_engine,
+        :cowboy
       ]
 
       def framework
@@ -20,13 +21,14 @@ class SiteInspector
         return cms unless cms.nil?
         return :expression_engine if endpoint.cookies.any? { |c| c.keys.first =~ /^exp_/ }
         return :php if endpoint.cookies["PHPSESSID"]
+        return :cowboy if endpoint.headers.server.to_s.downcase == "cowboy"
         nil
       end
 
       def open_source?
         OPEN_SOURCE_FRAMEWORKS.include?(framework)
       end
-      
+
       def analytics
         sniff :analytics
       end

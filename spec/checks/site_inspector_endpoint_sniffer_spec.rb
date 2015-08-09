@@ -81,7 +81,6 @@ describe SiteInspector::Endpoint::Sniffer do
   end
 
   context "no body" do
-
     subject do
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Sniffer.new(endpoint)
@@ -101,6 +100,14 @@ describe SiteInspector::Endpoint::Sniffer do
     it "detects Expression Engine" do
       set_cookie("exp_csrf_token", "1234")
       expect(subject.framework).to eql(:expression_engine)
+      expect(subject.open_source?).to eql(true)
+    end
+
+    it "detects cowboy" do
+      stub_request(:get, "http://example.com/").
+        to_return(:status => 200, :body => "", :headers => { "server" => "Cowboy" } )
+
+      expect(subject.framework).to eql(:cowboy)
       expect(subject.open_source?).to eql(true)
     end
   end
