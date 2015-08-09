@@ -8,6 +8,10 @@ class SiteInspector
         !!headers["set-cookie"]
       end
 
+      def cookies
+        headers["set-cookie"].map { |c| CGI::Cookie::parse(c) } if cookies?
+      end
+
       # TODO: kill this
       def strict_transport_security?
         !!strict_transport_security
@@ -50,7 +54,7 @@ class SiteInspector
       end
 
       def secure_cookies?
-        return false if !cookies?
+        return false unless cookies?
         cookie = headers["set-cookie"]
         cookie = cookie.first if cookie.is_a?(Array)
         !!(cookie =~ /(; secure.*; httponly|; httponly.*; secure)/i)
