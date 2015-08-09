@@ -2,6 +2,7 @@ require 'open-uri'
 require 'addressable/uri'
 require 'public_suffix'
 require 'typhoeus'
+require 'cgi'
 
 require_relative 'site-inspector/cache'
 require_relative 'site-inspector/disk_cache'

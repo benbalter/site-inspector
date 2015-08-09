@@ -2,8 +2,12 @@ class SiteInspector
   class Endpoint
     class Sniffer < Check
 
-      def cms
-        sniff :cms
+      def framework
+        cms = sniff :cms
+        return cms unless cms.nil?
+        return :expression_engine if endpoint.headers.cookies.any? { |c| c.keys.first =~ /^exp_/ }
+        return :php if endpoint.headers.cookies.any? { |c| c.keys.first == "PHPSESSID" }
+        nil
       end
 
       def analytics
@@ -20,7 +24,7 @@ class SiteInspector
 
       def to_h
         {
-          :cms         => cms,
+          :framework   => framework,
           :analytics   => analytics,
           :javascript  => javascript,
           :advertising => advertising
@@ -31,9 +35,8 @@ class SiteInspector
 
       def sniff(type)
         require 'sniffles'
-        results = Sniffles.sniff(endpoint.content.body, type).select { |name, meta| meta[:found] == true }
-        results.each { |name, result| result.delete :found} if results
-        results
+        results = Sniffles.sniff(endpoint.content.body, type).select { |name, meta| meta[:found] }
+        results.keys.first if results
       rescue
         nil
       end
