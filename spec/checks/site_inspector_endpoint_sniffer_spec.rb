@@ -74,6 +74,10 @@ describe SiteInspector::Endpoint::Sniffer do
     it "detects advertising" do
       expect(subject.advertising).to eql(:adsense)
     end
+
+    it "knows wordpress is open source" do
+      expect(subject.open_source?).to eql(true)
+    end
   end
 
   context "no body" do
@@ -83,14 +87,21 @@ describe SiteInspector::Endpoint::Sniffer do
       SiteInspector::Endpoint::Sniffer.new(endpoint)
     end
 
+    it "knows when something isn't open source" do
+      set_cookie("foo", "bar")
+      expect(subject.open_source?).to eql(false)
+    end
+
     it "detects PHP" do
       set_cookie("PHPSESSID", "1234")
       expect(subject.framework).to eql(:php)
+      expect(subject.open_source?).to eql(true)
     end
 
     it "detects Expression Engine" do
       set_cookie("exp_csrf_token", "1234")
       expect(subject.framework).to eql(:expression_engine)
+      expect(subject.open_source?).to eql(true)
     end
   end
 end
