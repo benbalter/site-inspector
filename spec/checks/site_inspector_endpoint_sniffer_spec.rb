@@ -21,7 +21,9 @@ describe SiteInspector::Endpoint::Sniffer do
         "path" => "/"
       )
     ].map { |c| c.to_s }
-    stub_header("set-cookie", cookies)
+
+    stub_request(:get, "http://example.com/").
+      to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies } )
   end
 
   context "stubbed body" do
@@ -77,9 +79,6 @@ describe SiteInspector::Endpoint::Sniffer do
   context "no body" do
 
     subject do
-      stub_request(:get, "http://example.com/").
-        to_return(:status => 200, :body => "" )
-
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Sniffer.new(endpoint)
     end

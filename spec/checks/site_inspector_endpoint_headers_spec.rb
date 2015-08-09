@@ -61,14 +61,4 @@ describe SiteInspector::Endpoint::Headers do
     expect(subject.strict_transport_security).to eql("foo")
     expect(subject.strict_transport_security?).to eql(true)
   end
-
-  it "knows if there are cookies" do
-    expect(subject.cookies?).to eql(false)
-    stub_header "set-cookie", "foo"
-    expect(subject.cookies?).to eql(true)
-  end
-
-  it "knows if the cookies are secure" do
-
-  end
 end

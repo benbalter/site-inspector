@@ -16,6 +16,7 @@ require_relative 'site-inspector/checks/headers'
 require_relative 'site-inspector/checks/hsts'
 require_relative 'site-inspector/checks/https'
 require_relative 'site-inspector/checks/sniffer'
+require_relative 'site-inspector/checks/cookies'
 require_relative 'site-inspector/endpoint'
 require_relative 'site-inspector/version'
 
