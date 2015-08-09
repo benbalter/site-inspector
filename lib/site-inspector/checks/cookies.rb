@@ -36,7 +36,8 @@ class SiteInspector
       private
 
       def cookie_header
-        endpoint.headers.all["set-cookie"]
+        # Cookie header may be an array or string, always return an array
+        [endpoint.headers.all["set-cookie"]].flatten.compact
       end
 
     end
