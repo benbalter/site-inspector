@@ -5,8 +5,8 @@ class SiteInspector
       def framework
         cms = sniff :cms
         return cms unless cms.nil?
-        return :expression_engine if endpoint.headers.cookies.any? { |c| c.keys.first =~ /^exp_/ }
-        return :php if endpoint.headers.cookies.any? { |c| c.keys.first == "PHPSESSID" }
+        return :expression_engine if endpoint.cookies.any? { |c| c.keys.first =~ /^exp_/ }
+        return :php if endpoint.cookies["PHPSESSID"]
         nil
       end
 
