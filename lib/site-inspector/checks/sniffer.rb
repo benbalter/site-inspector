@@ -2,6 +2,19 @@ class SiteInspector
   class Endpoint
     class Sniffer < Check
 
+      OPEN_SOURCE_FRAMEWORKS = [
+        # Sniffles
+        :drupal,
+        :joomla,
+        :movabletype,
+        :phpbb,
+        :wordpress,
+
+        # Internal
+        :php,
+        :expression_engine
+      ]
+
       def framework
         cms = sniff :cms
         return cms unless cms.nil?
@@ -10,6 +23,10 @@ class SiteInspector
         nil
       end
 
+      def open_source?
+        OPEN_SOURCE_FRAMEWORKS.include?(framework)
+      end
+      
       def analytics
         sniff :analytics
       end
