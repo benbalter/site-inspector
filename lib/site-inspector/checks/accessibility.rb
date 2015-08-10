@@ -24,7 +24,10 @@ class SiteInspector
         def pa11y?
           !!(Cliver.detect('pa11y'))
         end
-        alias_method :enabled?, :pa11y?
+
+        def enabled?
+          @@enabled && pa11y?
+        end
       end
 
       def level

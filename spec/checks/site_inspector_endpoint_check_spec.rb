@@ -32,7 +32,10 @@ describe SiteInspector::Endpoint::Check do
     expect(SiteInspector::Endpoint::Check.name).to eql(:check)
   end
 
-  it "enables the check" do
+  it "enables and disables the check" do
     expect(SiteInspector::Endpoint::Check.enabled?).to eql(true)
+    SiteInspector::Endpoint::Check.enabled = false
+    expect(SiteInspector::Endpoint::Check.enabled?).to eql(false)
+    SiteInspector::Endpoint::Check.enabled = true
   end
 end
