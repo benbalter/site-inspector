@@ -22,7 +22,7 @@ class SiteInspector
         end
 
         def pa11y?
-          !pa11y_version.nil?
+          !!(Cliver.detect('pa11y'))
         end
         alias_method :enabled?, :pa11y?
       end
@@ -83,7 +83,7 @@ class SiteInspector
       private
 
       def pa11y(standard)
-        raise "pa11y not found. To install: [sudo] npm install -g pa11y" unless self.class.pa11y?
+        Cliver.assert('pa11y')
         raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
 
         args = [
