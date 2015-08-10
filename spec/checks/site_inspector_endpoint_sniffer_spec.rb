@@ -110,5 +110,28 @@ describe SiteInspector::Endpoint::Sniffer do
       expect(subject.framework).to eql(:cowboy)
       expect(subject.open_source?).to eql(true)
     end
+
+    it "detects ColdFusion" do
+      cookies = [
+        CGI::Cookie::new(
+          "name" => "CFID",
+          "value" => "1234",
+          "domain" => "example.com",
+          "path" => "/"
+        ),
+        CGI::Cookie::new(
+          "name" => "CFTOKEN",
+          "value" => "5678",
+          "domain" => "example.com",
+          "path" => "/"
+        )
+      ].map { |c| c.to_s }
+
+      stub_request(:get, "http://example.com/").
+        to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies } )
+
+      expect(subject.framework).to eql(:coldfusion)
+      expect(subject.open_source?).to eql(false)
+    end
   end
 end
