@@ -2,6 +2,7 @@ require 'open-uri'
 require 'addressable/uri'
 require 'public_suffix'
 require 'typhoeus'
+require 'parallel'
 require 'cliver'
 require 'cgi'
 
@@ -55,8 +56,9 @@ class SiteInspector
       }
     end
 
+    # Returns a thread-safe, memoized hydra instance
     def hydra
-      @hydra ||= Typhoeus::Hydra.new(max_concurrency: 4)
+      Typhoeus::Hydra.hydra
     end
   end
 end
