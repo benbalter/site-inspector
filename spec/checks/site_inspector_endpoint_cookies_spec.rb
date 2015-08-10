@@ -4,7 +4,7 @@ describe SiteInspector::Endpoint::Cookies do
 
   context "without cookies" do
     subject do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 200, :body => "" )
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Cookies.new(endpoint)
@@ -33,7 +33,7 @@ describe SiteInspector::Endpoint::Cookies do
         )
       ].map { |c| c.to_s }
 
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies })
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Cookies.new(endpoint)
@@ -59,7 +59,7 @@ describe SiteInspector::Endpoint::Cookies do
         "foo=bar; domain=example.com; path=/; secure; HttpOnly",
         "foo2=bar2; domain=example.com; path=/"
       ]
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies })
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Cookies.new(endpoint)

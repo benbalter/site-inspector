@@ -50,6 +50,7 @@ class SiteInspector
         :followlocation => false,
         :timeout => SiteInspector.timeout,
         :accept_encoding => "gzip",
+        :method => :head,
         :headers => {
           "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }

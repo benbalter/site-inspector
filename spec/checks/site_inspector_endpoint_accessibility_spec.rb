@@ -44,7 +44,7 @@ describe SiteInspector::Endpoint::Accessibility do
   context "with pa11y installed" do
 
     before do
-      stub_request(:get, "http://example.com/").to_return(:status => 200 )
+      stub_request(:head, "http://example.com/").to_return(:status => 200 )
     end
 
   end

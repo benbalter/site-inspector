@@ -4,7 +4,7 @@ describe SiteInspector::Endpoint::Hsts do
 
   subject do
     headers = { "strict-transport-security" => "max-age=31536000; includeSubDomains;" }
-    stub_request(:get, "http://example.com/").
+    stub_request(:head, "http://example.com/").
       to_return(:status => 200, :headers => headers )
     endpoint = SiteInspector::Endpoint.new("http://example.com")
     SiteInspector::Endpoint::Hsts.new(endpoint)

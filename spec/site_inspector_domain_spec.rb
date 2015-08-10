@@ -53,10 +53,10 @@ describe SiteInspector::Domain do
   end
 
   it "knows the canonical domain" do
-    stub_request(:get, "https://example.com/").to_return(:status => 500)
-    stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-    stub_request(:get, "http://www.example.com/").to_return(:status => 200)
-    stub_request(:get, "http://example.com/").to_return(:status => 200)
+    stub_request(:head, "https://example.com/").to_return(:status => 500)
+    stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+    stub_request(:head, "http://www.example.com/").to_return(:status => 200)
+    stub_request(:head, "http://example.com/").to_return(:status => 200)
     expect(subject.canonical_endpoint.to_s).to eql("http://example.com")
   end
 
@@ -75,7 +75,7 @@ describe SiteInspector::Domain do
         end
       end
 
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.up?).to eql(true)
     end
@@ -91,19 +91,19 @@ describe SiteInspector::Domain do
 
   context "up" do
     it "considers a domain up if at least one endpoint is up" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 500)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.up?).to eql(true)
     end
 
     it "doesn't consider a domain up if all endpoints are down" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "https://example.com/").to_return(:status => 500)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 500)
 
       expect(subject.up?).to eql(false)
     end
@@ -111,19 +111,19 @@ describe SiteInspector::Domain do
 
   context "www" do
     it "considers a site www when at least one endpoint is www" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.www?).to eql(true)
     end
 
     it "doesn't consider a site www when no endpoint is www" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 200)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 200)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 500)
 
       expect(subject.www?).to eql(false)
     end
@@ -131,19 +131,19 @@ describe SiteInspector::Domain do
 
   context "root" do
     it "considers a domain root if you can connect without www" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 500)
 
       expect(subject.root?).to eql(true)
     end
 
     it "doesn't call a www-only domain root" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 200)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 500)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.root?).to eql(false)
     end
@@ -151,38 +151,38 @@ describe SiteInspector::Domain do
 
   context "https" do
     it "knows when a domain supports https" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 200)
-      stub_request(:get, "http://example.com/").to_return(:status => 200)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "http://example.com/").to_return(:status => 200)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
       allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
       expect(subject.https?).to eql(true)
     end
 
     it "knows when a domain doesn't support https" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 200)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 500)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 200)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.https?).to eql(false)
     end
 
     it "considers HTTPS inforced when no http endpoint responds" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 500)
 
       #expect(subject.enforces_https?).to eql(true)
     end
 
     it "doesn't consider HTTPS inforced when an http endpoint responds" do
-      stub_request(:get, "https://example.com/").to_return(:status => 200)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").to_return(:status => 500)
-      stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+      stub_request(:head, "https://example.com/").to_return(:status => 200)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
       expect(subject.enforces_https?).to eql(false)
     end
@@ -199,20 +199,20 @@ describe SiteInspector::Domain do
   context "canonical" do
     context "www" do
       it "detects a domain as canonically www when root is down" do
-        stub_request(:get, "https://example.com/").to_return(:status => 500)
-        stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-        stub_request(:get, "http://example.com/").to_return(:status => 500)
-        stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+        stub_request(:head, "https://example.com/").to_return(:status => 500)
+        stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+        stub_request(:head, "http://example.com/").to_return(:status => 500)
+        stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
         expect(subject.canonically_www?).to eql(true)
       end
 
       it "detects a domain as canonically www when root redirects" do
-        stub_request(:get, "https://example.com/").to_return(:status => 500)
-        stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-        stub_request(:get, "http://example.com/").
+        stub_request(:head, "https://example.com/").to_return(:status => 500)
+        stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+        stub_request(:head, "http://example.com/").
           to_return(:status => 301, :headers => { :location => "http://www.example.com" } )
-        stub_request(:get, "http://www.example.com/").to_return(:status => 200)
+        stub_request(:head, "http://www.example.com/").to_return(:status => 200)
 
         expect(subject.canonically_www?).to eql(true)
       end
@@ -220,21 +220,21 @@ describe SiteInspector::Domain do
 
     context "https" do
       it "detects a domain as canonically https when http is down" do
-        stub_request(:get, "https://example.com/").to_return(:status => 200)
-        stub_request(:get, "https://www.example.com/").to_return(:status => 200)
-        stub_request(:get, "http://example.com/").to_return(:status => 500)
-        stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+        stub_request(:head, "https://example.com/").to_return(:status => 200)
+        stub_request(:head, "https://www.example.com/").to_return(:status => 200)
+        stub_request(:head, "http://example.com/").to_return(:status => 500)
+        stub_request(:head, "http://www.example.com/").to_return(:status => 500)
         allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
         expect(subject.canonically_https?).to eql(true)
       end
 
       it "detects a domain as canonically https when http redirect" do
-        stub_request(:get, "https://example.com/").to_return(:status => 200)
-        stub_request(:get, "https://www.example.com/").to_return(:status => 200)
-        stub_request(:get, "http://example.com/").
+        stub_request(:head, "https://example.com/").to_return(:status => 200)
+        stub_request(:head, "https://www.example.com/").to_return(:status => 200)
+        stub_request(:head, "http://example.com/").
           to_return(:status => 301, :headers => { :location => "https://example.com" } )
-        stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+        stub_request(:head, "http://www.example.com/").to_return(:status => 500)
         allow(subject.endpoints.first.https).to receive(:valid?) { true }
 
         expect(subject.canonically_https?).to eql(true)
@@ -244,11 +244,11 @@ describe SiteInspector::Domain do
 
   context "redirects" do
     it "knows when a domain redirects" do
-      stub_request(:get, "https://example.com/").to_return(:status => 500)
-      stub_request(:get, "https://www.example.com/").to_return(:status => 500)
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "https://example.com/").to_return(:status => 500)
+      stub_request(:head, "https://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://foo.example.com" } )
-      stub_request(:get, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://www.example.com/").to_return(:status => 500)
 
       expect(subject.redirect?).to eql(true)
     end
