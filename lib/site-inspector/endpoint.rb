@@ -161,7 +161,7 @@ class SiteInspector
       checks = SiteInspector::Endpoint.checks.select { |c| options.keys.include?(c.name) }
       checks = SiteInspector::Endpoint.checks if checks.empty?
 
-      checks.each do |check|
+      Parallel.each(checks, :in_threads => 4) do |check|
         hash[check.name] = self.send(check.name).to_h
       end
 
