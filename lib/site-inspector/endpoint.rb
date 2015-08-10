@@ -111,6 +111,10 @@ class SiteInspector
     def resolves_to
       return self unless redirect?
 
+      # If the redirect doesn't return a 30x response code, return the redirected endpoint
+      # Otherwise, we'll need to go down the rabbit hole and see how deep it goes
+      return redirect unless redirect.redirect?
+
       @resolves_to ||= begin
         response = request(:followlocation => true)
 

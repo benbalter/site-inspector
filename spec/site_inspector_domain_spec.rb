@@ -249,6 +249,7 @@ describe SiteInspector::Domain do
       stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://foo.example.com" } )
       stub_request(:head, "http://www.example.com/").to_return(:status => 500)
+      stub_request(:head, "http://foo.example.com/").to_return(:status => 200)
 
       expect(subject.redirect?).to eql(true)
     end
