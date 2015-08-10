@@ -1,6 +1,7 @@
 class SiteInspector
   class Endpoint
     class Dns < Check
+      class LocalhostError < StandardError; end
 
       def self.resolver
         require "dnsruby"
@@ -55,6 +56,10 @@ class SiteInspector
         end
       end
 
+      def localhost?
+        ip == '127.0.0.1'
+      end
+
       def ip
         require 'resolv'
         @ip ||= Resolv.getaddress host
@@ -80,6 +85,7 @@ class SiteInspector
       end
 
       def to_h
+        return { :error => LocalhostError } if localhost?
         {
           :dnssec => dnssec?,
           :ipv6   => ipv6?,
