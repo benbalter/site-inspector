@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency("oj", "~> 2.11")
   s.add_dependency("mercenary", "~> 0.3")
   s.add_dependency("colorator", "~> 0.1")
+  s.add_dependency("cliver", "~> 0.3")
   s.add_development_dependency("pry", "~> 0.10")
   s.add_development_dependency( "rake", "~> 10.4" )
   s.add_development_dependency( "rspec", "~> 3.2")

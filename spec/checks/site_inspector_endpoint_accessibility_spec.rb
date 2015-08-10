@@ -78,18 +78,4 @@ describe SiteInspector::Endpoint::Accessibility do
       expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
     end
   end
-
-  context "without pa11y installed" do
-    before do
-      allow(subject.class).to receive(:pa11y_version) { nil }
-    end
-
-    it "knows when pa11y insn't installed" do
-      expect(subject.class.pa11y?).to eql(false)
-    end
-
-    it "fails loudly withouy pa11y" do
-      expect{subject.check}.to raise_error("pa11y not found. To install: [sudo] npm install -g pa11y")
-    end
-  end
 end
