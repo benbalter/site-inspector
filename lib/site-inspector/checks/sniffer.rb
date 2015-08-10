@@ -21,6 +21,7 @@ class SiteInspector
         return cms unless cms.nil?
         return :expression_engine if endpoint.cookies.any? { |c| c.keys.first =~ /^exp_/ }
         return :php if endpoint.cookies["PHPSESSID"]
+        return :coldfusion if endpoint.cookies["CFID"] && endpoint.cookies["CFTOKEN"]
         return :cowboy if endpoint.headers.server.to_s.downcase == "cowboy"
         nil
       end
