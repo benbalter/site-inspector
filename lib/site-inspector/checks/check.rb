@@ -33,12 +33,21 @@ class SiteInspector
         self.class.name
       end
 
-      def self.name
-        self.to_s.split('::').last.downcase.to_sym
-      end
+      class << self
 
-      def self.enabled?
-        true
+        @@enabled = true
+
+        def name
+          self.to_s.split('::').last.downcase.to_sym
+        end
+
+        def enabled?
+          !!(@@enabled)
+        end
+
+        def enabled=(value)
+          @@enabled = !!(value)
+        end
       end
     end
   end
