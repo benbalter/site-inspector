@@ -10,15 +10,21 @@ class SiteInspector
   # Because each of the four endpoints could potentially respond differently
   # We must evaluate all four to make certain determination
   class Endpoint
-    attr_accessor :host, :uri
+    attr_accessor :host, :uri, :domain
 
     # Initatiate a new Endpoint object
     #
     # endpoint - (string) the endpoint to query (e.g., `https://example.com`)
-    def initialize(host)
+    # options  - A hash of options
+    #   domain - the parent domain object, if passed, facilitates caching of redirects
+    def initialize(host, options={})
       @uri = Addressable::URI.parse(host.downcase)
+      # The root URL always has an implict path of "/", even if not requested
+      # Make it explicit to facilitate caching and prevent a potential redirect
+      @uri.path = "/"
       @host = uri.host.sub(/^www\./, "")
       @checks = {}
+      @domain = options[:domain]
     end
 
     def www?
@@ -92,7 +98,7 @@ class SiteInspector
         return if redirect.host == host && redirect.scheme == scheme
 
         # Init a new endpoint representing the redirect
-        Endpoint.new(redirect.to_s)
+        find_or_create_by_uri(redirect.to_s)
       end
     end
 
@@ -104,6 +110,7 @@ class SiteInspector
     # What's the effective URL of a request to this domain?
     def resolves_to
       return self unless redirect?
+
       @resolves_to ||= begin
         response = request(:followlocation => true)
 
@@ -118,7 +125,7 @@ class SiteInspector
           url = response.effective_url
         end
 
-        Endpoint.new(url)
+        find_or_create_by_uri(url)
       end
     end
 
@@ -192,6 +199,17 @@ class SiteInspector
 
     def hydra
       SiteInspector.hydra
+    end
+
+    # In the event that a redirect is to one of the domain's four endpoints,
+    # Try to return the existing endpoint, rather than create a new one
+    def find_or_create_by_uri(uri)
+      uri = Addressable::URI.parse(uri.downcase)
+      if domain && cached_endpoint = domain.endpoints.find { |e| e.uri.to_s == uri.to_s }
+        cached_endpoint
+      else
+        Endpoint.new(uri.to_s)
+      end
     end
   end
 end

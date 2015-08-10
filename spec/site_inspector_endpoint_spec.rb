@@ -15,7 +15,7 @@ describe SiteInspector::Endpoint do
   end
 
   it "returns the uri" do
-    expect(subject.uri.to_s).to eql("http://example.com")
+    expect(subject.uri.to_s).to eql("http://example.com/")
   end
 
   it "knows if an endpoint is www" do
@@ -181,7 +181,7 @@ describe SiteInspector::Endpoint do
       stub_request(:head, "http://www.example.com/").
         to_return(:status => 200)
 
-      expect(subject.redirect.uri.to_s).to eql("http://www.example.com")
+      expect(subject.redirect.uri.to_s).to eql("http://www.example.com/")
     end
 
     it "handles relative redirects" do
@@ -206,7 +206,7 @@ describe SiteInspector::Endpoint do
         to_return(:status => 200)
 
       expect(subject.redirect?).to eql(true)
-      expect(subject.resolves_to.uri.to_s).to eql("http://www.example.com")
+      expect(subject.resolves_to.uri.to_s).to eql("http://www.example.com/")
     end
 
     it "detects external redirects" do

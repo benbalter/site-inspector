@@ -45,10 +45,10 @@ describe SiteInspector::Domain do
     it "generates the endpoints" do
       endpoints = subject.endpoints
       expect(endpoints.count).to eql(4)
-      expect(endpoints[0].to_s).to eql("https://example.com")
-      expect(endpoints[1].to_s).to eql("https://www.example.com")
-      expect(endpoints[2].to_s).to eql("http://example.com")
-      expect(endpoints[3].to_s).to eql("http://www.example.com")
+      expect(endpoints[0].to_s).to eql("https://example.com/")
+      expect(endpoints[1].to_s).to eql("https://www.example.com/")
+      expect(endpoints[2].to_s).to eql("http://example.com/")
+      expect(endpoints[3].to_s).to eql("http://www.example.com/")
     end
   end
 
@@ -57,7 +57,7 @@ describe SiteInspector::Domain do
     stub_request(:head, "https://www.example.com/").to_return(:status => 500)
     stub_request(:head, "http://www.example.com/").to_return(:status => 200)
     stub_request(:head, "http://example.com/").to_return(:status => 200)
-    expect(subject.canonical_endpoint.to_s).to eql("http://example.com")
+    expect(subject.canonical_endpoint.to_s).to eql("http://example.com/")
   end
 
   it "knows if a domain is a government domain" do

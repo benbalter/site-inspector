@@ -14,16 +14,19 @@ class SiteInspector
 
     def endpoints
       @endpoints ||= [
-        Endpoint.new("https://#{host}"),
-        Endpoint.new("https://www.#{host}"),
-        Endpoint.new("http://#{host}"),
-        Endpoint.new("http://www.#{host}")
+        Endpoint.new("https://#{host}", :domain => self),
+        Endpoint.new("https://www.#{host}", :domain => self),
+        Endpoint.new("http://#{host}", :domain => self),
+        Endpoint.new("http://www.#{host}", :domain => self)
       ]
     end
 
     def canonical_endpoint
-      @canonical_endpoint ||= endpoints.find do |e|
-        e.https? == canonically_https? && e.www? == canonically_www?
+      @canonical_endpoint ||= begin
+        prefetch
+        endpoints.find do |e|
+          e.https? == canonically_https? && e.www? == canonically_www?
+        end
       end
     end
 

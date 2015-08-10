@@ -64,5 +64,11 @@ class SiteInspector
   end
 end
 
+if ENV["DEBUG"]
+  Ethon.logger = Logger.new(STDOUT);
+  Ethon.logger.level = Logger::DEBUG
+  Typhoeus::Config.verbose = true
+end
+
 Typhoeus::Config.memoize = true
 Typhoeus::Config.cache = SiteInspector.cache
