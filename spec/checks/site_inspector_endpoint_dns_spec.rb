@@ -81,6 +81,10 @@ describe SiteInspector::Endpoint::Dns do
       expect(subject.ipv6?).to eql(true)
     end
 
+    it "knows it's not a localhost address" do
+      expect(subject.localhost?).to eql(false)
+    end
+
     context "hostname detection" do
       it "lists cnames" do
         records = []
@@ -163,5 +167,21 @@ describe SiteInspector::Endpoint::Dns do
         expect(subject.google_apps?).to eql(true)
       end
     end
+  end
+
+  context "localhost" do
+
+    before do
+      allow(subject).to receive(:ip) { "127.0.0.1" }
+    end
+
+    it "knows it's a localhost address" do
+      expect(subject.localhost?).to eql(true)
+    end
+
+    it "returns a LocalhostError" do
+      expect(subject.to_h).to eql({:error => SiteInspector::Endpoint::Dns::LocalhostError})
+    end
+
   end
 end
