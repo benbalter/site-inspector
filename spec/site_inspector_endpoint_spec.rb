@@ -28,10 +28,10 @@ describe SiteInspector::Endpoint do
   end
 
   it "knows if an endpoint is http" do
-    stub_request(:get, "http://example.com/").
+    stub_request(:head, "http://example.com/").
       to_return(:status => 200, :body => "content")
 
-    stub_request(:get, "https://example.com/").
+    stub_request(:head, "https://example.com/").
       to_return(:status => 500, :body => "content")
 
     expect(subject.https?).to eql(false)
@@ -39,10 +39,10 @@ describe SiteInspector::Endpoint do
   end
 
   it "knows if an endpoint is https" do
-    stub_request(:get, "http://example.com/").
+    stub_request(:head, "http://example.com/").
       to_return(:status => 200, :body => "content")
 
-    stub_request(:get, "https://example.com/").
+    stub_request(:head, "https://example.com/").
       to_return(:status => 200, :body => "content")
 
     endpoint = SiteInspector::Endpoint.new("https://example.com")
@@ -60,7 +60,7 @@ describe SiteInspector::Endpoint do
   context "requests" do
 
     it "requests a URL" do
-      stub = stub_request(:get, "http://example.com/").
+      stub = stub_request(:head, "http://example.com/").
            to_return(:status => 200, :body => "content")
 
       expect(subject.request.body).to eql("content")
@@ -68,7 +68,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "requests a requested path" do
-      stub = stub_request(:get, "http://example.com/foo").
+      stub = stub_request(:head, "http://example.com/foo").
            to_return(:status => 200, :body => "content")
 
       expect(subject.request(:path => "foo").body).to eql("content")
@@ -76,7 +76,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "requests with typhoeus options" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 301, :headers => { :location => "http://example.com/foo" } )
 
       response = subject.request(:followlocation => true)
@@ -84,7 +84,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "returns the response" do
-      stub = stub_request(:get, "http://example.com/").
+      stub = stub_request(:head, "http://example.com/").
            to_return(:status => 200, :body => "content")
 
       expect(subject.response.body).to eql("content")
@@ -93,7 +93,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "knows if there's a response" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 200, :body => "content")
 
       expect(subject.responds?).to eql(true)
@@ -108,7 +108,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "knows the response code" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 200)
 
       expect(subject.response_code).to eql("200")
@@ -120,7 +120,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "considers a 200 response code to be live and a response" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 200)
 
       expect(subject.up?).to eql(true)
@@ -128,7 +128,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "considers a 301 response code to be live and a response" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 301)
 
       expect(subject.up?).to eql(true)
@@ -136,7 +136,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "considers a 404 response code to be down but a response" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 404)
 
       expect(subject.up?).to eql(false)
@@ -144,7 +144,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "considers a 500 response code to be down but a response" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 500)
 
       expect(subject.up?).to eql(false)
@@ -168,41 +168,41 @@ describe SiteInspector::Endpoint do
 
   context "redirects" do
     it "knows when there's a redirect" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://www.example.com" } )
 
       expect(subject.redirect?).to eql(true)
     end
 
     it "returns the redirect" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://www.example.com" } )
 
-      stub_request(:get, "http://www.example.com/").
+      stub_request(:head, "http://www.example.com/").
         to_return(:status => 200)
 
       expect(subject.redirect.uri.to_s).to eql("http://www.example.com")
     end
 
     it "handles relative redirects" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 301, :headers => { :location => "/foo" } )
 
       expect(subject.redirect?).to eql(false)
     end
 
     it "handles relative redirects without a leading slash" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
            to_return(:status => 301, :headers => { :location => "foo" } )
 
       expect(subject.redirect?).to eql(false)
     end
 
     it "knows what it resolves to" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://www.example.com" } )
 
-      stub_request(:get, "http://www.example.com/").
+      stub_request(:head, "http://www.example.com/").
         to_return(:status => 200)
 
       expect(subject.redirect?).to eql(true)
@@ -210,7 +210,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "detects external redirects" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "http://www.example.gov" } )
 
       expect(subject.redirect?).to eql(true)
@@ -218,7 +218,7 @@ describe SiteInspector::Endpoint do
     end
 
     it "knows internal redirects are not external redirects" do
-      stub_request(:get, "http://example.com/").
+      stub_request(:head, "http://example.com/").
         to_return(:status => 301, :headers => { :location => "https://example.com" } )
 
       expect(subject.external_redirect?).to eql(false)
@@ -233,7 +233,7 @@ describe SiteInspector::Endpoint do
     SiteInspector::Endpoint.checks.each do |check|
       it "responds to the #{check} check" do
 
-        stub_request(:get, "http://example.com/").
+        stub_request(:head, "http://example.com/").
           to_return(:status => 200)
 
         expect(subject.send(check.name)).to_not be_nil

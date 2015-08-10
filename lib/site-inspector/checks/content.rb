@@ -6,6 +6,12 @@ class SiteInspector
         endpoint.up? && endpoint.request(path: path, followlocation: true).success?
       end
 
+      # The default Check#response method is from a HEAD request
+      # The content check has a special response which includes the body from a GET request
+      def response
+        @response ||= endpoint.request(:method => :get)
+      end
+
       def document
         require 'nokogiri'
         @doc ||= Nokogiri::HTML response.body if response

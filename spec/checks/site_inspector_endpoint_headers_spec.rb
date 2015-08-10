@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Headers do
 
   subject do
-    stub_request(:get, "http://example.com/").
+    stub_request(:head, "http://example.com/").
       to_return(:status => 200, :headers => { :foo => "bar" } )
     endpoint = SiteInspector::Endpoint.new("http://example.com")
     SiteInspector::Endpoint::Headers.new(endpoint)

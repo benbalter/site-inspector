@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Https do
 
   subject do
-    stub_request(:get, "https://example.com/").
+    stub_request(:head, "https://example.com/").
       to_return(:status => 200 )
     endpoint = SiteInspector::Endpoint.new("https://example.com")
     allow(endpoint.response).to receive(:return_code) { :ok }

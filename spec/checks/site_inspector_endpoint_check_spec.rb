@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SiteInspector::Endpoint::Check do
 
   subject do
-    stub_request(:get, "http://example.com/").to_return(:status => 200)
+    stub_request(:head, "http://example.com/").to_return(:status => 200)
     endpoint = SiteInspector::Endpoint.new("http://example.com")
     SiteInspector::Endpoint::Check.new(endpoint)
   end

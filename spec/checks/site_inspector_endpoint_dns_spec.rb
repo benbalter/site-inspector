@@ -4,7 +4,7 @@ require 'dnsruby'
 describe SiteInspector::Endpoint::Dns do
 
   subject do
-    stub_request(:get, "http://github.com/").to_return(:status => 200)
+    stub_request(:head, "http://github.com/").to_return(:status => 200)
     endpoint = SiteInspector::Endpoint.new("http://github.com")
     SiteInspector::Endpoint::Dns.new(endpoint)
   end

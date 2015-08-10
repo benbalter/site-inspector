@@ -23,7 +23,10 @@ describe SiteInspector::Endpoint::Sniffer do
     ].map { |c| c.to_s }
 
     stub_request(:get, "http://example.com/").
-      to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies } )
+      to_return(:status => 200, :body => "" )
+
+    stub_request(:head, "http://example.com/").
+      to_return(:status => 200, :headers => { "set-cookie" => cookies } )
   end
 
   context "stubbed body" do
@@ -50,6 +53,9 @@ describe SiteInspector::Endpoint::Sniffer do
 
       stub_request(:get, "http://example.com/").
         to_return(:status => 200, :body => body )
+
+      stub_request(:head, "http://example.com/").
+          to_return(:status => 200)
       endpoint = SiteInspector::Endpoint.new("http://example.com")
       SiteInspector::Endpoint::Sniffer.new(endpoint)
     end
@@ -105,7 +111,10 @@ describe SiteInspector::Endpoint::Sniffer do
 
     it "detects cowboy" do
       stub_request(:get, "http://example.com/").
-        to_return(:status => 200, :body => "", :headers => { "server" => "Cowboy" } )
+        to_return(:status => 200, :body => "" )
+
+      stub_request(:head, "http://example.com/").
+        to_return(:status => 200, :headers => { "server" => "Cowboy" } )
 
       expect(subject.framework).to eql(:cowboy)
       expect(subject.open_source?).to eql(true)
@@ -128,7 +137,10 @@ describe SiteInspector::Endpoint::Sniffer do
       ].map { |c| c.to_s }
 
       stub_request(:get, "http://example.com/").
-        to_return(:status => 200, :body => "", :headers => { "set-cookie" => cookies } )
+        to_return(:status => 200, :body => "" )
+        
+      stub_request(:head, "http://example.com/").
+        to_return(:status => 200, :headers => { "set-cookie" => cookies } )
 
       expect(subject.framework).to eql(:coldfusion)
       expect(subject.open_source?).to eql(false)
