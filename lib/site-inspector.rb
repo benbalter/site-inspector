@@ -548,6 +548,8 @@ class SiteInspector
 
       # compare base domain names
       base_original = PublicSuffix.parse(uri_original.hostname).domain
+      # compare base subdomain names
+      sub_original = PublicSuffix.parse(uri_original.hostname).subdomain
 
       # if the redirects aren't to valid hostnames (e.g. IP addresses)
       # then fine just compare them directly, they're not going to be
@@ -564,13 +566,33 @@ class SiteInspector
         uri_eventual.to_s
       end
 
+      sub_immediate = begin
+        PublicSuffix.parse(uri_immediate.hostname).subdomain
+      rescue PublicSuffix::DomainInvalid
+        uri_immediate.to_s
+      end
+
+      sub_eventual = begin
+        PublicSuffix.parse(uri_eventual.hostname).subdomain
+      rescue PublicSuffix::DomainInvalid
+        uri_eventual.to_s
+      end
+
       details[:redirect_immediately_to] = uri_immediate.to_s
       details[:redirect_immediately_to_www] = !!uri_immediate.to_s.match(/^https?:\/\/www\./)
       details[:redirect_immediately_to_https] = uri_immediate.to_s.start_with?("https://")
       details[:redirect_immediately_external] = (base_original != base_immediate)
+      details[:redirect_immediately_to_subdomain] = (
+        (base_original == base_immediate) and
+        (sub_original != sub_immediate)
+      )
 
       details[:redirect_to] = uri_eventual.to_s
       details[:redirect_external] = (base_original != base_eventual)
+      details[:redirect_to_subdomain] = (
+        (base_original == base_eventual) and
+        (sub_original != sub_eventual)
+      )
 
     # otherwise, mark all the redirect fields as false/null
     else
