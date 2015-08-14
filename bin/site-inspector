@@ -12,17 +12,22 @@ if domain.to_s.empty?
   exit 1
 end
 
+site = SiteInspector.new(domain)
+
+if site.ip == "127.0.0.1"
+  puts "Skipping: domain points to localhost."
+  exit 1
+end
+
 # HTTP mode:
 #   * all details for possible endpoints
 #   * don't follow redirects
 #   * shorter timeout
 if http_mode
-  site = SiteInspector.new(domain)
   details = site.http
 
 # Normal mode: autodetect canonical domain, sweep every attribute.
 else
-  site = SiteInspector.new(domain)
   details = site.to_hash
 end
 
