@@ -159,7 +159,7 @@ class SiteInspector
 end
 ```
 
-Which can be then be used by calling:
+This check can then be used as follows:
 ```
 domain.canonical_endpoint.mention.mentions_ben?
 ```
