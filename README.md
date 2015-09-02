@@ -150,13 +150,18 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 ```ruby
 class SiteInspector
   class Endpoint
-    class Mention
+    class Mention < Check
       def mentions_ben?
         endpoint.content.body =~ /ben/i
       end
     end
   end
 end
+```
+
+Which can be then be used by calling:
+```
+domain.canonical_endpoint.mention.mentions_ben?
 ```
 
 Checks can call the `endpoint` object, which, contains the request, response, and other checks. Custom checks are automatically exposed as endpoint methods.
