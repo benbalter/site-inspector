@@ -55,7 +55,7 @@ class SiteInspector
           "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }
       }
-      unless @typhoeus_options.nil?
+      if @typhoeus_options
         defaults.merge! @typhoeus_options
       end
       defaults
