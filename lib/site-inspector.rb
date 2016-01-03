@@ -25,7 +25,7 @@ require_relative 'site-inspector/version'
 class SiteInspector
   class << self
 
-    attr_writer :timeout, :cache
+    attr_writer :timeout, :cache, :typhoeus_options
 
     def cache
       @cache ||= if ENV['CACHE']
@@ -46,7 +46,7 @@ class SiteInspector
     end
 
     def typhoeus_defaults
-      {
+      defaults = {
         :followlocation => false,
         :timeout => SiteInspector.timeout,
         :accept_encoding => "gzip",
@@ -55,6 +55,10 @@ class SiteInspector
           "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }
       }
+      if @typhoeus_options
+        defaults.merge! @typhoeus_options
+      end
+      defaults
     end
 
     # Returns a thread-safe, memoized hydra instance
