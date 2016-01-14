@@ -233,7 +233,10 @@ describe SiteInspector::Endpoint do
 
   context "checks" do
     it "identifies checks" do
-      expect(SiteInspector::Endpoint.checks.count).to eql(8)
+      expected = 8
+      pa11y = SiteInspector::Endpoint::Accessibility.pa11y?
+      expected = expected - 1 unless pa11y
+      expect(SiteInspector::Endpoint.checks.count).to eql(expected)
     end
 
     SiteInspector::Endpoint.checks.each do |check|

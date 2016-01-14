@@ -15,18 +15,28 @@ class SiteInspector
 
       DEFAULT_LEVEL = :error
 
+      REQUIRED_PA11Y_VERSION = '~> 2.1'
+
       class << self
         def pa11y_version
-          output, status = Open3.capture2e("pa11y", "--version")
-          output.strip if status == 0
+          @pa11y_version ||= pa11y.version
         end
 
         def pa11y?
-          !!(Cliver.detect('pa11y'))
+          return @pa11y_detected if defined? @pa11y_detected
+          @pa11y_detected = !!(pa11y.detect)
         end
 
         def enabled?
           @@enabled && pa11y?
+        end
+
+        def pa11y
+          @pa11y ||= begin
+            node_bin = File.expand_path('../../../node_modules/pa11y/bin', File.dirname(__FILE__))
+            path = ["*", node_bin].join(File::PATH_SEPARATOR)
+            Cliver::Dependency.new('pa11y', REQUIRED_PA11Y_VERSION, path: path)
+          end
         end
       end
 
@@ -61,7 +71,7 @@ class SiteInspector
       end
 
       def check
-        @check ||= pa11y(standard)
+        @check ||= run_pa11y(standard)
       rescue Pa11yError
         nil
       end
@@ -69,7 +79,7 @@ class SiteInspector
 
       def method_missing(method_sym, *arguments, &block)
         if standard?(method_sym)
-          pa11y(method_sym)
+          run_pa11y(method_sym)
         else
           super
         end
@@ -85,8 +95,8 @@ class SiteInspector
 
       private
 
-      def pa11y(standard)
-        Cliver.assert('pa11y')
+      def run_pa11y(standard)
+        self.class.pa11y.detect! unless ENV["SKIP_PA11Y_CHECK"]
         raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
 
         args = [
@@ -110,7 +120,7 @@ class SiteInspector
       end
 
       def run_command(args)
-        Open3.capture2e("pa11y", *args)
+        Open3.capture2e(self.class.pa11y.path, *args)
       end
     end
   end
