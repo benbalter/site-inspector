@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Pa11y version: $(pa11y --version)"
+script/pa11y-version
 
 bundle exec rake spec
 

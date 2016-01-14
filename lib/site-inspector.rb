@@ -21,6 +21,7 @@ require_relative 'site-inspector/checks/sniffer'
 require_relative 'site-inspector/checks/cookies'
 require_relative 'site-inspector/endpoint'
 require_relative 'site-inspector/version'
+require_relative 'cliver/dependency_ext'
 
 class SiteInspector
   class << self

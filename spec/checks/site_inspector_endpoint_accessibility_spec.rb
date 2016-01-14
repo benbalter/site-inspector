@@ -8,6 +8,7 @@ describe SiteInspector::Endpoint::Accessibility do
   end
 
   it "retrieve's pa11y's version" do
+    pending("Pa11y not installed") unless SiteInspector::Endpoint::Accessibility.pa11y?
     expect(subject.class.pa11y_version).to match(/\d\.\d\.\d/)
   end
 
@@ -56,26 +57,30 @@ describe SiteInspector::Endpoint::Accessibility do
       allow(subject).to receive(:run_command) { [output, 2] }
     end
 
-    it "knows if pa11y is installed" do
-      expect(subject.class.pa11y?).to eql(true)
-    end
-
     it "knows if a site is valid" do
-      expect(subject.valid?).to eql(false)
+      with_env "SKIP_PA11Y_CHECK", "true" do
+        expect(subject.valid?).to eql(false)
+      end
     end
 
     it "counts the errors" do
-      expect(subject.errors).to eql(1)
+      with_env "SKIP_PA11Y_CHECK", "true" do
+        expect(subject.errors).to eql(1)
+      end
     end
 
     it "runs the check" do
-      expect(subject.check[:valid]).to eql(false)
-      expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
+      with_env "SKIP_PA11Y_CHECK", "true" do
+        expect(subject.check[:valid]).to eql(false)
+        expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
+      end
     end
 
     it "runs a named check" do
-      expect(subject.check[:valid]).to eql(false)
-      expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
+      with_env "SKIP_PA11Y_CHECK", "true" do
+        expect(subject.check[:valid]).to eql(false)
+        expect(subject.check[:results].first["code"]).to eql("Section508.L.NoContentAnchor")
+      end
     end
   end
 end
