@@ -1,23 +1,22 @@
 class SiteInspector
   class Domain
-
     attr_reader :host
 
     def initialize(host)
       host = host.downcase
-      host = host.sub /^https?\:/, ""
-      host = host.sub /^\/+/, ""
-      host = host.sub /^www\./, ""
+      host = host.sub(/^https?\:/, '')
+      host = host.sub(%r{^/+}, '')
+      host = host.sub(/^www\./, '')
       uri = Addressable::URI.parse "//#{host}"
       @host = uri.host
     end
 
     def endpoints
       @endpoints ||= [
-        Endpoint.new("https://#{host}", :domain => self),
-        Endpoint.new("https://www.#{host}", :domain => self),
-        Endpoint.new("http://#{host}", :domain => self),
-        Endpoint.new("http://www.#{host}", :domain => self)
+        Endpoint.new("https://#{host}", domain: self),
+        Endpoint.new("https://www.#{host}", domain: self),
+        Endpoint.new("http://#{host}", domain: self),
+        Endpoint.new("http://www.#{host}", domain: self)
       ]
     end
 
@@ -37,15 +36,14 @@ class SiteInspector
 
     # Does *any* endpoint return a 200 or 300 response code?
     def up?
-      endpoints.any? { |e| e.up? }
+      endpoints.any?(&:up?)
     end
 
     # Does *any* endpoint respond to HTTP?
     # TODO: needs to allow an invalid chain.
     def responds?
-      endpoints.any? { |e| e.responds? }
+      endpoints.any?(&:responds?)
     end
-
 
     # TODO: These weren't present before, and may not be useful.
     # Can you connect to www?
@@ -84,7 +82,7 @@ class SiteInspector
     # TODO: don't need to require that the HTTPS cert is valid for this purpose.
     def enforces_https?
       return false unless https?
-      endpoints.select { |e| e.http? }.all? { |e| !e.up? || (e.redirect && e.redirect.https?) }
+      endpoints.select(&:http?).all? { |e| !e.up? || (e.redirect && e.redirect.https?) }
     end
 
     # we can say that a canonical HTTPS site "defaults" to HTTPS,
@@ -93,7 +91,7 @@ class SiteInspector
     #
     # TODO: not implemented.
     def defaults_https?
-      raise "Not implemented. Halp?"
+      fail 'Not implemented. Halp?'
     end
 
     # HTTPS is "downgraded" if both:
@@ -128,10 +126,10 @@ class SiteInspector
       return false unless www?
 
       # Are both root endpoints down?
-      return true if endpoints.select { |e| e.root? }.all? { |e| !e.up? }
+      return true if endpoints.select(&:root?).all? { |e| !e.up? }
 
       # Does either root endpoint redirect to a www endpoint?
-      endpoints.select { |e| e.root? }.any? { |e| e.redirect && e.redirect.www? }
+      endpoints.select(&:root?).any? { |e| e.redirect && e.redirect.www? }
     end
 
     # A domain is "canonically" at https if:
@@ -159,10 +157,10 @@ class SiteInspector
       return false unless https?
 
       # Both http endpoints are down
-      return true if endpoints.select { |e| e.http? }.all? { |e| !e.up? }
+      return true if endpoints.select(&:http?).all? { |e| !e.up? }
 
       # at least one http endpoint redirects immediately to https
-      endpoints.select { |e| e.http? }.any? { |e| e.redirect && e.redirect.https? }
+      endpoints.select(&:http?).any? { |e| e.redirect && e.redirect.https? }
     end
 
     # A domain redirects if
@@ -175,7 +173,7 @@ class SiteInspector
 
     # The first endpoint to respond with a redirect
     def redirect
-      endpoints.find { |e| e.external_redirect? }
+      endpoints.find(&:external_redirect?)
     end
 
     # HSTS on the canonical domain?
@@ -223,7 +221,7 @@ class SiteInspector
     #  :all - return information about all endpoints
     #
     # Returns a complete hash of the domain's information
-    def to_h(options={})
+    def to_h(options = {})
       prefetch
 
       hash = {
@@ -244,19 +242,17 @@ class SiteInspector
         canonical_endpoint: canonical_endpoint.to_h(options)
       }
 
-      if options["all"]
-        hash.merge!({
-          endpoints: {
-            https: {
-              root: endpoints[0].to_h(options),
-              www:  endpoints[1].to_h(options)
-            },
-            http: {
-              root: endpoints[2].to_h(options),
-              www:  endpoints[3].to_h(options)
-            }
-          }
-        })
+      if options['all']
+        hash.merge!(endpoints: {
+                      https: {
+                        root: endpoints[0].to_h(options),
+                        www:  endpoints[1].to_h(options)
+                      },
+                      http:  {
+                        root: endpoints[2].to_h(options),
+                        www:  endpoints[3].to_h(options)
+                      }
+                    })
       end
 
       hash

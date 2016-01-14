@@ -6,4 +6,6 @@ script/pa11y-version
 
 bundle exec rake spec
 
+bundle exec rubocop 
+
 gem build site-inspector.gemspec

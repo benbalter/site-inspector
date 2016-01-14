@@ -4,15 +4,15 @@ class SiteInspector
       class LocalhostError < StandardError; end
 
       def self.resolver
-        require "dnsruby"
+        require 'dnsruby'
         @resolver ||= begin
           resolver = Dnsruby::Resolver.new
-          resolver.config.nameserver = ["8.8.8.8", "8.8.4.4"]
+          resolver.config.nameserver = ['8.8.8.8', '8.8.4.4']
           resolver
         end
       end
 
-      def query(type="ANY")
+      def query(type = 'ANY')
         SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
       rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain
         []
@@ -22,20 +22,21 @@ class SiteInspector
         @records ||= query
       end
 
-      def has_record?(type)
+      def record?(type)
         records.any? { |record| record.type == type } || query(type).count != 0
       end
+      alias_method :has_record?, :record?
 
       def dnssec?
-        @dnssec ||= has_record? "DNSKEY"
+        @dnssec ||= has_record? 'DNSKEY'
       end
 
       def ipv6?
-        @ipv6 ||= has_record? "AAAA"
+        @ipv6 ||= has_record? 'AAAA'
       end
 
       def cdn
-        detect_by_hostname "cdn"
+        detect_by_hostname 'cdn'
       end
 
       def cdn?
@@ -43,7 +44,7 @@ class SiteInspector
       end
 
       def cloud_provider
-        detect_by_hostname "cloud"
+        detect_by_hostname 'cloud'
       end
 
       def cloud?
@@ -52,7 +53,7 @@ class SiteInspector
 
       def google_apps?
         @google ||= records.any? do |record|
-          record.type == "MX" && record.exchange.to_s =~ /google(mail)?\.com\.?\z/i
+          record.type == 'MX' && record.exchange.to_s =~ /google(mail)?\.com\.?\z/i
         end
       end
 
@@ -75,7 +76,7 @@ class SiteInspector
       end
 
       def cnames
-        @cnames ||= records.select { |record| record.type == "CNAME" }.map do |record|
+        @cnames ||= records.select { |record| record.type == 'CNAME' }.map do |record|
           PublicSuffix.parse(record.cname.to_s)
         end
       end
@@ -85,15 +86,15 @@ class SiteInspector
       end
 
       def to_h
-        return { :error => LocalhostError } if localhost?
+        return { error: LocalhostError } if localhost?
         {
-          :dnssec => dnssec?,
-          :ipv6   => ipv6?,
-          :cdn    => cdn,
-          :cloud_provider => cloud_provider,
-          :google_apps => google_apps?,
-          :hostname => hostname,
-          :ip => ip
+          dnssec:         dnssec?,
+          ipv6:           ipv6?,
+          cdn:            cdn,
+          cloud_provider: cloud_provider,
+          google_apps:    google_apps?,
+          hostname:       hostname,
+          ip:             ip
         }
       end
 
@@ -115,7 +116,7 @@ class SiteInspector
 
       def detect_by_hostname(type)
         haystack = load_data(type)
-        needle = haystack.find do |name, domain|
+        needle = haystack.find do |_name, domain|
           cnames.any? do |cname|
             domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"
           end
@@ -124,7 +125,7 @@ class SiteInspector
         return needle[0].to_sym if needle
         return nil unless hostname
 
-        needle = haystack.find do |name, domain|
+        needle = haystack.find do |_name, domain|
           domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
         end
 

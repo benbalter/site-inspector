@@ -3,7 +3,6 @@ class SiteInspector
     # Utility parser for HSTS headers.
     # RFC: http://tools.ietf.org/html/rfc6797
     class Hsts < Check
-
       def valid?
         return false unless header
         pairs.none? { |key, value| "#{key}#{value}" =~ /[\s\'\"]/ }
@@ -28,17 +27,17 @@ class SiteInspector
 
       # Google's minimum max-age for automatic preloading
       def preload_ready?
-        include_subdomains? and preload? and max_age >= 10886400
+        include_subdomains? && preload? && max_age >= 10_886_400
       end
 
       def to_h
         {
-          valid: valid?,
-          max_age: max_age,
+          valid:              valid?,
+          max_age:            max_age,
           include_subdomains: include_subdomains?,
-          preload: preload?,
-          enabled: enabled?,
-          preload_ready: preload_ready?
+          preload:            preload?,
+          enabled:            enabled?,
+          preload_ready:      preload_ready?
         }
       end
 
@@ -49,7 +48,7 @@ class SiteInspector
       end
 
       def header
-        @header ||= headers["strict-transport-security"]
+        @header ||= headers['strict-transport-security']
       end
 
       def directives
@@ -60,7 +59,7 @@ class SiteInspector
         @pairs ||= begin
           pairs = {}
           directives.each do |directive|
-            key, value = directive.downcase.split("=")
+            key, value = directive.downcase.split('=')
 
             if value =~ /\".*\"/
               value = value.sub(/^\"/, '')

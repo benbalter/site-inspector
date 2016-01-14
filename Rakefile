@@ -1,8 +1,8 @@
 require './lib/site-inspector'
 require 'rspec/core/rake_task'
 
-desc "Run specs"
+desc 'Run specs'
 RSpec::Core::RakeTask.new do |t|
   t.pattern = 'spec/**/*_spec.rb'
-  t.rspec_opts = ["--order", "rand", "--color"]
+  t.rspec_opts = ['--order', 'rand', '--color']
 end

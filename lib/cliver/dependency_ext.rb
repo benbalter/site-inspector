@@ -1,6 +1,5 @@
 module Cliver
   class Dependency
-
     # Memoized shortcut for detect
     # Returns the path to the detected dependency
     # Raises an error if the dependency was not satisfied

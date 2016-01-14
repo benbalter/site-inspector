@@ -34,7 +34,7 @@ class SiteInspector
         def pa11y
           @pa11y ||= begin
             node_bin = File.expand_path('../../../node_modules/pa11y/bin', File.dirname(__FILE__))
-            path = ["*", node_bin].join(File::PATH_SEPARATOR)
+            path = ['*', node_bin].join(File::PATH_SEPARATOR)
             Cliver::Dependency.new('pa11y', REQUIRED_PA11Y_VERSION, path: path)
           end
         end
@@ -45,7 +45,7 @@ class SiteInspector
       end
 
       def level=(level)
-        raise ArgumentError, "Invalid level '#{level}'" unless [:error, :warning, :notice].include?(level)
+        fail ArgumentError, "Invalid level '#{level}'" unless [:error, :warning, :notice].include?(level)
         @level = level
       end
 
@@ -58,7 +58,7 @@ class SiteInspector
       end
 
       def standard=(standard)
-        raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
+        fail ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
         @standard = standard
       end
 
@@ -67,7 +67,7 @@ class SiteInspector
       end
 
       def errors
-        check[:results].count { |r| r["type"] == "error" } if check
+        check[:results].count { |r| r['type'] == 'error' } if check
       end
 
       def check
@@ -96,27 +96,27 @@ class SiteInspector
       private
 
       def run_pa11y(standard)
-        self.class.pa11y.detect! unless ENV["SKIP_PA11Y_CHECK"]
-        raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
+        self.class.pa11y.detect! unless ENV['SKIP_PA11Y_CHECK']
+        fail ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
 
         args = [
-          "--standard", STANDARDS[standard],
-          "--reporter", "json",
-          "--level",    level.to_s,
+          '--standard', STANDARDS[standard],
+          '--reporter', 'json',
+          '--level',    level.to_s,
           endpoint.uri.to_s
         ]
         output, status = run_command(args)
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
-        raise Pa11yError if status == 1
+        fail Pa11yError if status == 1
 
         {
           valid:   status == 0,
           results: JSON.parse(output)
         }
       rescue Pa11yError, JSON::ParserError
-        raise Pa11yError, "Command `pa11y #{args.join(" ")}` failed: #{output}"
+        raise Pa11yError, "Command `pa11y #{args.join(' ')}` failed: #{output}"
       end
 
       def run_command(args)

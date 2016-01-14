@@ -1,7 +1,6 @@
 class SiteInspector
   class Endpoint
     class Sniffer < Check
-
       OPEN_SOURCE_FRAMEWORKS = [
         # Sniffles
         :drupal,
@@ -20,9 +19,9 @@ class SiteInspector
         cms = sniff :cms
         return cms unless cms.nil?
         return :expression_engine if endpoint.cookies.any? { |c| c.keys.first =~ /^exp_/ }
-        return :php if endpoint.cookies["PHPSESSID"]
-        return :coldfusion if endpoint.cookies["CFID"] && endpoint.cookies["CFTOKEN"]
-        return :cowboy if endpoint.headers.server.to_s.downcase == "cowboy"
+        return :php if endpoint.cookies['PHPSESSID']
+        return :coldfusion if endpoint.cookies['CFID'] && endpoint.cookies['CFTOKEN']
+        return :cowboy if endpoint.headers.server.to_s.downcase == 'cowboy'
         nil
       end
 
@@ -44,10 +43,10 @@ class SiteInspector
 
       def to_h
         {
-          :framework   => framework,
-          :analytics   => analytics,
-          :javascript  => javascript,
-          :advertising => advertising
+          framework:   framework,
+          analytics:   analytics,
+          javascript:  javascript,
+          advertising: advertising
         }
       end
 
@@ -55,7 +54,7 @@ class SiteInspector
 
       def sniff(type)
         require 'sniffles'
-        results = Sniffles.sniff(endpoint.content.body, type).select { |name, meta| meta[:found] }
+        results = Sniffles.sniff(endpoint.content.body, type).select { |_name, meta| meta[:found] }
         results.keys.first if results
       rescue
         nil

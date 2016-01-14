@@ -1,7 +1,6 @@
 class SiteInspector
   class Endpoint
     class Cookies < Check
-
       def any?(&block)
         if cookie_header.nil? || cookie_header.empty?
           false
@@ -14,7 +13,7 @@ class SiteInspector
       alias_method :cookies?, :any?
 
       def all
-        @cookies ||= cookie_header.map { |c| CGI::Cookie::parse(c) } if cookies?
+        @cookies ||= cookie_header.map { |c| CGI::Cookie.parse(c) } if cookies?
       end
 
       def [](key)
@@ -22,14 +21,14 @@ class SiteInspector
       end
 
       def secure?
-        pairs = cookie_header.join("; ").split("; ") # CGI::Cookies#Parse doesn't seem to like secure headers
-        pairs.any? { |c| c.downcase == "secure" } && pairs.any? { |c| c.downcase == "httponly" }
+        pairs = cookie_header.join('; ').split('; ') # CGI::Cookies#Parse doesn't seem to like secure headers
+        pairs.any? { |c| c.downcase == 'secure' } && pairs.any? { |c| c.downcase == 'httponly' }
       end
 
       def to_h
         {
-          :cookie? => any?,
-          :secure? => secure?
+          cookie?: any?,
+          secure?: secure?
         }
       end
 
@@ -37,9 +36,8 @@ class SiteInspector
 
       def cookie_header
         # Cookie header may be an array or string, always return an array
-        [endpoint.headers.all["set-cookie"]].flatten.compact
+        [endpoint.headers.all['set-cookie']].flatten.compact
       end
-
     end
   end
 end

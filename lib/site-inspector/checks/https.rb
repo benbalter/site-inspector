@@ -1,9 +1,8 @@
 class SiteInspector
   class Endpoint
     class Https < Check
-
       def scheme?
-        scheme == "https"
+        scheme == 'https'
       end
 
       def valid?
@@ -24,8 +23,8 @@ class SiteInspector
 
       def to_h
         {
-          valid: valid?,
-          return_code: response.return_code,
+          valid:       valid?,
+          return_code: response.return_code
         }
       end
 
@@ -34,7 +33,6 @@ class SiteInspector
       def scheme
         @scheme ||= request.base_url.scheme
       end
-
     end
   end
 end

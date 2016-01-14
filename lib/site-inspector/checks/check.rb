@@ -1,7 +1,6 @@
 class SiteInspector
   class Endpoint
     class Check
-
       attr_reader :endpoint
 
       # A check is an abstract class that takes an Endpoint object
@@ -34,11 +33,10 @@ class SiteInspector
       end
 
       class << self
-
         @@enabled = true
 
         def name
-          self.to_s.split('::').last.downcase.to_sym
+          to_s.split('::').last.downcase.to_sym
         end
 
         def enabled?

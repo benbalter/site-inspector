@@ -17,12 +17,12 @@ class SiteInspector
     # endpoint - (string) the endpoint to query (e.g., `https://example.com`)
     # options  - A hash of options
     #   domain - the parent domain object, if passed, facilitates caching of redirects
-    def initialize(host, options={})
+    def initialize(host, options = {})
       @uri = Addressable::URI.parse(host.downcase)
       # The root URL always has an implict path of "/", even if not requested
       # Make it explicit to facilitate caching and prevent a potential redirect
-      @uri.path = "/"
-      @host = uri.host.sub(/^www\./, "")
+      @uri.path = '/'
+      @host = uri.host.sub(/^www\./, '')
       @checks = {}
       @domain = options[:domain]
     end
@@ -72,24 +72,24 @@ class SiteInspector
 
     # Does the endpoint return a 2xx or 3xx response code?
     def up?
-      response && response_code.start_with?("2") || response_code.start_with?("3")
+      response && response_code.start_with?('2') || response_code.start_with?('3')
     end
 
     # Does the server respond at all?
     def responds?
-       response.code != 0 && !timed_out?
+      response.code != 0 && !timed_out?
     end
 
     # If the domain is a redirect, what's the first endpoint we're redirected to?
     def redirect
-      return unless response && response_code.start_with?("3")
+      return unless response && response_code.start_with?('3')
 
       @redirect ||= begin
-        redirect = Addressable::URI.parse(headers["location"])
+        redirect = Addressable::URI.parse(headers['location'])
 
         # This is a relative redirect, but we still need the absolute URI
         if redirect.relative?
-          redirect.path = "/#{redirect.path}" unless redirect.path[0] == "/"
+          redirect.path = "/#{redirect.path}" unless redirect.path[0] == '/'
           redirect.host = host
           redirect.scheme = scheme
         end
@@ -116,12 +116,12 @@ class SiteInspector
       return redirect unless redirect.redirect?
 
       @resolves_to ||= begin
-        response = request(:followlocation => true)
+        response = request(followlocation: true)
 
         # Workaround for Webmock not playing nicely with Typhoeus redirects
         if response.mock?
-          if response.headers["Location"]
-            url = response.headers["Location"]
+          if response.headers['Location']
+            url = response.headers['Location']
           else
             url = response.request.url
           end
@@ -142,7 +142,7 @@ class SiteInspector
     end
 
     def inspect
-      "#<SiteInspector::Endpoint uri=\"#{uri.to_s}\">"
+      "#<SiteInspector::Endpoint uri=\"#{uri}\">"
     end
 
     # Returns information about the endpoint
@@ -154,37 +154,39 @@ class SiteInspector
     #   a hash of check symbols and bools representing which checks should be run
     #
     # Returns the hash representing the endpoint and its checks
-    def to_h(options={})
+    def to_h(options = {})
       hash = {
-        uri: uri.to_s,
-        host: host,
-        www: www?,
-        https: https?,
-        scheme: scheme,
-        up: up?,
-        responds: responds?,
-        timed_out: timed_out?,
-        redirect: redirect?,
-        external_redirect: external_redirect?,
+        uri:               uri.to_s,
+        host:              host,
+        www:               www?,
+        https:             https?,
+        scheme:            scheme,
+        up:                up?,
+        responds:          responds?,
+        timed_out:         timed_out?,
+        redirect:          redirect?,
+        external_redirect: external_redirect?
       }
 
       # Either they've specifically asked for a check, or we throw everything at them
       checks = SiteInspector::Endpoint.checks.select { |c| options.keys.include?(c.name) }
       checks = SiteInspector::Endpoint.checks if checks.empty?
 
-      Parallel.each(checks, :in_threads => 4) do |check|
-        hash[check.name] = self.send(check.name).to_h
+      Parallel.each(checks, in_threads: 4) do |check|
+        hash[check.name] = send(check.name).to_h
       end
 
       hash
     end
 
     def self.checks
-      ObjectSpace.each_object(Class).select { |klass| klass < Check }.select { |check| check.enabled? }
+      return @checks if defined? @checks
+      @checks = ObjectSpace.each_object(Class).select { |klass| klass < Check }.select(&:enabled?)
     end
 
     def method_missing(method_sym, *arguments, &block)
-      if check = SiteInspector::Endpoint.checks.find { |c| c.name == method_sym }
+      check = SiteInspector::Endpoint.checks.find { |c| c.name == method_sym }
+      if check
         @checks[method_sym] ||= check.new(self)
       else
         super
@@ -209,11 +211,8 @@ class SiteInspector
     # Try to return the existing endpoint, rather than create a new one
     def find_or_create_by_uri(uri)
       uri = Addressable::URI.parse(uri.downcase)
-      if domain && cached_endpoint = domain.endpoints.find { |e| e.uri.to_s == uri.to_s }
-        cached_endpoint
-      else
-        Endpoint.new(uri.to_s)
-      end
+      cached_endpoint = domain.endpoints.find { |e| e.uri.to_s == uri.to_s } if domain
+      cached_endpoint || Endpoint.new(uri.to_s)
     end
   end
 end

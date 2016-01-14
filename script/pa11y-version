@@ -5,5 +5,5 @@ require './lib/site-inspector'
 if SiteInspector::Endpoint::Accessibility.pa11y?
   puts "Pa11y version: #{SiteInspector::Endpoint::Accessibility.pa11y_version}"
 else
-  puts "**RUNNING TESTS WITHOUT PA11Y**"
+  puts '**RUNNING TESTS WITHOUT PA11Y**'
 end

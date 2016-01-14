@@ -9,7 +9,7 @@ class SiteInspector
       # The default Check#response method is from a HEAD request
       # The content check has a special response which includes the body from a GET request
       def response
-        @response ||= endpoint.request(:method => :get)
+        @response ||= endpoint.request(method: :get)
       end
 
       def document
@@ -19,19 +19,19 @@ class SiteInspector
       alias_method :doc, :document
 
       def body
-        @body ||= document.to_s.force_encoding("UTF-8").encode("UTF-8", :invalid => :replace, :replace => "")
+        @body ||= document.to_s.force_encoding('UTF-8').encode('UTF-8', invalid: :replace, replace: '')
       end
 
       def robots_txt?
-        @bodts_txt ||= path_exists?("robots.txt") if proper_404s?
+        @bodts_txt ||= path_exists?('robots.txt') if proper_404s?
       end
 
       def sitemap_xml?
-        @sitemap_xml ||= path_exists?("sitemap.xml") if proper_404s?
+        @sitemap_xml ||= path_exists?('sitemap.xml') if proper_404s?
       end
 
       def humans_txt?
-        @humans_txt ||= path_exists?("humans.txt") if proper_404s?
+        @humans_txt ||= path_exists?('humans.txt') if proper_404s?
       end
 
       def doctype
@@ -41,7 +41,7 @@ class SiteInspector
       def prefetch
         return unless endpoint.up?
         options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
-        ["robots.txt", "sitemap.xml", "humans.txt", random_path].each do |path|
+        ['robots.txt', 'sitemap.xml', 'humans.txt', random_path].each do |path|
           request = Typhoeus::Request.new(URI.join(endpoint.uri, path), options)
           SiteInspector.hydra.queue(request)
         end

@@ -1,0 +1,34 @@
+Metrics/LineLength:
+  Enabled: false
+
+Style/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Lint/EndAlignment:
+  AlignWith: variable
+  AutoCorrect: true
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FileName:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+  
+Style/ClassVars:
+  Enabled: false

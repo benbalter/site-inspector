@@ -25,7 +25,6 @@ require_relative 'cliver/dependency_ext'
 
 class SiteInspector
   class << self
-
     attr_writer :timeout, :cache, :typhoeus_options
 
     def cache
@@ -48,17 +47,15 @@ class SiteInspector
 
     def typhoeus_defaults
       defaults = {
-        :followlocation => false,
-        :timeout => SiteInspector.timeout,
-        :accept_encoding => "gzip",
-        :method => :head,
-        :headers => {
-          "User-Agent" => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
+        followlocation:  false,
+        timeout:         SiteInspector.timeout,
+        accept_encoding: 'gzip',
+        method:          :head,
+        headers:         {
+          'User-Agent' => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }
       }
-      if @typhoeus_options
-        defaults.merge! @typhoeus_options
-      end
+      defaults.merge! @typhoeus_options if @typhoeus_options
       defaults
     end
 
@@ -69,8 +66,8 @@ class SiteInspector
   end
 end
 
-if ENV["DEBUG"]
-  Ethon.logger = Logger.new(STDOUT);
+if ENV['DEBUG']
+  Ethon.logger = Logger.new(STDOUT)
   Ethon.logger.level = Logger::DEBUG
   Typhoeus::Config.verbose = true
 end
