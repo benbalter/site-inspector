@@ -52,7 +52,7 @@ class SiteInspector
 
       def google_apps?
         @google ||= records.any? do |record|
-          record.type == "MX" && record.exchange.to_s =~ /google(mail)?\.com\.?$/
+          record.type == "MX" && record.exchange.to_s =~ /google(mail)?\.com\.?\z/i
         end
       end
 
