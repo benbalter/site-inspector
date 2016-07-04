@@ -2,6 +2,7 @@
 /*.gem
 vendor
 Gemfile.lock
+.ruby-version
 
 /.env
 /env
