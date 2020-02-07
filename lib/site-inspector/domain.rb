@@ -267,5 +267,21 @@ class SiteInspector
     def to_json(*_args)
       to_h.to_json
     end
+
+    def ip
+      @ip ||= Resolv.getaddress host
+    end
+
+    def domain_whois
+      whois.lookup host
+    end
+
+    def ip_whois
+      whois.lookup ip
+    end
+
+    def whois
+      @whois ||= Whois::Client.new
+    end
   end
 end

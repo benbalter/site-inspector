@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency('public_suffix', '~> 3.0')
   s.add_dependency('sniffles', '~> 0.0')
   s.add_dependency('typhoeus', '~> 1.0')
+  s.add_dependency('whois', '~> 4.0')
 
   s.add_development_dependency('pry', '~> 0.0')
   s.add_development_dependency('rake', '~> 13.0')

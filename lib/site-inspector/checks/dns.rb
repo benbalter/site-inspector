@@ -64,7 +64,6 @@ class SiteInspector
       end
 
       def ip
-        require 'resolv'
         @ip ||= Resolv.getaddress host
       rescue Resolv::ResolvError
         nil
