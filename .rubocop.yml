@@ -1,14 +1,6 @@
 Metrics/LineLength:
   Enabled: false
 
-Style/AlignHash:
-  EnforcedHashRocketStyle: table
-  EnforcedColonStyle: table
-
-Lint/EndAlignment:
-  AlignWith: variable
-  AutoCorrect: true
-
 Metrics/MethodLength:
   Enabled: false
 
@@ -29,6 +21,9 @@ Style/DoubleNegation:
 
 Metrics/ClassLength:
   Enabled: false
-  
+
 Style/ClassVars:
+  Enabled: false
+
+Metrics/BlockLength:
   Enabled: false

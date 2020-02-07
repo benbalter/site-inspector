@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Check
@@ -40,11 +42,11 @@ class SiteInspector
         end
 
         def enabled?
-          !!(@@enabled)
+          !!@@enabled
         end
 
         def enabled=(value)
-          @@enabled = !!(value)
+          @@enabled = !!value
         end
       end
     end

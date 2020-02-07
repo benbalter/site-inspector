@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Sniffer < Check
@@ -13,7 +15,7 @@ class SiteInspector
         :php,
         :expression_engine,
         :cowboy
-      ]
+      ].freeze
 
       def framework
         cms = sniff :cms
@@ -22,6 +24,7 @@ class SiteInspector
         return :php if endpoint.cookies['PHPSESSID']
         return :coldfusion if endpoint.cookies['CFID'] && endpoint.cookies['CFTOKEN']
         return :cowboy if endpoint.headers.server.to_s.downcase == 'cowboy'
+
         nil
       end
 
@@ -43,9 +46,9 @@ class SiteInspector
 
       def to_h
         {
-          framework:   framework,
-          analytics:   analytics,
-          javascript:  javascript,
+          framework: framework,
+          analytics: analytics,
+          javascript: javascript,
           advertising: advertising
         }
       end
@@ -55,8 +58,8 @@ class SiteInspector
       def sniff(type)
         require 'sniffles'
         results = Sniffles.sniff(endpoint.content.body, type).select { |_name, meta| meta[:found] }
-        results.keys.first if results
-      rescue
+        results&.keys&.first
+      rescue StandardError
         nil
       end
     end

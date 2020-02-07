@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   # Every domain has four possible "endpoints" to evaluate
   #
@@ -67,7 +69,7 @@ class SiteInspector
     end
 
     def timed_out?
-      response && response.timed_out?
+      response&.timed_out?
     end
 
     # Does the endpoint return a 2xx or 3xx response code?
@@ -119,15 +121,11 @@ class SiteInspector
         response = request(followlocation: true)
 
         # Workaround for Webmock not playing nicely with Typhoeus redirects
-        if response.mock?
-          if response.headers['Location']
-            url = response.headers['Location']
-          else
-            url = response.request.url
-          end
-        else
-          url = response.effective_url
-        end
+        url = if response.mock?
+                response.headers['Location'] || response.request.url
+              else
+                response.effective_url
+              end
 
         find_or_create_by_uri(url)
       end
@@ -156,15 +154,15 @@ class SiteInspector
     # Returns the hash representing the endpoint and its checks
     def to_h(options = {})
       hash = {
-        uri:               uri.to_s,
-        host:              host,
-        www:               www?,
-        https:             https?,
-        scheme:            scheme,
-        up:                up?,
-        responds:          responds?,
-        timed_out:         timed_out?,
-        redirect:          redirect?,
+        uri: uri.to_s,
+        host: host,
+        www: www?,
+        https: https?,
+        scheme: scheme,
+        up: up?,
+        responds: responds?,
+        timed_out: timed_out?,
+        redirect: redirect?,
         external_redirect: external_redirect?
       }
 
@@ -181,6 +179,7 @@ class SiteInspector
 
     def self.checks
       return @checks if defined? @checks
+
       @checks = ObjectSpace.each_object(Class).select { |klass| klass < Check }.select(&:enabled?)
     end
 

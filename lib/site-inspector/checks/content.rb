@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Content < Check
@@ -16,7 +18,7 @@ class SiteInspector
         require 'nokogiri'
         @doc ||= Nokogiri::HTML response.body if response
       end
-      alias_method :doc, :document
+      alias doc document
 
       def body
         @body ||= document.to_s.force_encoding('UTF-8').encode('UTF-8', invalid: :replace, replace: '')
@@ -40,6 +42,7 @@ class SiteInspector
 
       def prefetch
         return unless endpoint.up?
+
         options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
         ['robots.txt', 'sitemap.xml', 'humans.txt', random_path].each do |path|
           request = Typhoeus::Request.new(URI.join(endpoint.uri, path), options)
@@ -55,10 +58,10 @@ class SiteInspector
       def to_h
         prefetch
         {
-          doctype:     doctype,
+          doctype: doctype,
           sitemap_xml: sitemap_xml?,
-          robots_txt:  robots_txt?,
-          humans_txt:  humans_txt?,
+          robots_txt: robots_txt?,
+          humans_txt: humans_txt?,
           proper_404s: proper_404s?
         }
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     # Utility parser for HSTS headers.
@@ -5,6 +7,7 @@ class SiteInspector
     class Hsts < Check
       def valid?
         return false unless header
+
         pairs.none? { |key, value| "#{key}#{value}" =~ /[\s\'\"]/ }
       end
 
@@ -22,6 +25,7 @@ class SiteInspector
 
       def enabled?
         return false unless max_age
+
         max_age > 0
       end
 
@@ -32,12 +36,12 @@ class SiteInspector
 
       def to_h
         {
-          valid:              valid?,
-          max_age:            max_age,
+          valid: valid?,
+          max_age: max_age,
           include_subdomains: include_subdomains?,
-          preload:            preload?,
-          enabled:            enabled?,
-          preload_ready:      preload_ready?
+          preload: preload?,
+          enabled: enabled?,
+          preload_ready: preload_ready?
         }
       end
 

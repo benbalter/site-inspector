@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Https < Check
@@ -23,7 +25,7 @@ class SiteInspector
 
       def to_h
         {
-          valid:       valid?,
+          valid: valid?,
           return_code: response.return_code
         }
       end

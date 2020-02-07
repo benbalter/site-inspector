@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'open3'
 
@@ -8,10 +10,10 @@ class SiteInspector
 
       STANDARDS = {
         section508: 'Section508', # Default standard
-        wcag2a:     'WCAG2A',
-        wcag2aa:    'WCAG2AA',
-        wcag2aaa:   'WCAG2AAA'
-      }
+        wcag2a: 'WCAG2A',
+        wcag2aa: 'WCAG2AA',
+        wcag2aaa: 'WCAG2AAA'
+      }.freeze
 
       DEFAULT_LEVEL = :error
 
@@ -24,7 +26,8 @@ class SiteInspector
 
         def pa11y?
           return @pa11y_detected if defined? @pa11y_detected
-          @pa11y_detected = !!(pa11y.detect)
+
+          @pa11y_detected = !!pa11y.detect
         end
 
         def enabled?
@@ -45,7 +48,8 @@ class SiteInspector
       end
 
       def level=(level)
-        fail ArgumentError, "Invalid level '#{level}'" unless [:error, :warning, :notice].include?(level)
+        raise ArgumentError, "Invalid level '#{level}'" unless %i[error warning notice].include?(level)
+
         @level = level
       end
 
@@ -58,7 +62,8 @@ class SiteInspector
       end
 
       def standard=(standard)
-        fail ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
+        raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
+
         @standard = standard
       end
 
@@ -75,7 +80,7 @@ class SiteInspector
       rescue Pa11yError
         nil
       end
-      alias_method :to_h, :check
+      alias to_h check
 
       def method_missing(method_sym, *arguments, &block)
         if standard?(method_sym)
@@ -97,7 +102,7 @@ class SiteInspector
 
       def run_pa11y(standard)
         self.class.pa11y.detect! unless ENV['SKIP_PA11Y_CHECK']
-        fail ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
+        raise ArgumentError, "Unknown standard '#{standard}'" unless standard?(standard)
 
         args = [
           '--standard', STANDARDS[standard],
@@ -109,10 +114,10 @@ class SiteInspector
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
-        fail Pa11yError if status == 1
+        raise Pa11yError if status == 1
 
         {
-          valid:   status == 0,
+          valid: status == 0,
           results: JSON.parse(output)
         }
       rescue Pa11yError, JSON::ParserError

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Dns < Check
@@ -25,7 +27,7 @@ class SiteInspector
       def record?(type)
         records.any? { |record| record.type == type } || query(type).count != 0
       end
-      alias_method :has_record?, :record?
+      alias has_record? record?
 
       def dnssec?
         @dnssec ||= has_record? 'DNSKEY'
@@ -87,14 +89,15 @@ class SiteInspector
 
       def to_h
         return { error: LocalhostError } if localhost?
+
         {
-          dnssec:         dnssec?,
-          ipv6:           ipv6?,
-          cdn:            cdn,
+          dnssec: dnssec?,
+          ipv6: ipv6?,
+          cdn: cdn,
           cloud_provider: cloud_provider,
-          google_apps:    google_apps?,
-          hostname:       hostname,
-          ip:             ip
+          google_apps: google_apps?,
+          hostname: hostname,
+          ip: ip
         }
       end
 

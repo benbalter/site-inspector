@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class RailsCache
     def get(request)

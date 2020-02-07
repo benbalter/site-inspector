@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 require 'addressable/uri'
 require 'public_suffix'
@@ -29,11 +31,11 @@ class SiteInspector
 
     def cache
       @cache ||= if ENV['CACHE']
-        SiteInspector::DiskCache.new
-      elsif Object.const_defined?('Rails')
-        SiteInspector::RailsCache.new
-      else
-        SiteInspector::Cache.new
+                   SiteInspector::DiskCache.new
+                 elsif Object.const_defined?('Rails')
+                   SiteInspector::RailsCache.new
+                 else
+                   SiteInspector::Cache.new
       end
     end
 
@@ -47,11 +49,11 @@ class SiteInspector
 
     def typhoeus_defaults
       defaults = {
-        followlocation:  false,
-        timeout:         SiteInspector.timeout,
+        followlocation: false,
+        timeout: SiteInspector.timeout,
         accept_encoding: 'gzip',
-        method:          :head,
-        headers:         {
+        method: :head,
+        headers: {
           'User-Agent' => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
         }
       }

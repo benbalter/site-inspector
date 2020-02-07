@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe SiteInspector::Endpoint::Sniffer do
@@ -8,16 +10,16 @@ describe SiteInspector::Endpoint::Sniffer do
   def set_cookie(key, value)
     cookies = [
       CGI::Cookie.new(
-        'name'   => 'foo',
-        'value'  => 'bar',
+        'name' => 'foo',
+        'value' => 'bar',
         'domain' => 'example.com',
-        'path'   => '/'
+        'path' => '/'
       ),
       CGI::Cookie.new(
-        'name'   => key,
-        'value'  => value,
+        'name' => key,
+        'value' => value,
         'domain' => 'example.com',
-        'path'   => '/'
+        'path' => '/'
       )
     ].map(&:to_s)
 
@@ -122,16 +124,16 @@ describe SiteInspector::Endpoint::Sniffer do
     it 'detects ColdFusion' do
       cookies = [
         CGI::Cookie.new(
-          'name'   => 'CFID',
-          'value'  => '1234',
+          'name' => 'CFID',
+          'value' => '1234',
           'domain' => 'example.com',
-          'path'   => '/'
+          'path' => '/'
         ),
         CGI::Cookie.new(
-          'name'   => 'CFTOKEN',
-          'value'  => '5678',
+          'name' => 'CFTOKEN',
+          'value' => '5678',
           'domain' => 'example.com',
-          'path'   => '/'
+          'path' => '/'
         )
       ].map(&:to_s)
 

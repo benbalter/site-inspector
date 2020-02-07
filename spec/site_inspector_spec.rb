@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe SiteInspector do
@@ -34,10 +36,10 @@ describe SiteInspector do
   it 'returns the typhoeus defaults' do
     expected = {
       accept_encoding: 'gzip',
-      followlocation:  false,
-      method:          :head,
-      timeout:         10,
-      headers:         {
+      followlocation: false,
+      method: :head,
+      timeout: 10,
+      headers: {
         'User-Agent' => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
       }
     }

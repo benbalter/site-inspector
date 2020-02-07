@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Domain
     attr_reader :host
@@ -82,7 +84,8 @@ class SiteInspector
     # TODO: don't need to require that the HTTPS cert is valid for this purpose.
     def enforces_https?
       return false unless https?
-      endpoints.select(&:http?).all? { |e| !e.up? || (e.redirect && e.redirect.https?) }
+
+      endpoints.select(&:http?).all? { |e| !e.up? || e.redirect&.https? }
     end
 
     # we can say that a canonical HTTPS site "defaults" to HTTPS,
@@ -91,7 +94,7 @@ class SiteInspector
     #
     # TODO: not implemented.
     def defaults_https?
-      fail 'Not implemented. Halp?'
+      raise 'Not implemented. Halp?'
     end
 
     # HTTPS is "downgraded" if both:
@@ -102,6 +105,7 @@ class SiteInspector
     # TODO: the redirect must be internal.
     def downgrades_https?
       return false unless https?
+
       canonical_endpoint.redirect? && canonical_endpoint.redirect.http?
     end
 
@@ -129,7 +133,7 @@ class SiteInspector
       return true if endpoints.select(&:root?).all? { |e| !e.up? }
 
       # Does either root endpoint redirect to a www endpoint?
-      endpoints.select(&:root?).any? { |e| e.redirect && e.redirect.www? }
+      endpoints.select(&:root?).any? { |e| e.redirect&.www? }
     end
 
     # A domain is "canonically" at https if:
@@ -160,7 +164,7 @@ class SiteInspector
       return true if endpoints.select(&:http?).all? { |e| !e.up? }
 
       # at least one http endpoint redirects immediately to https
-      endpoints.select(&:http?).any? { |e| e.redirect && e.redirect.https? }
+      endpoints.select(&:http?).any? { |e| e.redirect&.https? }
     end
 
     # A domain redirects if
@@ -168,6 +172,7 @@ class SiteInspector
     # 2. All endpoints are either down or an external redirect
     def redirect?
       return false unless redirect
+
       endpoints.all? { |e| !e.up? || e.external_redirect? }
     end
 
@@ -178,7 +183,7 @@ class SiteInspector
 
     # HSTS on the canonical domain?
     def hsts?
-      canonical_endpoint.hsts && canonical_endpoint.hsts.enabled?
+      canonical_endpoint.hsts&.enabled?
     end
 
     def hsts_subdomains?
@@ -187,6 +192,7 @@ class SiteInspector
 
     def hsts_preload_ready?
       return false unless hsts_subdomains?
+
       endpoints.find { |e| e.root? && e.https? }.hsts.preload_ready?
     end
 
@@ -225,19 +231,19 @@ class SiteInspector
       prefetch
 
       hash = {
-        host:               host,
-        up:                 up?,
-        responds:           responds?,
-        www:                www?,
-        root:               root?,
-        https:              https?,
-        enforces_https:     enforces_https?,
-        downgrades_https:   downgrades_https?,
-        canonically_www:    canonically_www?,
-        canonically_https:  canonically_https?,
-        redirect:           redirect?,
-        hsts:               hsts?,
-        hsts_subdomains:    hsts_subdomains?,
+        host: host,
+        up: up?,
+        responds: responds?,
+        www: www?,
+        root: root?,
+        https: https?,
+        enforces_https: enforces_https?,
+        downgrades_https: downgrades_https?,
+        canonically_www: canonically_www?,
+        canonically_https: canonically_https?,
+        redirect: redirect?,
+        hsts: hsts?,
+        hsts_subdomains: hsts_subdomains?,
         hsts_preload_ready: hsts_preload_ready?,
         canonical_endpoint: canonical_endpoint.to_h(options)
       }
@@ -246,11 +252,11 @@ class SiteInspector
         hash.merge!(endpoints: {
                       https: {
                         root: endpoints[0].to_h(options),
-                        www:  endpoints[1].to_h(options)
+                        www: endpoints[1].to_h(options)
                       },
-                      http:  {
+                      http: {
                         root: endpoints[2].to_h(options),
-                        www:  endpoints[3].to_h(options)
+                        www: endpoints[3].to_h(options)
                       }
                     })
       end
@@ -258,7 +264,7 @@ class SiteInspector
       hash
     end
 
-    def to_json
+    def to_json(*_args)
       to_h.to_json
     end
   end

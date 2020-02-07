@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path './lib/site-inspector/version', File.dirname(__FILE__)
 
 Gem::Specification.new do |s|
@@ -15,21 +17,21 @@ Gem::Specification.new do |s|
   s.test_files            = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths         = ['lib']
 
-  s.add_dependency('nokogiri', '~> 1.6')
-  s.add_dependency('public_suffix', '~> 1.4')
-  s.add_dependency('gman', '~> 4.1')
-  s.add_dependency('dnsruby', '~> 1.56')
-  s.add_dependency('sniffles', '~> 0.2')
-  s.add_dependency('typhoeus', '~> 0.7')
-  s.add_dependency('oj', '~> 2.11')
-  s.add_dependency('mercenary', '~> 0.3')
-  s.add_dependency('colorator', '~> 0.1')
-  s.add_dependency('cliver', '~> 0.3')
-  s.add_dependency('parallel', '~> 1.6')
-  s.add_development_dependency('pry', '~> 0.10')
-  s.add_development_dependency('rake', '~> 10.4')
-  s.add_development_dependency('rspec', '~> 3.2')
-  s.add_development_dependency('bundler', '~> 1.6')
-  s.add_development_dependency('webmock', '~> 1.2')
-  s.add_development_dependency('rubocop', '~> 0.35')
+  s.add_dependency('cliver', '~> 0.0')
+  s.add_dependency('colorator', '~> 1.1')
+  s.add_dependency('dnsruby', '~> 1.0')
+  s.add_dependency('gman', '~> 7.0', '>= 7.0.3')
+  s.add_dependency('mercenary', '~> 0.0')
+  s.add_dependency('nokogiri', '~> 1.0')
+  s.add_dependency('oj', '~> 3.0')
+  s.add_dependency('parallel', '~> 1.0')
+  s.add_dependency('public_suffix', '~> 3.0')
+  s.add_dependency('sniffles', '~> 0.0')
+  s.add_dependency('typhoeus', '~> 1.0')
+
+  s.add_development_dependency('pry', '~> 0.0')
+  s.add_development_dependency('rake', '~> 13.0')
+  s.add_development_dependency('rspec', '~> 3.0')
+  s.add_development_dependency('rubocop', '~> 0.0')
+  s.add_development_dependency('webmock', '~> 3.0')
 end

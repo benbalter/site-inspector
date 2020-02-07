@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe SiteInspector::Endpoint do
-  
   subject { SiteInspector::Endpoint.new('http://example.com') }
 
   it 'downcases the host' do

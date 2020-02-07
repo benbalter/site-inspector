@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Cookies < Check
@@ -10,7 +12,7 @@ class SiteInspector
           true
         end
       end
-      alias_method :cookies?, :any?
+      alias cookies? any?
 
       def all
         @cookies ||= cookie_header.map { |c| CGI::Cookie.parse(c) } if cookies?

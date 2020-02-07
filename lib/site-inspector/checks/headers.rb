@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class Endpoint
     class Headers < Check
@@ -44,9 +46,9 @@ class SiteInspector
 
       # Returns an array of hashes of downcased key/value header pairs (or an empty hash)
       def all
-        @all ||= (response && response.headers) ? Hash[response.headers.map { |k, v| [k.downcase, v] }] : {}
+        @all ||= response&.headers ? Hash[response.headers.map { |k, v| [k.downcase, v] }] : {}
       end
-      alias_method :headers, :all
+      alias headers all
 
       def [](header)
         headers[header]
@@ -55,10 +57,10 @@ class SiteInspector
       def to_h
         {
           strict_transport_security: strict_transport_security || false,
-          content_security_policy:   content_security_policy || false,
-          click_jacking_protection:  click_jacking_protection || false,
-          server:                    server,
-          xss_protection:            xss_protection || false
+          content_security_policy: content_security_policy || false,
+          click_jacking_protection: click_jacking_protection || false,
+          server: server,
+          xss_protection: xss_protection || false
         }
       end
     end

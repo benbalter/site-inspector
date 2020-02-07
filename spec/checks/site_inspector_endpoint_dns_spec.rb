@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'dnsruby'
 
@@ -20,7 +22,7 @@ describe SiteInspector::Endpoint::Dns do
 
     context 'resolv' do
       it 'returns the IP' do
-        expect(subject.ip).to include('192.30.252.')
+        expect(subject.ip).to include('192.30.253.')
       end
 
       it 'returns the hostname' do
@@ -68,8 +70,8 @@ describe SiteInspector::Endpoint::Dns do
       expect(subject.ipv6?).to eql(false)
 
       input = {
-        type:    'AAAA',
-        name:    'test',
+        type: 'AAAA',
+        name: 'test',
         address: '102:304:506:708:90a:b0c:d0e:ff10'
       }
       record = Dnsruby::RR.create input
@@ -87,15 +89,15 @@ describe SiteInspector::Endpoint::Dns do
         records = []
 
         records.push Dnsruby::RR.create(
-          type:       'CNAME',
+          type: 'CNAME',
           domainname: 'example.com',
-          name:       'example'
+          name: 'example'
         )
 
         records.push Dnsruby::RR.create(
-          type:       'CNAME',
+          type: 'CNAME',
           domainname: 'github.com',
-          name:       'github'
+          name: 'github'
         )
 
         allow(subject).to receive(:records) { records }
@@ -110,9 +112,9 @@ describe SiteInspector::Endpoint::Dns do
 
       it 'detects CDNs' do
         records = [Dnsruby::RR.create(
-          type:       'CNAME',
+          type: 'CNAME',
           domainname: 'foo.cloudfront.net',
-          name:       'example'
+          name: 'example'
         )]
         allow(subject).to receive(:records) { records }
 
@@ -138,9 +140,9 @@ describe SiteInspector::Endpoint::Dns do
 
       it 'detects cloud providers' do
         records = [Dnsruby::RR.create(
-          type:       'CNAME',
+          type: 'CNAME',
           domainname: 'foo.herokuapp.com',
-          name:       'example'
+          name: 'example'
         )]
         allow(subject).to receive(:records) { records }
 
@@ -155,9 +157,9 @@ describe SiteInspector::Endpoint::Dns do
 
       it 'knows when a domain is using google apps' do
         records = [Dnsruby::RR.create(
-          type:       'MX',
-          exchange:   'mx1.google.com',
-          name:       'example',
+          type: 'MX',
+          exchange: 'mx1.google.com',
+          name: 'example',
           preference: 10
         )]
         allow(subject).to receive(:records) { records }

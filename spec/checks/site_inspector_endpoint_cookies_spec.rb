@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe SiteInspector::Endpoint::Cookies do
@@ -19,16 +21,16 @@ describe SiteInspector::Endpoint::Cookies do
     subject do
       cookies = [
         CGI::Cookie.new(
-          'name'   => 'foo',
-          'value'  => 'bar',
+          'name' => 'foo',
+          'value' => 'bar',
           'domain' => 'example.com',
-          'path'   => '/'
+          'path' => '/'
         ),
         CGI::Cookie.new(
-          'name'   => 'foo2',
-          'value'  => 'bar2',
+          'name' => 'foo2',
+          'value' => 'bar2',
           'domain' => 'example.com',
-          'path'   => '/'
+          'path' => '/'
         )
       ].map(&:to_s)
 

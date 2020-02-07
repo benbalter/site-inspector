@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteInspector
   class DiskCache
     def initialize(dir = nil, replace = nil)

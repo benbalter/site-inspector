@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe SiteInspector::Domain do
@@ -69,9 +71,7 @@ describe SiteInspector::Domain do
   context 'up' do
     it 'considers a domain up if at least one endpoint is up' do
       subject.endpoints.each do |endpoint|
-        unless endpoint.uri.to_s.start_with?('http://www')
-          allow(endpoint).to receive(:response) { Typhoeus::Response.new(code: 0) }
-        end
+        allow(endpoint).to receive(:response) { Typhoeus::Response.new(code: 0) } unless endpoint.uri.to_s.start_with?('http://www')
       end
 
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
