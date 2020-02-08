@@ -21,7 +21,7 @@ class SiteInspector
       private
 
       def record_to_h(record)
-        record.content.scan(/^\s*([A-Z].*?): \s*(.*?)\r?\n/).to_h
+        record.content.scan(/^\s*(.*?): \s*(.*?)\r?\n/).to_h
       end
 
       def ip_address
