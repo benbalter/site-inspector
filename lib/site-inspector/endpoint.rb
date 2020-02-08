@@ -180,7 +180,7 @@ class SiteInspector
     def self.checks
       return @checks if defined? @checks
 
-      @checks = ObjectSpace.each_object(Class).select { |klass| klass < Check }.select(&:enabled?)
+      @checks = ObjectSpace.each_object(Class).select { |klass| klass < Check }.select(&:enabled?).sort_by(&:name)
     end
 
     def method_missing(method_sym, *arguments, &block)
