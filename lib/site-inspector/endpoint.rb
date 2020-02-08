@@ -192,7 +192,7 @@ class SiteInspector
       end
     end
 
-    def respond_to?(method_sym, include_private = false)
+    def respond_to_missing?(method_sym, include_private = false)
       if checks.keys.include?(method_sym)
         true
       else

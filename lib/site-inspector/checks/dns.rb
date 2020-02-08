@@ -54,7 +54,7 @@ class SiteInspector
       end
 
       def google_apps?
-        @google ||= records.any? do |record|
+        @google_apps ||= records.any? do |record|
           record.type == 'MX' && record.exchange.to_s =~ /google(mail)?\.com\.?\z/i
         end
       end
@@ -120,7 +120,7 @@ class SiteInspector
         haystack = load_data(type)
         needle = haystack.find do |_name, domain|
           cnames.any? do |cname|
-            domain == cname.tld || domain == "#{cname.sld}.#{cname.tld}"
+            [cname.tld, "#{cname.sld}.#{cname.tld}"].include? domain
           end
         end
 
@@ -128,7 +128,7 @@ class SiteInspector
         return nil unless hostname
 
         needle = haystack.find do |_name, domain|
-          domain == hostname.tld || domain == "#{hostname.sld}.#{hostname.tld}"
+          [hostname.tld, "#{hostname.sld}.#{hostname.tld}"].include? domain
         end
 
         needle ? needle[0].to_sym : nil

@@ -90,7 +90,7 @@ class SiteInspector
         end
       end
 
-      def respond_to?(method_sym, include_private = false)
+      def respond_to_missing?(method_sym, include_private = false)
         if standard?(method_sym)
           true
         else
@@ -117,7 +117,7 @@ class SiteInspector
         raise Pa11yError if status == 1
 
         {
-          valid: status == 0,
+          valid: status.zero?,
           results: JSON.parse(output)
         }
       rescue Pa11yError, JSON::ParserError

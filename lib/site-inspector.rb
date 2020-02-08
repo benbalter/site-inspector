@@ -38,7 +38,7 @@ class SiteInspector
                    SiteInspector::RailsCache.new
                  else
                    SiteInspector::Cache.new
-      end
+                 end
     end
 
     def timeout

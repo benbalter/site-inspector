@@ -26,7 +26,7 @@ class SiteInspector
       def enabled?
         return false unless max_age
 
-        max_age > 0
+        max_age.positive?
       end
 
       # Google's minimum max-age for automatic preloading

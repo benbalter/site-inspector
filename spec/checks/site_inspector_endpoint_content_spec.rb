@@ -4,14 +4,14 @@ require 'spec_helper'
 
 describe SiteInspector::Endpoint::Content do
   subject do
-    body = <<-eos
+    body = <<-BODY
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html>
         <body>
           <h1>Some page</h1>
         </body>
       </html>
-    eos
+    BODY
 
     stub_request(:get, 'http://example.com/')
       .to_return(status: 200, body: body)

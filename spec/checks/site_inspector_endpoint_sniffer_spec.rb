@@ -32,7 +32,7 @@ describe SiteInspector::Endpoint::Sniffer do
 
   context 'stubbed body' do
     subject do
-      body = <<-eos
+      body = <<-BODY
         <html>
           <head>
             <link rel='stylesheet' href='/wp-content/themes/foo/style.css type='text/css' media='all' />
@@ -50,7 +50,7 @@ describe SiteInspector::Endpoint::Sniffer do
             </script>
           </body>
         </html>
-      eos
+      BODY
 
       stub_request(:get, 'http://example.com/')
         .to_return(status: 200, body: body)

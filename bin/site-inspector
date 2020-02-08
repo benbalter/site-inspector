@@ -7,11 +7,11 @@ require 'yaml'
 require 'colorator'
 require_relative '../lib/site-inspector'
 
-def stringify_keys_deep!(h)
-  h.keys.each do |k|
+def stringify_keys_deep!(hash)
+  hash.keys.each do |k|
     ks = k.respond_to?(:to_s) ? k.to_s : k
-    h[ks] = h.delete k # Preserve order even when k == ks
-    stringify_keys_deep! h[ks] if h[ks].is_a? Hash
+    hash[ks] = hash.delete k # Preserve order even when k == ks
+    stringify_keys_deep! h[ks] if hash[ks].is_a? Hash
   end
 end
 
