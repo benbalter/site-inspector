@@ -7,6 +7,9 @@ describe SiteInspector::Endpoint::Content do
     body = <<-BODY
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html>
+        <head>
+          <meta name="generator" content="Jekyll v3.8.5" />
+        </head>
         <body>
           <h1>Some page</h1>
         </body>
@@ -80,6 +83,10 @@ describe SiteInspector::Endpoint::Content do
     stub_request(:head, 'http://example.com/humans.txt')
       .to_return(status: 200)
     expect(subject.humans_txt?).to be(true)
+  end
+
+  it 'returns the generator' do
+    expect(subject.generator).to eql('Jekyll v3.8.5')
   end
 
   context '404s' do

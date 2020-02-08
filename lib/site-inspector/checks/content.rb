@@ -40,6 +40,10 @@ class SiteInspector
         document.internal_subset.external_id
       end
 
+      def generator
+        @generator ||= document.at('meta[name="generator"]')['content']
+      end
+
       def prefetch
         return unless endpoint.up?
 
@@ -59,6 +63,7 @@ class SiteInspector
         prefetch
         {
           doctype: doctype,
+          generator: generator,
           sitemap_xml: sitemap_xml?,
           robots_txt: robots_txt?,
           humans_txt: humans_txt?,
