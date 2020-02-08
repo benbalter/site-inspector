@@ -13,12 +13,16 @@ class SiteInspector
 
       def to_h
         {
-          domain: domain,
-          ip: ip
+          domain: record_to_h(domain),
+          ip: record_to_h(ip)
         }
       end
 
       private
+
+      def record_to_h(record)
+        record.content.scan(/^\s*([A-Z].*?): \s*(.*?)\r?\n/).to_h
+      end
 
       def ip_address
         @ip_address ||= Resolv.getaddress host
