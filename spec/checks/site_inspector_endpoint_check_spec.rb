@@ -6,7 +6,7 @@ describe SiteInspector::Endpoint::Check do
   subject do
     stub_request(:head, 'http://example.com/').to_return(status: 200)
     endpoint = SiteInspector::Endpoint.new('http://example.com')
-    SiteInspector::Endpoint::Check.new(endpoint)
+    described_class.new(endpoint)
   end
 
   it 'returns the endpoint' do
@@ -26,17 +26,17 @@ describe SiteInspector::Endpoint::Check do
   end
 
   it 'returns its name' do
-    expect(subject.name).to eql(:check)
+    expect(subject.name).to be(:check)
   end
 
   it 'returns the instance name' do
-    expect(SiteInspector::Endpoint::Check.name).to eql(:check)
+    expect(described_class.name).to be(:check)
   end
 
   it 'enables and disables the check' do
-    expect(SiteInspector::Endpoint::Check.enabled?).to eql(true)
-    SiteInspector::Endpoint::Check.enabled = false
-    expect(SiteInspector::Endpoint::Check.enabled?).to eql(false)
-    SiteInspector::Endpoint::Check.enabled = true
+    expect(described_class.enabled?).to be(true)
+    described_class.enabled = false
+    expect(described_class.enabled?).to be(false)
+    described_class.enabled = true
   end
 end

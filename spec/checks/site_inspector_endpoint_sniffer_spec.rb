@@ -58,56 +58,56 @@ describe SiteInspector::Endpoint::Sniffer do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200)
       endpoint = SiteInspector::Endpoint.new('http://example.com')
-      SiteInspector::Endpoint::Sniffer.new(endpoint)
+      described_class.new(endpoint)
     end
 
     it 'sniffs' do
       sniff = subject.send(:sniff, :cms)
-      expect(sniff).to eql(:wordpress)
+      expect(sniff).to be(:wordpress)
     end
 
     it 'detects the CMS' do
-      expect(subject.framework).to eql(:wordpress)
+      expect(subject.framework).to be(:wordpress)
     end
 
     it 'detects the analytics' do
-      expect(subject.analytics).to eql(:google_analytics)
+      expect(subject.analytics).to be(:google_analytics)
     end
 
     it 'detects javascript' do
-      expect(subject.javascript).to eql(:jquery)
+      expect(subject.javascript).to be(:jquery)
     end
 
     it 'detects advertising' do
-      expect(subject.advertising).to eql(:adsense)
+      expect(subject.advertising).to be(:adsense)
     end
 
     it 'knows wordpress is open source' do
-      expect(subject.open_source?).to eql(true)
+      expect(subject.open_source?).to be(true)
     end
   end
 
   context 'no body' do
     subject do
       endpoint = SiteInspector::Endpoint.new('http://example.com')
-      SiteInspector::Endpoint::Sniffer.new(endpoint)
+      described_class.new(endpoint)
     end
 
     it "knows when something isn't open source" do
       set_cookie('foo', 'bar')
-      expect(subject.open_source?).to eql(false)
+      expect(subject.open_source?).to be(false)
     end
 
     it 'detects PHP' do
       set_cookie('PHPSESSID', '1234')
-      expect(subject.framework).to eql(:php)
-      expect(subject.open_source?).to eql(true)
+      expect(subject.framework).to be(:php)
+      expect(subject.open_source?).to be(true)
     end
 
     it 'detects Expression Engine' do
       set_cookie('exp_csrf_token', '1234')
-      expect(subject.framework).to eql(:expression_engine)
-      expect(subject.open_source?).to eql(true)
+      expect(subject.framework).to be(:expression_engine)
+      expect(subject.open_source?).to be(true)
     end
 
     it 'detects cowboy' do
@@ -117,8 +117,8 @@ describe SiteInspector::Endpoint::Sniffer do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, headers: { 'server' => 'Cowboy' })
 
-      expect(subject.framework).to eql(:cowboy)
-      expect(subject.open_source?).to eql(true)
+      expect(subject.framework).to be(:cowboy)
+      expect(subject.open_source?).to be(true)
     end
 
     it 'detects ColdFusion' do
@@ -143,8 +143,8 @@ describe SiteInspector::Endpoint::Sniffer do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, headers: { 'set-cookie' => cookies })
 
-      expect(subject.framework).to eql(:coldfusion)
-      expect(subject.open_source?).to eql(false)
+      expect(subject.framework).to be(:coldfusion)
+      expect(subject.open_source?).to be(false)
     end
   end
 end

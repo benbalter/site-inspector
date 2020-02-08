@@ -249,16 +249,16 @@ class SiteInspector
       }
 
       if options['all']
-        hash.merge!(endpoints: {
-                      https: {
-                        root: endpoints[0].to_h(options),
-                        www: endpoints[1].to_h(options)
-                      },
-                      http: {
-                        root: endpoints[2].to_h(options),
-                        www: endpoints[3].to_h(options)
-                      }
-                    })
+        hash[:endpoints] = {
+          https: {
+            root: endpoints[0].to_h(options),
+            www: endpoints[1].to_h(options)
+          },
+          http: {
+            root: endpoints[2].to_h(options),
+            www: endpoints[3].to_h(options)
+          }
+        }
       end
 
       hash

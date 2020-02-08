@@ -16,11 +16,11 @@ class SiteInspector
       end
 
       def include_subdomains?
-        pairs.keys.include? :includesubdomains
+        pairs.key?(:includesubdomains)
       end
 
       def preload?
-        pairs.keys.include? :preload
+        pairs.key?(:preload)
       end
 
       def enabled?
@@ -65,7 +65,7 @@ class SiteInspector
           directives.each do |directive|
             key, value = directive.downcase.split('=')
 
-            if value =~ /\".*\"/
+            if /\".*\"/.match?(value)
               value = value.sub(/^\"/, '')
               value = value.sub(/\"$/, '')
             end

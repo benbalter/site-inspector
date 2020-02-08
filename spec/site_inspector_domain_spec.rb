@@ -3,41 +3,41 @@
 require 'spec_helper'
 
 describe SiteInspector::Domain do
-  subject { SiteInspector::Domain.new('example.com') }
+  subject { described_class.new('example.com') }
 
   context 'domain parsing' do
     it 'downcases the domain' do
-      domain = SiteInspector::Domain.new('EXAMPLE.com')
+      domain = described_class.new('EXAMPLE.com')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips http from the domain' do
-      domain = SiteInspector::Domain.new('http://example.com')
+      domain = described_class.new('http://example.com')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips https from the domain' do
-      domain = SiteInspector::Domain.new('https://example.com')
+      domain = described_class.new('https://example.com')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips www from the domain' do
-      domain = SiteInspector::Domain.new('www.example.com')
+      domain = described_class.new('www.example.com')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips http://www from the domain' do
-      domain = SiteInspector::Domain.new('http://www.example.com')
+      domain = described_class.new('http://www.example.com')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips paths from the domain' do
-      domain = SiteInspector::Domain.new('http://www.example.com/foo')
+      domain = described_class.new('http://www.example.com/foo')
       expect(domain.host).to eql('example.com')
     end
 
     it 'strips trailing slashes from the domain' do
-      domain = SiteInspector::Domain.new('http://www.example.com/')
+      domain = described_class.new('http://www.example.com/')
       expect(domain.host).to eql('example.com')
     end
   end
@@ -45,7 +45,7 @@ describe SiteInspector::Domain do
   context 'endpoints' do
     it 'generates the endpoints' do
       endpoints = subject.endpoints
-      expect(endpoints.count).to eql(4)
+      expect(endpoints.count).to be(4)
       expect(endpoints[0].to_s).to eql('https://example.com/')
       expect(endpoints[1].to_s).to eql('https://www.example.com/')
       expect(endpoints[2].to_s).to eql('http://example.com/')
@@ -62,10 +62,10 @@ describe SiteInspector::Domain do
   end
 
   it 'knows if a domain is a government domain' do
-    expect(subject.government?).to eql(false)
+    expect(subject.government?).to be(false)
 
-    domain = SiteInspector::Domain.new('whitehouse.gov')
-    expect(domain.government?).to eql(true)
+    domain = described_class.new('whitehouse.gov')
+    expect(domain.government?).to be(true)
   end
 
   context 'up' do
@@ -76,7 +76,7 @@ describe SiteInspector::Domain do
 
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.up?).to eql(true)
+      expect(subject.up?).to be(true)
     end
 
     it "doesn't consider a domain up when all endpoints are down" do
@@ -84,7 +84,7 @@ describe SiteInspector::Domain do
         allow(endpoint).to receive(:response) { Typhoeus::Response.new(code: 0) }
       end
 
-      expect(subject.up?).to eql(false)
+      expect(subject.up?).to be(false)
     end
   end
 
@@ -95,7 +95,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.up?).to eql(true)
+      expect(subject.up?).to be(true)
     end
 
     it "doesn't consider a domain up if all endpoints are down" do
@@ -104,7 +104,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 500)
 
-      expect(subject.up?).to eql(false)
+      expect(subject.up?).to be(false)
     end
   end
 
@@ -115,7 +115,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.www?).to eql(true)
+      expect(subject.www?).to be(true)
     end
 
     it "doesn't consider a site www when no endpoint is www" do
@@ -124,7 +124,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 200)
       stub_request(:head, 'http://www.example.com/').to_return(status: 500)
 
-      expect(subject.www?).to eql(false)
+      expect(subject.www?).to be(false)
     end
   end
 
@@ -135,7 +135,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 500)
 
-      expect(subject.root?).to eql(true)
+      expect(subject.root?).to be(true)
     end
 
     it "doesn't call a www-only domain root" do
@@ -144,7 +144,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.root?).to eql(false)
+      expect(subject.root?).to be(false)
     end
   end
 
@@ -154,9 +154,9 @@ describe SiteInspector::Domain do
       stub_request(:head, 'https://www.example.com/').to_return(status: 200)
       stub_request(:head, 'http://example.com/').to_return(status: 200)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
-      allow(subject.endpoints.first.https).to receive(:valid?) { true }
+      allow(subject.endpoints.first.https).to receive(:valid?).and_return(true)
 
-      expect(subject.https?).to eql(true)
+      expect(subject.https?).to be(true)
     end
 
     it "knows when a domain doesn't support https" do
@@ -165,7 +165,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 200)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.https?).to eql(false)
+      expect(subject.https?).to be(false)
     end
 
     it 'considers HTTPS inforced when no http endpoint responds' do
@@ -183,7 +183,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://example.com/').to_return(status: 500)
       stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-      expect(subject.enforces_https?).to eql(false)
+      expect(subject.enforces_https?).to be(false)
     end
 
     it 'detects when a domain downgrades to http' do
@@ -203,7 +203,7 @@ describe SiteInspector::Domain do
         stub_request(:head, 'http://example.com/').to_return(status: 500)
         stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-        expect(subject.canonically_www?).to eql(true)
+        expect(subject.canonically_www?).to be(true)
       end
 
       it 'detects a domain as canonically www when root redirects' do
@@ -213,7 +213,7 @@ describe SiteInspector::Domain do
           .to_return(status: 301, headers: { location: 'http://www.example.com' })
         stub_request(:head, 'http://www.example.com/').to_return(status: 200)
 
-        expect(subject.canonically_www?).to eql(true)
+        expect(subject.canonically_www?).to be(true)
       end
     end
 
@@ -223,9 +223,9 @@ describe SiteInspector::Domain do
         stub_request(:head, 'https://www.example.com/').to_return(status: 200)
         stub_request(:head, 'http://example.com/').to_return(status: 500)
         stub_request(:head, 'http://www.example.com/').to_return(status: 500)
-        allow(subject.endpoints.first.https).to receive(:valid?) { true }
+        allow(subject.endpoints.first.https).to receive(:valid?).and_return(true)
 
-        expect(subject.canonically_https?).to eql(true)
+        expect(subject.canonically_https?).to be(true)
       end
 
       it 'detects a domain as canonically https when http redirect' do
@@ -234,9 +234,9 @@ describe SiteInspector::Domain do
         stub_request(:head, 'http://example.com/')
           .to_return(status: 301, headers: { location: 'https://example.com' })
         stub_request(:head, 'http://www.example.com/').to_return(status: 500)
-        allow(subject.endpoints.first.https).to receive(:valid?) { true }
+        allow(subject.endpoints.first.https).to receive(:valid?).and_return(true)
 
-        expect(subject.canonically_https?).to eql(true)
+        expect(subject.canonically_https?).to be(true)
       end
     end
   end
@@ -250,7 +250,7 @@ describe SiteInspector::Domain do
       stub_request(:head, 'http://www.example.com/').to_return(status: 500)
       stub_request(:head, 'http://foo.example.com/').to_return(status: 200)
 
-      expect(subject.redirect?).to eql(true)
+      expect(subject.redirect?).to be(true)
     end
   end
 

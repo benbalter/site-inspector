@@ -7,7 +7,7 @@ describe SiteInspector::Endpoint::Headers do
     stub_request(:head, 'http://example.com/')
       .to_return(status: 200, headers: { foo: 'bar' })
     endpoint = SiteInspector::Endpoint.new('http://example.com')
-    SiteInspector::Endpoint::Headers.new(endpoint)
+    described_class.new(endpoint)
   end
 
   def stub_header(header, value)
@@ -15,7 +15,7 @@ describe SiteInspector::Endpoint::Headers do
   end
 
   it 'parses the headers' do
-    expect(subject.headers.count).to eql(1)
+    expect(subject.headers.count).to be(1)
     expect(subject.headers.keys).to include('foo')
   end
 
@@ -36,30 +36,30 @@ describe SiteInspector::Endpoint::Headers do
 
   it 'validates xss-protection' do
     stub_header 'x-xss-protection', 'foo'
-    expect(subject.xss_protection?).to eql(false)
+    expect(subject.xss_protection?).to be(false)
 
     stub_header 'x-xss-protection', '1; mode=block'
-    expect(subject.xss_protection?).to eql(true)
+    expect(subject.xss_protection?).to be(true)
   end
 
   it 'checks for clickjack proetection' do
-    expect(subject.click_jacking_protection?).to eql(false)
+    expect(subject.click_jacking_protection?).to be(false)
     stub_header 'x-frame-options', 'foo'
     expect(subject.click_jacking_protection).to eql('foo')
-    expect(subject.click_jacking_protection?).to eql(true)
+    expect(subject.click_jacking_protection?).to be(true)
   end
 
   it 'checks for CSP' do
-    expect(subject.content_security_policy?).to eql(false)
+    expect(subject.content_security_policy?).to be(false)
     stub_header 'content-security-policy', 'foo'
     expect(subject.content_security_policy).to eql('foo')
-    expect(subject.content_security_policy?).to eql(true)
+    expect(subject.content_security_policy?).to be(true)
   end
 
   it 'checks for strict-transport-security' do
-    expect(subject.strict_transport_security?).to eql(false)
+    expect(subject.strict_transport_security?).to be(false)
     stub_header 'strict-transport-security', 'foo'
     expect(subject.strict_transport_security).to eql('foo')
-    expect(subject.strict_transport_security?).to eql(true)
+    expect(subject.strict_transport_security?).to be(true)
   end
 end

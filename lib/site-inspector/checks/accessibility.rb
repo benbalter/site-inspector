@@ -54,7 +54,7 @@ class SiteInspector
       end
 
       def standard?(standard)
-        STANDARDS.keys.include?(standard)
+        STANDARDS.key?(standard)
       end
 
       def standard

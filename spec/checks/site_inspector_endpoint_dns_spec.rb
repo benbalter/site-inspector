@@ -7,16 +7,16 @@ describe SiteInspector::Endpoint::Dns do
   subject do
     stub_request(:head, 'http://github.com/').to_return(status: 200)
     endpoint = SiteInspector::Endpoint.new('http://github.com')
-    SiteInspector::Endpoint::Dns.new(endpoint)
+    described_class.new(endpoint)
   end
 
   it 'inits the resolver' do
-    expect(SiteInspector::Endpoint::Dns.resolver.class).to eql(Dnsruby::Resolver)
+    expect(described_class.resolver.class).to eql(Dnsruby::Resolver)
   end
 
   # Note: these tests makes external calls
   context 'live tests' do
-    it 'it runs the query' do
+    it 'runs the query' do
       expect(subject.query).not_to be_empty
     end
 
@@ -35,21 +35,21 @@ describe SiteInspector::Endpoint::Dns do
     before do
       record = Dnsruby::RR.create type: 'A', address: '1.2.3.4', name: 'test'
       allow(subject).to receive(:records) { [record] }
-      allow(subject).to receive(:query) { [] }
+      allow(subject).to receive(:query).and_return([])
     end
 
     it 'returns the records' do
-      expect(subject.records.count).to eql(1)
+      expect(subject.records.count).to be(1)
       expect(subject.records.first.class).to eql(Dnsruby::RR::IN::A)
     end
 
     it 'knows if a record exists' do
-      expect(subject.has_record?('A')).to eql(true)
-      expect(subject.has_record?('CNAME')).to eql(false)
+      expect(subject.has_record?('A')).to be(true)
+      expect(subject.has_record?('CNAME')).to be(false)
     end
 
     it 'knows if a domain supports dnssec' do
-      expect(subject.dnssec?).to eql(false)
+      expect(subject.dnssec?).to be(false)
 
       # via https://github.com/alexdalitz/dnsruby/blob/master/test/tc_dnskey.rb
       input = 'example.com. 86400 IN DNSKEY 256 3 5 ( AQPSKmynfzW4kyBv015MUG2DeIQ3' \
@@ -63,11 +63,11 @@ describe SiteInspector::Endpoint::Dns do
       record = Dnsruby::RR.create input
       allow(subject).to receive(:records) { [record] }
 
-      expect(subject.dnssec?).to eql(true)
+      expect(subject.dnssec?).to be(true)
     end
 
     it 'knows if a domain supports ipv6' do
-      expect(subject.ipv6?).to eql(false)
+      expect(subject.ipv6?).to be(false)
 
       input = {
         type: 'AAAA',
@@ -77,11 +77,11 @@ describe SiteInspector::Endpoint::Dns do
       record = Dnsruby::RR.create input
       allow(subject).to receive(:records) { [record] }
 
-      expect(subject.ipv6?).to eql(true)
+      expect(subject.ipv6?).to be(true)
     end
 
     it "knows it's not a localhost address" do
-      expect(subject.localhost?).to eql(false)
+      expect(subject.localhost?).to be(false)
     end
 
     context 'hostname detection' do
@@ -102,12 +102,12 @@ describe SiteInspector::Endpoint::Dns do
 
         allow(subject).to receive(:records) { records }
 
-        expect(subject.cnames.count).to eql(2)
+        expect(subject.cnames.count).to be(2)
         expect(subject.cnames.first.sld).to eql('example')
       end
 
       it "knows when a domain doesn't have a cdn" do
-        expect(subject.cdn?).to eql(false)
+        expect(subject.cdn?).to be(false)
       end
 
       it 'detects CDNs' do
@@ -118,9 +118,9 @@ describe SiteInspector::Endpoint::Dns do
         )]
         allow(subject).to receive(:records) { records }
 
-        expect(subject.send(:detect_by_hostname, 'cdn')).to eql(:cloudfront)
-        expect(subject.cdn).to eql(:cloudfront)
-        expect(subject.cdn?).to eql(true)
+        expect(subject.send(:detect_by_hostname, 'cdn')).to be(:cloudfront)
+        expect(subject.cdn).to be(:cloudfront)
+        expect(subject.cdn?).to be(true)
       end
 
       it 'builds that path to a data file' do
@@ -135,7 +135,7 @@ describe SiteInspector::Endpoint::Dns do
       end
 
       it "knows when a domain isn't cloud" do
-        expect(subject.cloud?).to eql(false)
+        expect(subject.cloud?).to be(false)
       end
 
       it 'detects cloud providers' do
@@ -146,13 +146,13 @@ describe SiteInspector::Endpoint::Dns do
         )]
         allow(subject).to receive(:records) { records }
 
-        expect(subject.send(:detect_by_hostname, 'cloud')).to eql(:heroku)
-        expect(subject.cloud_provider).to eql(:heroku)
-        expect(subject.cloud?).to eql(true)
+        expect(subject.send(:detect_by_hostname, 'cloud')).to be(:heroku)
+        expect(subject.cloud_provider).to be(:heroku)
+        expect(subject.cloud?).to be(true)
       end
 
       it "knows when a domain doesn't have google apps" do
-        expect(subject.google_apps?).to eql(false)
+        expect(subject.google_apps?).to be(false)
       end
 
       it 'knows when a domain is using google apps' do
@@ -163,18 +163,18 @@ describe SiteInspector::Endpoint::Dns do
           preference: 10
         )]
         allow(subject).to receive(:records) { records }
-        expect(subject.google_apps?).to eql(true)
+        expect(subject.google_apps?).to be(true)
       end
     end
   end
 
   context 'localhost' do
     before do
-      allow(subject).to receive(:ip) { '127.0.0.1' }
+      allow(subject).to receive(:ip).and_return('127.0.0.1')
     end
 
     it "knows it's a localhost address" do
-      expect(subject.localhost?).to eql(true)
+      expect(subject.localhost?).to be(true)
     end
 
     it 'returns a LocalhostError' do

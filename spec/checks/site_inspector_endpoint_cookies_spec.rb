@@ -8,12 +8,12 @@ describe SiteInspector::Endpoint::Cookies do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, body: '')
       endpoint = SiteInspector::Endpoint.new('http://example.com')
-      SiteInspector::Endpoint::Cookies.new(endpoint)
+      described_class.new(endpoint)
     end
 
     it 'knows when there are no cookies' do
-      expect(subject.cookies?).to eql(false)
-      expect(subject.all).to eql(nil)
+      expect(subject.cookies?).to be(false)
+      expect(subject.all).to be(nil)
     end
   end
 
@@ -37,12 +37,12 @@ describe SiteInspector::Endpoint::Cookies do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, body: '', headers: { 'set-cookie' => cookies })
       endpoint = SiteInspector::Endpoint.new('http://example.com')
-      SiteInspector::Endpoint::Cookies.new(endpoint)
+      described_class.new(endpoint)
     end
 
     it 'knows when there are cookies' do
-      expect(subject.cookies?).to eql(true)
-      expect(subject.all.count).to eql(2)
+      expect(subject.cookies?).to be(true)
+      expect(subject.all.count).to be(2)
     end
 
     it 'returns a cookie by name' do
@@ -50,7 +50,7 @@ describe SiteInspector::Endpoint::Cookies do
     end
 
     it "knows cookies aren't secure" do
-      expect(subject.secure?).to eql(false)
+      expect(subject.secure?).to be(false)
     end
   end
 
@@ -63,11 +63,11 @@ describe SiteInspector::Endpoint::Cookies do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, body: '', headers: { 'set-cookie' => cookies })
       endpoint = SiteInspector::Endpoint.new('http://example.com')
-      SiteInspector::Endpoint::Cookies.new(endpoint)
+      described_class.new(endpoint)
     end
 
     it 'knows cookies are secure' do
-      expect(subject.secure?).to eql(true)
+      expect(subject.secure?).to be(true)
     end
   end
 end

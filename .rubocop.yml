@@ -1,4 +1,10 @@
-Metrics/LineLength:
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+Layout/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
@@ -10,7 +16,7 @@ Metrics/AbcSize:
 Style/Documentation:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Metrics/CyclomaticComplexity:

@@ -3,11 +3,11 @@
 class SiteInspector
   class Endpoint
     class Cookies < Check
-      def any?(&block)
+      def any?
         if cookie_header.nil? || cookie_header.empty?
           false
         elsif block_given?
-          all.any? { |cookie| block.call(cookie) }
+          all.any? { |cookie| yield(cookie) }
         else
           true
         end
@@ -24,7 +24,7 @@ class SiteInspector
 
       def secure?
         pairs = cookie_header.join('; ').split('; ') # CGI::Cookies#Parse doesn't seem to like secure headers
-        pairs.any? { |c| c.downcase == 'secure' } && pairs.any? { |c| c.downcase == 'httponly' }
+        pairs.any? { |c| c.casecmp('secure').zero? } && pairs.any? { |c| c.casecmp('httponly').zero? }
       end
 
       def to_h

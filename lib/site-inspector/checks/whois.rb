@@ -4,11 +4,11 @@ class SiteInspector
   class Endpoint
     class Whois < Check
       def domain
-        whois.lookup host
+        @domain ||= whois.lookup host
       end
 
       def ip
-        whois.lookup ip_address
+        @ip ||= whois.lookup ip_address
       end
 
       def to_h
@@ -21,7 +21,7 @@ class SiteInspector
       private
 
       def record_to_h(record)
-        record.content.scan(/^\s*(.*?): \s*(.*?)\r?\n/).to_h
+        record.content.scan(/^\s*(.*?):\s*(.*?)\r?\n/).to_h
       end
 
       def ip_address

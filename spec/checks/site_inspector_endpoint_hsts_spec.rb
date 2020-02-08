@@ -8,7 +8,7 @@ describe SiteInspector::Endpoint::Hsts do
     stub_request(:head, 'http://example.com/')
       .to_return(status: 200, headers: headers)
     endpoint = SiteInspector::Endpoint.new('http://example.com')
-    SiteInspector::Endpoint::Hsts.new(endpoint)
+    described_class.new(endpoint)
   end
 
   def stub_header(value)
@@ -23,8 +23,8 @@ describe SiteInspector::Endpoint::Hsts do
     expect(subject.send(:header)).to eql('max-age=31536000; includeSubDomains;')
   end
 
-  it 'it parses the directives' do
-    expect(subject.send(:directives).count).to eql(2)
+  it 'parses the directives' do
+    expect(subject.send(:directives).count).to be(2)
     expect(subject.send(:directives).first).to eql('max-age=31536000')
     expect(subject.send(:directives).last).to eql('includeSubDomains')
   end
@@ -35,58 +35,58 @@ describe SiteInspector::Endpoint::Hsts do
   end
 
   it 'knows if the header is valid' do
-    expect(subject.valid?).to eql(true)
+    expect(subject.valid?).to be(true)
 
-    allow(subject).to receive(:pairs) { ['fo o' => 'bar'] }
-    expect(subject.valid?).to eql(false)
+    allow(subject).to receive(:pairs).and_return(['fo o' => 'bar'])
+    expect(subject.valid?).to be(false)
 
-    allow(subject).to receive(:pairs) { ["fo'o" => 'bar'] }
-    expect(subject.valid?).to eql(false)
+    allow(subject).to receive(:pairs).and_return(["fo'o" => 'bar'])
+    expect(subject.valid?).to be(false)
   end
 
   it 'knows the max age' do
-    expect(subject.max_age).to eql(31_536_000)
+    expect(subject.max_age).to be(31_536_000)
   end
 
   it 'knows if subdomains are included' do
-    expect(subject.include_subdomains?).to eql(true)
-    allow(subject).to receive(:pairs) { { foo: 'bar' } }
-    expect(subject.include_subdomains?).to eql(false)
+    expect(subject.include_subdomains?).to be(true)
+    allow(subject).to receive(:pairs).and_return(foo: 'bar')
+    expect(subject.include_subdomains?).to be(false)
   end
 
   it "knows if it's preloaded" do
-    expect(subject.preload?).to eql(false)
-    allow(subject).to receive(:pairs) { { preload: nil } }
-    expect(subject.preload?).to eql(true)
+    expect(subject.preload?).to be(false)
+    allow(subject).to receive(:pairs).and_return(preload: nil)
+    expect(subject.preload?).to be(true)
   end
 
   it "knows if it's enabled" do
-    expect(subject.enabled?).to eql(true)
+    expect(subject.enabled?).to be(true)
 
-    allow(subject).to receive(:pairs) { { "max-age": 0 } }
-    expect(subject.preload?).to eql(false)
+    allow(subject).to receive(:pairs).and_return("max-age": 0)
+    expect(subject.preload?).to be(false)
 
-    allow(subject).to receive(:pairs) { { foo: 'bar' } }
-    expect(subject.preload?).to eql(false)
+    allow(subject).to receive(:pairs).and_return(foo: 'bar')
+    expect(subject.preload?).to be(false)
   end
 
   it "knows if it's preload ready" do
-    expect(subject.preload_ready?).to eql(false)
+    expect(subject.preload_ready?).to be(false)
 
     pairs = { "max-age": 10_886_401, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
-    expect(subject.preload_ready?).to eql(true)
+    expect(subject.preload_ready?).to be(true)
 
     pairs = { "max-age": 10_886_401, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
-    expect(subject.preload_ready?).to eql(false)
+    expect(subject.preload_ready?).to be(false)
 
     pairs = { "max-age": 10_886_401, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
-    expect(subject.preload_ready?).to eql(true)
+    expect(subject.preload_ready?).to be(true)
 
     pairs = { "max-age": 5, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
-    expect(subject.preload_ready?).to eql(false)
+    expect(subject.preload_ready?).to be(false)
   end
 end

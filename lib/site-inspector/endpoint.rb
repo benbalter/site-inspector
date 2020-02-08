@@ -167,7 +167,7 @@ class SiteInspector
       }
 
       # Either they've specifically asked for a check, or we throw everything at them
-      checks = SiteInspector::Endpoint.checks.select { |c| options.keys.include?(c.name) }
+      checks = SiteInspector::Endpoint.checks.select { |c| options.key?(c.name) }
       checks = SiteInspector::Endpoint.checks if checks.empty?
 
       Parallel.each(checks, in_threads: 4) do |check|
@@ -193,7 +193,7 @@ class SiteInspector
     end
 
     def respond_to_missing?(method_sym, include_private = false)
-      if checks.keys.include?(method_sym)
+      if checks.key?(method_sym)
         true
       else
         super
