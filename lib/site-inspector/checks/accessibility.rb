@@ -9,15 +9,15 @@ class SiteInspector
       class Pa11yError < RuntimeError; end
 
       STANDARDS = {
-        section508: 'Section508', # Default standard
-        wcag2a: 'WCAG2A',
+        wcag2a: 'WCAG2A', # Default standard
         wcag2aa: 'WCAG2AA',
-        wcag2aaa: 'WCAG2AAA'
+        wcag2aaa: 'WCAG2AAA',
+        section508: 'Section508'
       }.freeze
 
       DEFAULT_LEVEL = :error
 
-      REQUIRED_PA11Y_VERSION = '~> 2.1'
+      REQUIRED_PA11Y_VERSION = '~> 5.0'
 
       class << self
         def pa11y_version
@@ -38,7 +38,7 @@ class SiteInspector
           @pa11y ||= begin
             node_bin = File.expand_path('../../../node_modules/pa11y/bin', File.dirname(__FILE__))
             path = ['*', node_bin].join(File::PATH_SEPARATOR)
-            Cliver::Dependency.new('pa11y', REQUIRED_PA11Y_VERSION, path: path)
+            Cliver::Dependency.new('pa11y.js', REQUIRED_PA11Y_VERSION, path: path)
           end
         end
       end
@@ -114,10 +114,10 @@ class SiteInspector
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
-        raise Pa11yError if status == 1
+        raise Pa11yError if status.exitstatus == 1
 
         {
-          valid: status.zero?,
+          valid: status.exitstatus.zero?,
           results: JSON.parse(output)
         }
       rescue Pa11yError, JSON::ParserError
@@ -125,7 +125,7 @@ class SiteInspector
       end
 
       def run_command(args)
-        Open3.capture2e(self.class.pa11y.path, *args)
+        Open3.capture2e(self.class.pa11y.detect, *args)
       end
     end
   end

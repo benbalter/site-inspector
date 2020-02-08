@@ -41,7 +41,10 @@ class SiteInspector
       end
 
       def generator
-        @generator ||= document.at('meta[name="generator"]')['content']
+        @generator ||= begin
+          tag = document.at('meta[name="generator"]')
+          tag['content'] if tag
+        end
       end
 
       def prefetch
