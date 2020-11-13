@@ -6,7 +6,7 @@ class SiteInspector
 
     def initialize(host)
       host = host.downcase
-      host = host.sub(/^https?\:/, '')
+      host = host.sub(/^https?:/, '')
       host = host.sub(%r{^/+}, '')
       host = host.sub(/^www\./, '')
       uri = Addressable::URI.parse "//#{host}"

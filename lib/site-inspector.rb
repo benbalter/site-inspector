@@ -72,7 +72,7 @@ class SiteInspector
 end
 
 if ENV['DEBUG']
-  Ethon.logger = Logger.new(STDOUT)
+  Ethon.logger = Logger.new($stdout)
   Ethon.logger.level = Logger::DEBUG
   Typhoeus::Config.verbose = true
 end

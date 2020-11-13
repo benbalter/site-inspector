@@ -4,6 +4,9 @@ require:
   - rubocop-performance
   - rubocop-rspec
 
+AllCops:
+  NewCops: enable
+
 Layout/LineLength:
   Enabled: false
 

@@ -3,11 +3,11 @@
 class SiteInspector
   class Endpoint
     class Cookies < Check
-      def any?
+      def any?(&block)
         if cookie_header.nil? || cookie_header.empty?
           false
         elsif block_given?
-          all.any? { |cookie| yield(cookie) }
+          all.any?(&block)
         else
           true
         end

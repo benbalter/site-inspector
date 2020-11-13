@@ -14,7 +14,7 @@ describe SiteInspector::Endpoint::Dns do
     expect(described_class.resolver.class).to eql(Dnsruby::Resolver)
   end
 
-  # Note: these tests makes external calls
+  # NOTE: these tests makes external calls
   context 'live tests' do
     it 'runs the query' do
       expect(subject.query).not_to be_empty
@@ -22,7 +22,7 @@ describe SiteInspector::Endpoint::Dns do
 
     context 'resolv' do
       it 'returns the IP' do
-        expect(subject.ip).to include('192.30.253.')
+        expect(subject.ip).to include('140.82.')
       end
 
       it 'returns the hostname' do

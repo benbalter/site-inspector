@@ -21,7 +21,10 @@ class SiteInspector
 
       class << self
         def pa11y_version
-          @pa11y_version ||= pa11y.version
+          @pa11y_version ||= begin
+            output, status = run_command('--version')
+            output.strip if status.exitstatus.zero?
+          end
         end
 
         def pa11y?
@@ -40,6 +43,10 @@ class SiteInspector
             path = ['*', node_bin].join(File::PATH_SEPARATOR)
             Cliver::Dependency.new('pa11y.js', REQUIRED_PA11Y_VERSION, path: path)
           end
+        end
+
+        def run_command(args)
+          Open3.capture2e(pa11y.detect, *args)
         end
       end
 
@@ -110,7 +117,7 @@ class SiteInspector
           '--level',    level.to_s,
           endpoint.uri.to_s
         ]
-        output, status = run_command(args)
+        output, status = self.class.run_command(args)
 
         # Pa11y exit codes: https://github.com/nature/pa11y#exit-codes
         # 0: No errors, 1: Technical error within pa11y, 2: accessibility error (configurable via --level)
@@ -122,10 +129,6 @@ class SiteInspector
         }
       rescue Pa11yError, JSON::ParserError
         raise Pa11yError, "Command `pa11y #{args.join(' ')}` failed: #{output}"
-      end
-
-      def run_command(args)
-        Open3.capture2e(self.class.pa11y.detect, *args)
       end
     end
   end

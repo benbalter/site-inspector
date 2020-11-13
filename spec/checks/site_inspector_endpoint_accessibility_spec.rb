@@ -31,7 +31,7 @@ describe SiteInspector::Endpoint::Accessibility do
   end
 
   it 'knows the standard' do
-    expect(subject.standard).to be(:section508)
+    expect(subject.standard).to be(:wcag2a)
   end
 
   it 'allows the user to set the standard' do
@@ -70,14 +70,14 @@ describe SiteInspector::Endpoint::Accessibility do
     it 'runs the check' do
       with_env 'SKIP_PA11Y_CHECK', 'true' do
         expect(subject.check[:valid]).to be(false)
-        expect(subject.check[:results].first['code']).to eql('Section508.L.NoContentAnchor')
+        expect(subject.check[:results].first['code']).to eql('WCAG2A.Principle3.Guideline3_1.3_1_1.H57.2')
       end
     end
 
     it 'runs a named check' do
       with_env 'SKIP_PA11Y_CHECK', 'true' do
         expect(subject.check[:valid]).to be(false)
-        expect(subject.check[:results].first['code']).to eql('Section508.L.NoContentAnchor')
+        expect(subject.check[:results].first['code']).to eql('WCAG2A.Principle3.Guideline3_1.3_1_1.H57.2')
       end
     end
   end

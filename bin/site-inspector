@@ -8,7 +8,7 @@ require 'colorator'
 require_relative '../lib/site-inspector'
 
 def stringify_keys_deep!(hash)
-  hash.keys.each do |k|
+  hash.each_key do |k|
     ks = k.respond_to?(:to_s) ? k.to_s : k
     hash[ks] = hash.delete k # Preserve order even when k == ks
     stringify_keys_deep! h[ks] if hash[ks].is_a? Hash
@@ -46,8 +46,8 @@ Mercenary.program(:"site-inspector") do |p|
       yaml = YAML.dump Oj.load(json)
 
       # Colorize bools
-      yaml.gsub!(/\: (true|ok)$/, ': ' + 'true'.green)
-      yaml.gsub!(/\: false$/, ': ' + 'false'.red)
+      yaml.gsub!(/: (true|ok)$/, ": #{'true'.green}")
+      yaml.gsub!(/: false$/, ": #{'false'.red}")
 
       puts yaml
     end

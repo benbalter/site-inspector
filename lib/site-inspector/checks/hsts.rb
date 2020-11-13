@@ -8,7 +8,7 @@ class SiteInspector
       def valid?
         return false unless header
 
-        pairs.none? { |key, value| "#{key}#{value}" =~ /[\s\'\"]/ }
+        pairs.none? { |key, value| "#{key}#{value}" =~ /[\s'"]/ }
       end
 
       def max_age
@@ -65,9 +65,9 @@ class SiteInspector
           directives.each do |directive|
             key, value = directive.downcase.split('=')
 
-            if /\".*\"/.match?(value)
-              value = value.sub(/^\"/, '')
-              value = value.sub(/\"$/, '')
+            if /".*"/.match?(value)
+              value = value.sub(/^"/, '')
+              value = value.sub(/"$/, '')
             end
 
             pairs[key.to_sym] = value

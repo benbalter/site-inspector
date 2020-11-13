@@ -38,7 +38,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it 'knows when robots.txt exists' do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/robots.txt')
       .to_return(status: 200)
@@ -46,7 +46,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it "knows when robots.txt doesn't exist" do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/robots.txt')
       .to_return(status: 404)
@@ -54,7 +54,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it 'knows when sitemap.xml exists' do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/sitemap.xml')
       .to_return(status: 200)
@@ -62,7 +62,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it 'knows when sitemap.xml exists' do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/sitemap.xml')
       .to_return(status: 404)
@@ -70,7 +70,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it 'knows when humans.txt exists' do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/humans.txt')
       .to_return(status: 200)
@@ -78,7 +78,7 @@ describe SiteInspector::Endpoint::Content do
   end
 
   it "knows when humans.txt doesn't exist" do
-    stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
 
     stub_request(:head, 'http://example.com/humans.txt')
       .to_return(status: 200)
@@ -91,13 +91,13 @@ describe SiteInspector::Endpoint::Content do
 
   context '404s' do
     it 'knows when an endpoint returns a proper 404' do
-      stub_request(:head, %r{http\://example.com/.*})
+      stub_request(:head, %r{http://example.com/.*})
         .to_return(status: 404)
       expect(subject.proper_404s?).to be(true)
     end
 
     it "knows when an endpoint doesn't return a proper 404" do
-      stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i)
+      stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i)
         .to_return(status: 200)
       expect(subject.proper_404s?).to be(false)
     end
@@ -109,7 +109,7 @@ describe SiteInspector::Endpoint::Content do
     end
 
     it "doesn't say something exists when there are no 404s" do
-      stub_request(:head, %r{http\://example.com/[a-z0-9]{32}}i).to_return(status: 200)
+      stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 200)
       stub_request(:head, 'http://example.com/humans.txt').to_return(status: 200)
       expect(subject.humans_txt?).to be(nil)
     end
