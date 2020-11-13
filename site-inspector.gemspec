@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency('cliver', '~> 0.0')
   s.add_dependency('colorator', '~> 1.1')
   s.add_dependency('dnsruby', '~> 1.0')
+  s.add_dependency('dotenv', '~> 2.0')
   s.add_dependency('gman', '~> 7.0', '>= 7.0.4')
   s.add_dependency('mercenary', '~> 0.0')
   s.add_dependency('nokogiri', '~> 1.0')
@@ -28,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency('public_suffix', '~> 4.0')
   s.add_dependency('sniffles', '~> 0.0')
   s.add_dependency('typhoeus', '~> 1.0')
+  s.add_dependency('urlscan', '~> 0.6')
   s.add_dependency('whois', '~> 5.0')
 
   s.add_development_dependency('pry', '~> 0.0')

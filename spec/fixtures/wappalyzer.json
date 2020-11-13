@@ -1,0 +1,125 @@
+[
+   {
+      "url":"https://ben.balter.com",
+      "technologies":[
+         {
+            "slug":"cloudflare",
+            "name":"Cloudflare",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":31,
+                  "slug":"cdn",
+                  "name":"CDN"
+               }
+            ]
+         },
+         {
+            "slug":"varnish",
+            "name":"Varnish",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":23,
+                  "slug":"caching",
+                  "name":"Caching"
+               }
+            ]
+         },
+         {
+            "slug":"disqus",
+            "name":"Disqus",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               
+            ]
+         },
+         {
+            "slug":"google-analytics",
+            "name":"Google Analytics",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":10,
+                  "slug":"analytics",
+                  "name":"Analytics"
+               },
+               {
+                  "id":61,
+                  "slug":"saas",
+                  "name":"SaaS"
+               }
+            ]
+         },
+         {
+            "slug":"jekyll",
+            "name":"Jekyll",
+            "versions":[
+               "v3.9.0"
+            ],
+            "trafficRank":11,
+            "categories":[
+               
+            ]
+         },
+         {
+            "slug":"ruby-on-rails",
+            "name":"Ruby on Rails",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":18,
+                  "slug":"web-frameworks",
+                  "name":"Web frameworks"
+               }
+            ]
+         },
+         {
+            "slug":"fastly",
+            "name":"Fastly",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":31,
+                  "slug":"cdn",
+                  "name":"CDN"
+               }
+            ]
+         },
+         {
+            "slug":"github-pages",
+            "name":"GitHub Pages",
+            "versions":[
+               
+            ],
+            "trafficRank":11,
+            "categories":[
+               {
+                  "id":62,
+                  "slug":"paas",
+                  "name":"PaaS"
+               }
+            ]
+         }
+      ],
+      "crawl":true
+   }
+]
