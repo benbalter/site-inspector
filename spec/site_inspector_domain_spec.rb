@@ -8,37 +8,37 @@ describe SiteInspector::Domain do
   context 'domain parsing' do
     it 'downcases the domain' do
       domain = described_class.new('EXAMPLE.com')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips http from the domain' do
       domain = described_class.new('http://example.com')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips https from the domain' do
       domain = described_class.new('https://example.com')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips www from the domain' do
       domain = described_class.new('www.example.com')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips http://www from the domain' do
       domain = described_class.new('http://www.example.com')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips paths from the domain' do
       domain = described_class.new('http://www.example.com/foo')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
 
     it 'strips trailing slashes from the domain' do
       domain = described_class.new('http://www.example.com/')
-      expect(domain.host).to eql('example.com')
+      expect(domain.host.to_s).to eql('example.com')
     end
   end
 

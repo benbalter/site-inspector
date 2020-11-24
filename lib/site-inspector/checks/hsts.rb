@@ -5,6 +5,8 @@ class SiteInspector
     # Utility parser for HSTS headers.
     # RFC: http://tools.ietf.org/html/rfc6797
     class Hsts < Check
+      STATUS_ENDPOINT = 'https://hstspreload.org/api/v2/status'
+
       def valid?
         return false unless header
 
@@ -41,7 +43,8 @@ class SiteInspector
           include_subdomains: include_subdomains?,
           preload: preload?,
           enabled: enabled?,
-          preload_ready: preload_ready?
+          preload_ready: preload_ready?,
+          preload_list_status: preload_list['status']
         }
       end
 
@@ -74,6 +77,34 @@ class SiteInspector
           end
 
           pairs
+        end
+      end
+
+      def request
+        @request ||= begin
+          options = SiteInspector.typhoeus_defaults
+          options = options.merge(method: :get)
+          Typhoeus::Request.new(url, options)
+        end
+      end
+
+      def url
+        url = Addressable::URI.parse(STATUS_ENDPOINT)
+        url.query_values = { domain: endpoint.host }
+        url
+      end
+
+      def preload_list
+        @preload_list ||= begin
+          SiteInspector.hydra.queue(request)
+          SiteInspector.hydra.run
+
+          response = request.response
+          if response.success?
+            JSON.parse(response.body)
+          else
+            {}
+          end
         end
       end
     end

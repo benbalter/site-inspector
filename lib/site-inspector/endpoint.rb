@@ -14,23 +14,32 @@ class SiteInspector
   class Endpoint
     attr_accessor :host, :uri, :domain
 
+    def self.build(domain, https: true, www: false)
+      uri = Addressable::URI.new
+      uri.host = www ? "www.#{domain.host}" : domain.host.to_s
+      uri.scheme = https ? 'https' : 'http'
+
+      new(uri.to_s, domain: domain)
+    end
+
     # Initatiate a new Endpoint object
     #
     # endpoint - (string) the endpoint to query (e.g., `https://example.com`)
     # options  - A hash of options
     #   domain - the parent domain object, if passed, facilitates caching of redirects
     def initialize(host, options = {})
-      @uri = Addressable::URI.parse(host.downcase)
+      host = host.downcase if host.is_a?(String)
+      @uri = Addressable::URI.parse(host)
       # The root URL always has an implict path of "/", even if not requested
       # Make it explicit to facilitate caching and prevent a potential redirect
       @uri.path = '/'
-      @host = uri.host.sub(/^www\./, '')
+      @host = DomainParser.parse(host)
       @checks = {}
       @domain = options[:domain]
     end
 
     def www?
-      !!(uri.host =~ /^www\./)
+      @host.trd == 'www'
     end
 
     def root?
@@ -92,12 +101,12 @@ class SiteInspector
         # This is a relative redirect, but we still need the absolute URI
         if redirect.relative?
           redirect.path = "/#{redirect.path}" unless redirect.path[0] == '/'
-          redirect.host = host
+          redirect.host = host.to_s
           redirect.scheme = scheme
         end
 
         # This was a redirect to a subpath or back to itself, which we don't care about
-        return if redirect.host == host && redirect.scheme == scheme
+        return if redirect.host == host.to_s && redirect.scheme == scheme
 
         # Init a new endpoint representing the redirect
         find_or_create_by_uri(redirect.to_s)
@@ -132,7 +141,7 @@ class SiteInspector
     end
 
     def external_redirect?
-      host != resolves_to.host
+      host.to_s != resolves_to.host.to_s
     end
 
     def to_s
@@ -155,7 +164,7 @@ class SiteInspector
     def to_h(options = {})
       hash = {
         uri: uri.to_s,
-        host: host,
+        host: host.to_s,
         www: www?,
         https: https?,
         scheme: scheme,
@@ -199,6 +208,11 @@ class SiteInspector
         super
       end
     end
+
+    def eql?(other)
+      other.class == self.class && other.uri == uri
+    end
+    alias == eql?
 
     private
 

@@ -5,20 +5,21 @@ class SiteInspector
     attr_reader :host
 
     def initialize(host)
-      host = host.downcase
-      host = host.sub(/^https?:/, '')
-      host = host.sub(%r{^/+}, '')
-      host = host.sub(/^www\./, '')
-      uri = Addressable::URI.parse "//#{host}"
-      @host = uri.host
+      @host = DomainParser.parse(host)
+
+      if @host.trd == 'www'
+        @host.instance_variable_set('@trd', nil)
+      elsif @host.trd&.start_with?('www.')
+        @host.instance_variable_set('@trd', @host.trd.gsub(/^www\./, ''))
+      end
     end
 
     def endpoints
       @endpoints ||= [
-        Endpoint.new("https://#{host}", domain: self),
-        Endpoint.new("https://www.#{host}", domain: self),
-        Endpoint.new("http://#{host}", domain: self),
-        Endpoint.new("http://www.#{host}", domain: self)
+        Endpoint.build(self, https: true, www: false),
+        Endpoint.build(self, https: true, www: true),
+        Endpoint.build(self, https: false, www: false),
+        Endpoint.build(self, https: false, www: true)
       ]
     end
 
@@ -197,7 +198,7 @@ class SiteInspector
     end
 
     def to_s
-      host
+      host.to_s
     end
 
     def inspect
@@ -231,7 +232,10 @@ class SiteInspector
       prefetch
 
       hash = {
-        host: host,
+        host: canonical_endpoint.host.to_s,
+        tld: canonical_endpoint.host.trd,
+        trd: canonical_endpoint.host.tld,
+        sld: canonical_endpoint.host.sld,
         up: up?,
         responds: responds?,
         www: www?,
