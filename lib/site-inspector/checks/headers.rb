@@ -3,40 +3,24 @@
 class SiteInspector
   class Endpoint
     class Headers < Check
-      # TODO: kill this
-      def strict_transport_security?
-        !!strict_transport_security
-      end
+      COMMON = %w[
+        strict-transport-security
+        content-security-policy
+        x-frame-options
+        server
+        x-xss-protection
+      ].freeze
 
-      def content_security_policy?
-        !!content_security_policy
-      end
+      COMMON.each do |header|
+        name = header.gsub(/^x-/, '').tr('-', '_')
 
-      def click_jacking_protection?
-        !!click_jacking_protection
-      end
+        define_method name do
+          headers[header]
+        end
 
-      # return the found header value
-
-      # TODO: kill this
-      def strict_transport_security
-        headers['strict-transport-security']
-      end
-
-      def content_security_policy
-        headers['content-security-policy']
-      end
-
-      def click_jacking_protection
-        headers['x-frame-options']
-      end
-
-      def server
-        headers['server']
-      end
-
-      def xss_protection
-        headers['x-xss-protection']
+        define_method "#{name}?" do
+          !!headers[header]
+        end
       end
 
       # more specific checks than presence of headers
@@ -50,18 +34,19 @@ class SiteInspector
       end
       alias headers all
 
+      def custom_headers
+        @custom_headers ||= all.select do |header|
+          header.start_with?('x-') && !COMMON.include?(header)
+        end
+      end
+
       def [](header)
         headers[header]
       end
 
       def to_h
-        {
-          strict_transport_security: strict_transport_security || false,
-          content_security_policy: content_security_policy || false,
-          click_jacking_protection: click_jacking_protection || false,
-          server: server,
-          xss_protection: xss_protection || false
-        }
+        hash = COMMON.map { |h| [h, headers[h] || false] }.to_h
+        hash.merge custom_headers
       end
     end
   end

@@ -42,13 +42,6 @@ describe SiteInspector::Endpoint::Headers do
     expect(subject.xss_protection?).to be(true)
   end
 
-  it 'checks for clickjack proetection' do
-    expect(subject.click_jacking_protection?).to be(false)
-    stub_header 'x-frame-options', 'foo'
-    expect(subject.click_jacking_protection).to eql('foo')
-    expect(subject.click_jacking_protection?).to be(true)
-  end
-
   it 'checks for CSP' do
     expect(subject.content_security_policy?).to be(false)
     stub_header 'content-security-policy', 'foo'
