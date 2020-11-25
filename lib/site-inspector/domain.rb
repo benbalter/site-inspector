@@ -234,8 +234,8 @@ class SiteInspector
       hash = {
         host: canonical_endpoint.host.to_s,
         tld: canonical_endpoint.host.tld,
-        trd: canonical_endpoint.host.trd,
         sld: canonical_endpoint.host.sld,
+        trd: canonical_endpoint.host.trd,
         up: up?,
         responds: responds?,
         www: www?,
