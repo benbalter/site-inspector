@@ -90,7 +90,7 @@ class SiteInspector
 
       def url
         url = Addressable::URI.parse(STATUS_ENDPOINT)
-        url.query_values = { domain: endpoint.host }
+        url.query_values = { domain: endpoint.host.to_s }
         url
       end
 

@@ -7,9 +7,9 @@ class SiteInspector
     def initialize(host)
       @host = DomainParser.parse(host)
 
-      if @host.trd == 'www'
+      if @host&.trd == 'www'
         @host.instance_variable_set('@trd', nil)
-      elsif @host.trd&.start_with?('www.')
+      elsif @host&.trd&.start_with?('www.')
         @host.instance_variable_set('@trd', @host.trd.gsub(/^www\./, ''))
       end
     end
@@ -233,8 +233,8 @@ class SiteInspector
 
       hash = {
         host: canonical_endpoint.host.to_s,
-        tld: canonical_endpoint.host.trd,
-        trd: canonical_endpoint.host.tld,
+        tld: canonical_endpoint.host.tld,
+        trd: canonical_endpoint.host.trd,
         sld: canonical_endpoint.host.sld,
         up: up?,
         responds: responds?,
