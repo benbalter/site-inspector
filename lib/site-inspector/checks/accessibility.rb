@@ -40,7 +40,7 @@ class SiteInspector
         def pa11y
           @pa11y ||= begin
             node_bin = File.expand_path('../../../node_modules/pa11y/bin', File.dirname(__FILE__))
-            path = ['*', node_bin].join(File::PATH_SEPARATOR)
+            path = ['*', './bin', node_bin].join(File::PATH_SEPARATOR)
             Cliver::Dependency.new('pa11y.js', REQUIRED_PA11Y_VERSION, path: path)
           end
         end
