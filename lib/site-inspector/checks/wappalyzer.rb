@@ -3,7 +3,30 @@
 class SiteInspector
   class Endpoint
     class Wappalyzer < Check
-      ENDPOINT = 'https://api.wappalyzer.com/lookup/v2/'
+      class WappalyzerError < RuntimeError; end
+
+      class << self
+        def wappalyzer?
+          return @wappalyzer_detected if defined? @wappalyzer_detected
+
+          @wappalyzer_detected = !!wappalyzer.detect
+        end
+
+        def enabled?
+          @@enabled && wappalyzer?
+        end
+
+        def wappalyzer
+          @wappalyzer ||= begin
+            path = ['*', './bin', './node_modules/.bin'].join(File::PATH_SEPARATOR)
+            Cliver::Dependency.new('wappalyzer', path: path)
+          end
+        end
+
+        def run_command(args)
+          Open3.capture2e(wappalyzer.detect, *args)
+        end
+      end
 
       def to_h
         return {} unless data['technologies']
@@ -23,39 +46,16 @@ class SiteInspector
 
       private
 
-      def request
-        @request ||= begin
-          options = SiteInspector.typhoeus_defaults
-          headers = options[:headers].merge({ "x-api-key": api_key })
-          options = options.merge(method: :get, headers: headers)
-          Typhoeus::Request.new(url, options)
-        end
-      end
-
       def data
-        return {} unless api_key && api_key != ''
-
         @data ||= begin
-          SiteInspector.hydra.queue(request)
-          SiteInspector.hydra.run
+          args = [endpoint.uri.to_s]
+          output, status = self.class.run_command(args)
+          raise WappalyzerError if status.exitstatus == 1
 
-          response = request.response
-          if response.success?
-            JSON.parse(response.body).first
-          else
-            {}
-          end
+          @data = JSON.parse(output)
         end
-      end
-
-      def url
-        url = Addressable::URI.parse(ENDPOINT)
-        url.query_values = { urls: endpoint.uri }
-        url
-      end
-
-      def api_key
-        @api_key ||= ENV['WAPPALYZER_API_KEY']
+      rescue JSON::ParserError
+        raise WappalyzerError, "Command `wappalyzer #{args.join(' ')}` failed: #{output}"
       end
     end
   end
