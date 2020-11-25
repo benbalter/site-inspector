@@ -50,7 +50,7 @@ class SiteInspector
         @data ||= begin
           args = [endpoint.uri.to_s]
           output, status = self.class.run_command(args)
-          raise WappalyzerError if status.exitstatus == 1
+          raise WappalyzerError, output if status.exitstatus == 1
 
           @data = JSON.parse(output)
         end
