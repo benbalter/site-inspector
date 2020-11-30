@@ -4,7 +4,7 @@ class SiteInspector
   class Endpoint
     class Content < Check
       PATHS = [
-        'robots.txt', 'sitemap.xml', 'humans.txt', 'vulnerability-disclosure-policy', 'security.txt', '.well-known/security.txt'
+        'robots.txt', 'sitemap.xml', 'humans.txt', 'vulnerability-disclosure-policy', 'security.txt', '.well-known/security.txt', 'developer.json'
       ].freeze
 
       class << self
@@ -23,6 +23,8 @@ class SiteInspector
 
       # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
       def path_exists?(path)
+        return false unless proper_404s?
+
         endpoint.up? && endpoint.request(path: path, followlocation: true).success?
       rescue URI::InvalidURIError
         false
@@ -47,8 +49,6 @@ class SiteInspector
       def method_missing(method_sym, *arguments, &block)
         key = method_sym.to_s.gsub(/\?$/, '').to_sym
         if respond_to_missing?(key)
-          return unless proper_404s?
-
           path = self.class.paths[key]
           path_exists?(path)
         else
