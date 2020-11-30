@@ -3,9 +3,29 @@
 class SiteInspector
   class Endpoint
     class Content < Check
+      PATHS = [
+        'robots.txt', 'sitemap.xml', 'humans.txt', 'vulnerability-disclosure-policy', 'security.txt', '.well-known/security.txt'
+      ].freeze
+
+      class << self
+        def paths
+          @paths ||= PATHS.map { |p| [key_for(p), p] }.to_h
+        end
+
+        def path_for(key)
+          paths[key]
+        end
+
+        def key_for(path)
+          path.gsub(/(\.|-)/, '_').to_sym
+        end
+      end
+
       # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
       def path_exists?(path)
         endpoint.up? && endpoint.request(path: path, followlocation: true).success?
+      rescue URI::InvalidURIError
+        false
       end
 
       # The default Check#response method is from a HEAD request
@@ -24,16 +44,40 @@ class SiteInspector
         @body ||= document.to_s.force_encoding('UTF-8').encode('UTF-8', invalid: :replace, replace: '')
       end
 
-      def robots_txt?
-        @bodts_txt ||= path_exists?('robots.txt') if proper_404s?
+      def method_missing(method_sym, *arguments, &block)
+        key = method_sym.to_s.gsub(/\?$/, '').to_sym
+        if respond_to_missing?(key)
+          return unless proper_404s?
+
+          path = self.class.paths[key]
+          path_exists?(path)
+        else
+          super
+        end
       end
 
-      def sitemap_xml?
-        @sitemap_xml ||= path_exists?('sitemap.xml') if proper_404s?
+      def respond_to_missing?(method_sym, include_private = false)
+        if self.class.paths.key?(method_sym)
+          true
+        else
+          super
+        end
       end
 
-      def humans_txt?
-        @humans_txt ||= path_exists?('humans.txt') if proper_404s?
+      def security_txt?
+        @security_txt ||= begin
+          if proper_404s?
+            path_exists?('security.txt') || path_exists?('./well-known/security.txt')
+          else
+            false
+          end
+        end
+      end
+
+      def uri_for(key)
+        return nil unless PATHS.include?(key)
+
+        endpoint.join(key) if proper_404s?
       end
 
       def doctype
@@ -51,8 +95,9 @@ class SiteInspector
         return unless endpoint.up?
 
         options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
-        ['robots.txt', 'sitemap.xml', 'humans.txt', random_path].each do |path|
-          request = Typhoeus::Request.new(URI.join(endpoint.uri, path), options)
+        paths = self.class.paths.values.push(random_path)
+        paths.each do |path|
+          request = Typhoeus::Request.new(endpoint.join(path), options)
           SiteInspector.hydra.queue(request)
         end
         SiteInspector.hydra.run
@@ -64,14 +109,18 @@ class SiteInspector
 
       def to_h
         prefetch
-        {
+        hash = {
           doctype: doctype,
           generator: generator,
-          sitemap_xml: sitemap_xml?,
-          robots_txt: robots_txt?,
-          humans_txt: humans_txt?,
           proper_404s: proper_404s?
         }
+
+        self.class.paths.each do |key, _path|
+          hash[key] = send(key) unless key.to_s.start_with?('_')
+        end
+
+        hash[:security_txt] = security_txt?
+        hash
       end
 
       private

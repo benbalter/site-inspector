@@ -10,7 +10,7 @@ describe SiteInspector::Endpoint::Wappalyzer do
   let(:url) { "https://api.wappalyzer.com/lookup/v2/?urls=#{domain}/" }
 
   before do
-    path = File.expand_path '../fixtures/wappalyzer.json', __dir__
+    path = File.expand_path '../../fixtures/wappalyzer.json', __dir__
     body = File.read path
     stub_request(:get, url).to_return(status: 200, body: body)
   end

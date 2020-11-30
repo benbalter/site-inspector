@@ -29,11 +29,10 @@ class SiteInspector
       end
 
       def to_h
-        return {} unless data['technologies']
-
         @to_h ||= begin
           technologies = {}
-          data['technologies'].each do |t|
+
+          data['technologies']&.each do |t|
             category = t['categories'].first
             category = category ? category['name'] : 'Other'
             technologies[category] ||= []
@@ -48,11 +47,13 @@ class SiteInspector
 
       def data
         @data ||= begin
-          args = [endpoint.uri.to_s]
-          output, status = self.class.run_command(args)
-          raise WappalyzerError, output if status.exitstatus == 1
-
+          output, _status = self.class.run_command([endpoint.uri.to_s])
           @data = JSON.parse(output)
+        rescue Timeout::Error, IOError
+          @data = { technologies: {
+            categories: ['timeout'],
+            name: "https://www.wappalyzer.com/lookup/#{endpoint.host}"
+          } }
         end
       rescue JSON::ParserError
         raise WappalyzerError, "Command `wappalyzer #{args.join(' ')}` failed: #{output}"

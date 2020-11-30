@@ -16,7 +16,7 @@ class SiteInspector
 
       def query(type = 'ANY')
         SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
-      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain
+      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain, Dnsruby::OtherResolvError
         []
       end
 
@@ -65,14 +65,14 @@ class SiteInspector
 
       def ip
         @ip ||= Resolv.getaddress host
-      rescue Resolv::ResolvError
+      rescue Resolv::ResolvError, Dnsruby::OtherResolvError
         nil
       end
 
       def hostname
         require 'resolv'
         @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
-      rescue Resolv::ResolvError, PublicSuffix::DomainInvalid
+      rescue Resolv::ResolvError, PublicSuffix::DomainInvalid, Dnsruby::OtherResolvError
         nil
       end
 

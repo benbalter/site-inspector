@@ -125,7 +125,7 @@ describe SiteInspector::Endpoint::Dns do
 
       it 'builds that path to a data file' do
         path = subject.send(:data_path, 'foo')
-        expected = File.expand_path '../../lib/data/foo.yml', File.dirname(__FILE__)
+        expected = File.expand_path '../../../lib/data/foo.yml', File.dirname(__FILE__)
         expect(path).to eql(expected)
       end
 

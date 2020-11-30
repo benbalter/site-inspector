@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'nokogiri'
+require 'typhoeus'
+require 'yaml'
+
+path = './lib/data/well-known.yml'
+source = 'https://www.iana.org/assignments/well-known-uris/well-known-uris.xml'
+response = Typhoeus.get(source)
+xml = Nokogiri::XML(response.body)
+
+paths = xml.css('registry record').map do |record|
+  record.css('value').children.to_s
+end
+
+yaml = YAML.dump paths
+File.write(path, yaml)

@@ -23,7 +23,7 @@ class SiteInspector
       end
 
       def host
-        request.base_url.host
+        endpoint.host.to_s
       end
 
       def inspect
@@ -32,6 +32,10 @@ class SiteInspector
 
       def name
         self.class.name
+      end
+
+      def uri_for(_key)
+        nil
       end
 
       class << self

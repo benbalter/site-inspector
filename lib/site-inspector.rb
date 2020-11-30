@@ -26,6 +26,7 @@ require_relative 'site-inspector/checks/hsts'
 require_relative 'site-inspector/checks/https'
 require_relative 'site-inspector/checks/sniffer'
 require_relative 'site-inspector/checks/cookies'
+require_relative 'site-inspector/checks/well_known'
 require_relative 'site-inspector/checks/whois'
 require_relative 'site-inspector/checks/wappalyzer'
 require_relative 'site-inspector/endpoint'
@@ -81,5 +82,4 @@ if ENV['DEBUG']
   Typhoeus::Config.verbose = true
 end
 
-Typhoeus::Config.memoize = true
 Typhoeus::Config.cache = SiteInspector.cache

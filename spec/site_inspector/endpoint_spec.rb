@@ -234,7 +234,7 @@ describe SiteInspector::Endpoint do
 
   context 'checks' do
     it 'identifies checks' do
-      expected = 9
+      expected = 10
       pa11y = SiteInspector::Endpoint::Accessibility.pa11y?
       expected -= 1 unless pa11y
       expect(described_class.checks.count).to eql(expected)

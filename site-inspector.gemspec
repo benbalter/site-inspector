@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency('urlscan', '~> 0.6')
   s.add_dependency('whois', '~> 5.0')
 
+  s.add_development_dependency('nokogiri', '~> 1.10')
   s.add_development_dependency('pry', '~> 0.0')
   s.add_development_dependency('rake', '~> 13.0')
   s.add_development_dependency('rspec', '~> 3.0')
