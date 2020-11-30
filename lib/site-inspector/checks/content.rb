@@ -75,9 +75,9 @@ class SiteInspector
       end
 
       def uri_for(key)
-        return nil unless PATHS.include?(key)
+        return nil unless self.class.paths.keys.include?(key)
 
-        endpoint.join(key) if proper_404s?
+        endpoint.join(self.class.paths[key]) if proper_404s?
       end
 
       def doctype

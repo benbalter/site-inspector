@@ -9,23 +9,29 @@ class SiteInspector
 
       class << self
         def well_knowns
-          @well_knowns ||= begin
-            data = File.expand_path '../../data/well-known.yml', File.dirname(__FILE__)
-            wks = YAML.load_file(data)
-            wks = wks.reject { |wk| wk.include?('deprecated') }
+          data = File.expand_path '../../data/well-known.yml', File.dirname(__FILE__)
+          wks = YAML.load_file(data)
+          wks.reject { |wk| wk.include?('deprecated') }
+        end
 
-            wks = wks.map do |wk|
+        def keys
+          well_knowns.map { |wk| key_for(wk) }
+        end
+
+        def key_paths
+          @key_paths ||= begin
+            key_paths = well_knowns.map do |wk|
               [key_for(wk), path_for(wk)]
             end
 
-            wks.to_h
+            key_paths.to_h
           end
         end
 
-        def path_for(well_known)
-          return unless well_knowns.key?(well_known)
+        def path_for(wk)
+          return unless well_knowns.include?(wk)
 
-          "#{BASE_PATH}#{well_knowns[well_known]}"
+          "#{BASE_PATH}#{wk}"
         end
 
         def key_for(well_known)
@@ -38,8 +44,8 @@ class SiteInspector
         @exists[path] ||= endpoint.content.path_exists?(path)
       end
 
-      def uri_for(well_known)
-        path = self.class.path_for(well_known)
+      def uri_for(key)
+        path = self.class.key_paths[key]
         endpoint.join(path) if path
       end
 
@@ -49,7 +55,7 @@ class SiteInspector
         prefetch
         @hash = {}
 
-        self.class.well_knowns.each do |key, _path|
+        self.class.keys.each do |key|
           @hash[key] = public_send(key)
         end
 
@@ -58,14 +64,14 @@ class SiteInspector
 
       def method_missing(method_sym, *arguments, &block)
         if respond_to_missing?(method_sym)
-          exists?(self.class.well_knowns[method_sym])
+          exists?(self.class.key_paths[method_sym])
         else
           super
         end
       end
 
       def respond_to_missing?(method_sym, include_private = false)
-        if self.class.well_knowns.key?(method_sym)
+        if self.class.keys.include?(method_sym)
           true
         else
           super
@@ -76,7 +82,7 @@ class SiteInspector
 
       def prefetch
         options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
-        self.class.well_knowns.each do |_wk, path|
+        self.class.key_paths.each do |_key, path|
           uri = endpoint.join(path)
           request = Typhoeus::Request.new(uri, options)
           SiteInspector.hydra.queue(request)
