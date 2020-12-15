@@ -176,6 +176,7 @@ class SiteInspector
         responds: responds?,
         timed_out: timed_out?,
         redirect: redirect?,
+        resolves_to: resolves_to.to_s,
         external_redirect: external_redirect?
       }
 

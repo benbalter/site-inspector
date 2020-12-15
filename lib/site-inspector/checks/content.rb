@@ -23,7 +23,7 @@ class SiteInspector
 
       # Given a path (e.g, "/data"), check if the given path exists on the canonical endpoint
       def path_exists?(path)
-        return false unless path != random_path && proper_404s?
+        return unless proper_404s?
 
         endpoint.up? && endpoint.request(path: path, followlocation: true).success?
       rescue URI::InvalidURIError
@@ -104,7 +104,9 @@ class SiteInspector
       end
 
       def proper_404s?
-        @proper_404s ||= !path_exists?(random_path)
+        @proper_404s ||= begin
+          endpoint.request(path: random_path).code == 404 if endpoint.up?
+        end
       end
 
       def to_h

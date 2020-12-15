@@ -6,7 +6,7 @@ class SiteInspector
       def any?(&block)
         if cookie_header.nil? || cookie_header.empty?
           false
-        elsif block_given?
+        elsif block
           all.any?(&block)
         else
           true
