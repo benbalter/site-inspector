@@ -3,7 +3,7 @@
 require 'bundler/setup'
 require 'webmock/rspec'
 require 'fileutils'
-require_relative '../lib/site-inspector'
+require 'site-inspector'
 
 WebMock.disable_net_connect!
 

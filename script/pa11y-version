@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './lib/site-inspector'
+require 'site-inspector'
 
 if SiteInspector::Endpoint::Accessibility.pa11y?
   puts "Pa11y version: #{SiteInspector::Endpoint::Accessibility.pa11y_version}"

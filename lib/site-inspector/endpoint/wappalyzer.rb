@@ -34,7 +34,8 @@ class SiteInspector
 
           data['technologies']&.each do |t|
             category = t['categories'].first
-            category = category ? category['name'] : 'Other'
+            category = category ? category['name'] : 'other'
+            category = category.downcase.tr(' ', '_').to_sym
             technologies[category] ||= []
             technologies[category].push t['name']
           end

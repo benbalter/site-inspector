@@ -11,29 +11,18 @@ require 'cgi'
 require 'resolv'
 require 'dotenv/load'
 require 'naughty_or_nice'
-
-require_relative 'site-inspector/cache'
-require_relative 'site-inspector/disk_cache'
-require_relative 'site-inspector/rails_cache'
-require_relative 'site-inspector/domain'
-require_relative 'site-inspector/domain_parser'
-require_relative 'site-inspector/checks/check'
-require_relative 'site-inspector/checks/accessibility'
-require_relative 'site-inspector/checks/content'
-require_relative 'site-inspector/checks/dns'
-require_relative 'site-inspector/checks/headers'
-require_relative 'site-inspector/checks/hsts'
-require_relative 'site-inspector/checks/https'
-require_relative 'site-inspector/checks/sniffer'
-require_relative 'site-inspector/checks/cookies'
-require_relative 'site-inspector/checks/well_known'
-require_relative 'site-inspector/checks/whois'
-require_relative 'site-inspector/checks/wappalyzer'
-require_relative 'site-inspector/endpoint'
-require_relative 'site-inspector/version'
 require_relative 'cliver/dependency_ext'
 
 class SiteInspector
+  autoload :Cache, 'site-inspector/cache'
+  autoload :DiskCache, 'site-inspector/disk_cache'
+  autoload :Formatter, 'site-inspector/formatter'
+  autoload :RailsCache, 'site-inspector/rails_cache'
+  autoload :Domain, 'site-inspector/domain'
+  autoload :DomainParser, 'site-inspector/domain_parser'
+  autoload :Endpoint, 'site-inspector/endpoint'
+  autoload :VERSION, 'site-inspector/version'
+
   class << self
     attr_writer :timeout, :cache, :typhoeus_options
 

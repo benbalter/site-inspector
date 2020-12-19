@@ -1,5 +1,18 @@
 # frozen_string_literal: true
 
+require 'site-inspector/endpoint/check'
+require 'site-inspector/endpoint/accessibility'
+require 'site-inspector/endpoint/content'
+require 'site-inspector/endpoint/dns'
+require 'site-inspector/endpoint/headers'
+require 'site-inspector/endpoint/hsts'
+require 'site-inspector/endpoint/https'
+require 'site-inspector/endpoint/sniffer'
+require 'site-inspector/endpoint/cookies'
+require 'site-inspector/endpoint/well_known'
+require 'site-inspector/endpoint/whois'
+require 'site-inspector/endpoint/wappalyzer'
+
 class SiteInspector
   # Every domain has four possible "endpoints" to evaluate
   #
