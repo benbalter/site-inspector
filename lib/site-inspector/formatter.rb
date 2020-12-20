@@ -1,12 +1,23 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/string/inflections'
+require 'nokogiri'
 
 class SiteInspector
   module Formatter
     ACRONYMS = %w[
       acme cdn cms crm dns dnssec dnt hsts http https id ip ipv6 json paas pki sld ssl tld tls trd txt ui uri url whois www xml xss
     ].freeze
+
+    def format_table(hash)
+      build_fragment do |f|
+        f.table(class: 'table table-striped') do
+          hash.each do |key, value|
+            f << format_key_value(key, value)
+          end
+        end
+      end
+    end
 
     def format_key(string)
       capitalize_acronyms(string.to_s.gsub(/^x-/, '').tr('-', ' ').humanize)

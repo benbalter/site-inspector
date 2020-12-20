@@ -95,7 +95,7 @@ class SiteInspector
           cdn: cdn,
           cloud_provider: cloud_provider,
           google_apps: google_apps?,
-          hostname: hostname,
+          hostname: hostname.to_s,
           ip: ip
         }
       end

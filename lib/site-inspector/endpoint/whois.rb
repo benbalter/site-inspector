@@ -8,7 +8,7 @@ class SiteInspector
       end
 
       def ip
-        @ip ||= whois.lookup ip_address
+        @ip ||= whois.lookup ip_address if ip_address
       end
 
       def to_h
@@ -21,11 +21,19 @@ class SiteInspector
       private
 
       def record_to_h(record)
+        return unless record
+
         record.content.scan(/^\s*(.*?):\s*(.*?)\r?\n/).to_h
       end
 
       def ip_address
-        @ip_address ||= Resolv.getaddress host
+        return @ip_address if defined? @ip_address
+
+        @ip_address = begin
+          Resolv.getaddress host
+        rescue Resolv::ResolvError
+          nil
+        end
       end
 
       def whois
