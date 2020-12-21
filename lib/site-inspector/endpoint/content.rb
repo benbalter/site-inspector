@@ -138,7 +138,7 @@ class SiteInspector
 
       def random_path
         require 'securerandom'
-        @random_path ||= SecureRandom.hex
+        @random_path ||= "#{SecureRandom.hex}.html"
       end
     end
   end
