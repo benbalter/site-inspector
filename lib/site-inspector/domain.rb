@@ -229,6 +229,8 @@ class SiteInspector
     #
     # Returns a complete hash of the domain's information
     def to_h(options = {})
+      return {} unless host
+
       prefetch
 
       hash = {

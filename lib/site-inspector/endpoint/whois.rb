@@ -4,11 +4,23 @@ class SiteInspector
   class Endpoint
     class Whois < Check
       def domain
-        @domain ||= whois.lookup host
+        return @domain if defined? @domain
+
+        @domain = begin
+          whois.lookup host
+        rescue Timeout::Error
+          nil
+        end
       end
 
       def ip
-        @ip ||= whois.lookup ip_address if ip_address
+        return @ip if defined? @ip
+
+        @ip = begin
+          whois.lookup ip_address if ip_address
+        rescue Timeout::Error
+          nil
+        end
       end
 
       def to_h
