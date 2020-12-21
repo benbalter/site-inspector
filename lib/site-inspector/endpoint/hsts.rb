@@ -55,7 +55,7 @@ class SiteInspector
       end
 
       def header
-        @header ||= [headers['strict-transport-security']].flatten.join('; ')
+        @header ||= [headers['strict-transport-security']].flatten.join('; ').squeeze(';')
       end
 
       def directives
