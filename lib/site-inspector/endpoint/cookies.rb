@@ -28,6 +28,9 @@ class SiteInspector
       end
 
       def to_h
+        return {} unless endpoint.up?
+        return {} if endpoint.redirect?
+
         {
           cookie?: any?,
           secure?: secure?

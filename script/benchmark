@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'benchmark'
+require 'site-inspector'
+
+domain = 'ben.balter.com'
+puts Benchmark.measure { SiteInspector.inspect(domain).to_h }

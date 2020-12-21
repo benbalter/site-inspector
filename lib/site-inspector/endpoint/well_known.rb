@@ -40,8 +40,7 @@ class SiteInspector
       end
 
       def exists?(path)
-        @exists ||= {}
-        @exists[path] ||= endpoint.content.path_exists?(path)
+        endpoint.content.path_exists?(path)
       end
 
       def uri_for(key)
@@ -50,6 +49,8 @@ class SiteInspector
       end
 
       def to_h
+        return {} unless endpoint.up?
+        return {} if endpoint.redirect?
         return @hash if defined?(@hash)
 
         prefetch

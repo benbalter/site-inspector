@@ -82,6 +82,9 @@ class SiteInspector
       end
 
       def check
+        return {} unless endpoint.up?
+        return {} if endpoint.redirect?
+
         @check ||= run_pa11y(standard)
       rescue Pa11yError
         nil

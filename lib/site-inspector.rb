@@ -30,7 +30,7 @@ class SiteInspector
       @cache ||= if ENV['CACHE']
                    SiteInspector::DiskCache.new
                  elsif Object.const_defined?('Rails')
-                   SiteInspector::RailsCache.new
+                   Typhoeus::Cache::Rails.new
                  else
                    SiteInspector::Cache.new
                  end
@@ -49,10 +49,7 @@ class SiteInspector
         followlocation: false,
         timeout: SiteInspector.timeout,
         accept_encoding: 'gzip',
-        method: :head,
-        headers: {
-          'User-Agent' => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
-        }
+        method: :head
       }
       defaults.merge! @typhoeus_options if @typhoeus_options
       defaults
@@ -60,15 +57,29 @@ class SiteInspector
 
     # Returns a thread-safe, memoized hydra instance
     def hydra
-      Typhoeus::Hydra.hydra
+      @hydra ||= Typhoeus::Hydra.hydra
+    end
+
+    def logger
+      @logger ||= Logger.new($stdout)
     end
   end
 end
 
 if ENV['DEBUG']
-  Ethon.logger = Logger.new($stdout)
+  Ethon.logger = SiteInspector.logger
   Ethon.logger.level = Logger::DEBUG
   Typhoeus::Config.verbose = true
 end
 
 Typhoeus::Config.cache = SiteInspector.cache
+Typhoeus::Config.memoize = true
+Typhoeus::Config.user_agent = "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
+
+if ENV['VERBOSE']
+  Typhoeus.before do |req|
+    hit = Typhoeus::Config.cache.get(req)
+    SiteInspector.logger.info "#{req.options[:method]} #{req.base_url} (CACHE #{hit ? 'HIT' : 'MISS'})"
+    req
+  end
+end

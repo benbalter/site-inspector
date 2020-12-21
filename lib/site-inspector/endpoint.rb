@@ -72,11 +72,15 @@ class SiteInspector
     end
 
     def request(options = {})
-      target = options[:path] ? join(options.delete(:path)) : uri
-      request = Typhoeus::Request.new(target, SiteInspector.typhoeus_defaults.merge(options))
+      request = build_request(options)
       hydra.queue(request)
       hydra.run
       request.response
+    end
+
+    def build_request(options)
+      target = options[:path] ? join(options.delete(:path)) : uri
+      Typhoeus::Request.new(target, SiteInspector.typhoeus_defaults.merge(options))
     end
 
     def join(*args)
@@ -179,7 +183,9 @@ class SiteInspector
     #
     # Returns the hash representing the endpoint and its checks
     def to_h(options = {})
-      hash = {
+      return @hash if defined?(@hash) && options == {}
+
+      @hash = {
         uri: uri.to_s,
         host: host.to_s,
         www: www?,
@@ -197,11 +203,11 @@ class SiteInspector
       checks = SiteInspector::Endpoint.checks.select { |c| options.key?(c.name) }
       checks = SiteInspector::Endpoint.checks if checks.empty?
 
-      Parallel.each(checks, in_threads: 4) do |check|
-        hash[check.name] = send(check.name).to_h
+      Parallel.each(checks, in_processes: 0) do |check|
+        @hash[check.name] = send(check.name).to_h
       end
 
-      hash
+      @hash
     end
 
     def self.checks

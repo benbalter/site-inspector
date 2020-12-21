@@ -25,7 +25,8 @@ class SiteInspector
       def path_exists?(path)
         return unless proper_404s?
 
-        endpoint.up? && endpoint.request(path: path, followlocation: true).success?
+        @exists ||= {}
+        @exists[path] ||= endpoint.up? && endpoint.request(path: path, followlocation: true).success?
       rescue URI::InvalidURIError
         false
       end
@@ -94,12 +95,16 @@ class SiteInspector
       def prefetch
         return unless endpoint.up?
 
-        options = SiteInspector.typhoeus_defaults.merge(followlocation: true)
-        paths = self.class.paths.values.push(random_path)
-        paths.each do |path|
-          request = Typhoeus::Request.new(endpoint.join(path), options)
+        ['/', random_path].each do |path|
+          request = endpoint.build_request(path: path)
           SiteInspector.hydra.queue(request)
         end
+
+        self.class.paths.values.each do |path|
+          request = endpoint.build_request(path: path, followlocation: true)
+          SiteInspector.hydra.queue(request)
+        end
+
         SiteInspector.hydra.run
       end
 
@@ -110,19 +115,23 @@ class SiteInspector
       end
 
       def to_h
+        return {} unless endpoint.up?
+        return {} if endpoint.redirect?
+        return @hash if defined?(@hash)
+
         prefetch
-        hash = {
+        @hash = {
           doctype: doctype,
           generator: generator,
           proper_404s: proper_404s?
         }
 
         self.class.paths.each do |key, _path|
-          hash[key] = send(key) unless key.to_s.start_with?('_')
+          @hash[key] = send(key) unless key.to_s.start_with?('_')
         end
 
-        hash[:security_txt] = security_txt?
-        hash
+        @hash[:security_txt] = security_txt?
+        @hash
       end
 
       private

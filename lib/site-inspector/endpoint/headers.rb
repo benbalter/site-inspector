@@ -45,6 +45,8 @@ class SiteInspector
       end
 
       def to_h
+        return {} if endpoint.redirect?
+
         hash = COMMON.map { |h| [h, headers[h] || false] }.to_h
         hash.merge custom_headers
       end
