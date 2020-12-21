@@ -34,7 +34,7 @@ class SiteInspector
       # The default Check#response method is from a HEAD request
       # The content check has a special response which includes the body from a GET request
       def response
-        @response ||= endpoint.request(method: :get)
+        @response ||= endpoint.request(method: :get, followlocation: true)
       end
 
       def document
@@ -95,22 +95,22 @@ class SiteInspector
       def prefetch
         return unless endpoint.up?
 
-        ['/', random_path].each do |path|
-          request = endpoint.build_request(path: path)
-          SiteInspector.hydra.queue(request)
-        end
-
-        self.class.paths.values.each do |path|
+        paths = self.class.paths.values.push(random_path)
+        paths.each do |path|
           request = endpoint.build_request(path: path, followlocation: true)
           SiteInspector.hydra.queue(request)
         end
+
+        # Request for content is a GET, not a HEAD request
+        request = endpoint.build_request(method: :get, followlocation: true)
+        SiteInspector.hydra.queue(request)
 
         SiteInspector.hydra.run
       end
 
       def proper_404s?
         @proper_404s ||= begin
-          endpoint.request(path: random_path).code == 404 if endpoint.up?
+          endpoint.request(path: random_path, followlocation: true).code == 404 if endpoint.up?
         end
       end
 
