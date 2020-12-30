@@ -9,14 +9,15 @@ class SiteInspector
         require 'dnsruby'
         @resolver ||= begin
           resolver = Dnsruby::Resolver.new
-          resolver.config.nameserver = ['1.1.1.1', '1.1.0.1']
+          resolver.config.nameserver = ['8.8.8.8', '8.8.4.4']
           resolver
         end
       end
 
       def query(type = 'ANY')
         SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
-      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain, Dnsruby::OtherResolvError
+      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain, Dnsruby::OtherResolvError => e
+        SiteInspector.logger.warn e.message
         []
       end
 
