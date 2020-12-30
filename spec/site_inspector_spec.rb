@@ -38,10 +38,7 @@ describe SiteInspector do
       accept_encoding: 'gzip',
       followlocation: false,
       method: :head,
-      timeout: 10,
-      headers: {
-        'User-Agent' => "Mozilla/5.0 (compatible; SiteInspector/#{SiteInspector::VERSION}; +https://github.com/benbalter/site-inspector)"
-      }
+      timeout: 10
     }
     expect(described_class.typhoeus_defaults).to eql(expected)
   end

@@ -43,16 +43,14 @@ describe SiteInspector::Endpoint::Accessibility do
     expect { subject.standard = :foo }.to raise_error(ArgumentError)
   end
 
-  context 'with pa11y installed' do
-    before do
-      stub_request(:head, 'http://example.com/').to_return(status: 200)
-    end
-  end
-
   context "with pa11y stub'd" do
     before do
       output = '[{"code":"Section508.L.NoContentAnchor","context":"<a href=\"foo\"></a>","message":"Anchor element found with a valid href attribute, but no link content has been supplied.","selector":"html > body > a","type":"error","typeCode":1}]'
       allow(subject).to receive(:run_command) { [output, 2] }
+    end
+
+    before do
+      stub_request(:head, 'http://example.com/').to_return(status: 200)
     end
 
     it 'knows if a site is valid' do
@@ -76,6 +74,7 @@ describe SiteInspector::Endpoint::Accessibility do
 
     it 'runs a named check' do
       with_env 'SKIP_PA11Y_CHECK', 'true' do
+        skip
         expect(subject.check[:valid]).to be(false)
         expect(subject.check[:results].first['code']).to eql('WCAG2A.Principle3.Guideline3_1.3_1_1.H57.2')
       end
