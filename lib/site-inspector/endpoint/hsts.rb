@@ -8,7 +8,7 @@ class SiteInspector
       STATUS_ENDPOINT = 'https://hstspreload.org/api/v2/status'
 
       def valid?
-        return false unless header
+        return false if header.empty?
 
         pairs.none? { |key, value| "#{key}#{value}" =~ /[\s'"]/ }
       end
