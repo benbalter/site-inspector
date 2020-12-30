@@ -4,7 +4,7 @@ class SiteInspector
   class Endpoint
     class Content < Check
       PATHS = [
-        'robots.txt', 'sitemap.xml', 'humans.txt', 'vulnerability-disclosure-policy', 'security.txt', '.well-known/security.txt', 'developer.json'
+        'robots.txt', 'sitemap.xml', 'humans.txt', 'vulnerability-disclosure-policy', 'security.txt', '.well-known/security.txt', 'data.json'
       ].freeze
 
       class << self
