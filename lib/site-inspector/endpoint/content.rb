@@ -95,7 +95,7 @@ class SiteInspector
       def prefetch
         return unless endpoint.up?
 
-        paths = self.class.paths.values.push(random_path)
+        paths = self.class.paths.values.concat(random_paths)
         paths.each do |path|
           request = endpoint.build_request(path: path, followlocation: true)
           SiteInspector.hydra.queue(request)
@@ -110,7 +110,11 @@ class SiteInspector
 
       def proper_404s?
         @proper_404s ||= begin
-          endpoint.request(path: random_path, followlocation: true).code == 404 if endpoint.up?
+          return unless endpoint.up?
+
+          random_paths.all? do |random_path|
+            endpoint.request(path: random_path, followlocation: true).code == 404
+          end
         end
       end
 
@@ -136,9 +140,12 @@ class SiteInspector
 
       private
 
-      def random_path
+      def random_paths
         require 'securerandom'
-        @random_path ||= "#{SecureRandom.hex}.html"
+        @random_paths ||= [
+          SecureRandom.hex,
+          "#{SecureRandom.hex}.html"
+        ]
       end
     end
   end
