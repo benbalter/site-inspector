@@ -9,7 +9,7 @@ class SiteInspector
         require 'dnsruby'
         @resolver ||= begin
           resolver = Dnsruby::Resolver.new
-          resolver.config.nameserver = ['8.8.8.8', '8.8.4.4']
+          resolver.config.nameserver = ['1.1.1.1', '1.1.0.1']
           resolver
         end
       end
