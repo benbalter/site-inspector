@@ -144,7 +144,8 @@ class SiteInspector
         require 'securerandom'
         @random_paths ||= [
           SecureRandom.hex,
-          "#{SecureRandom.hex}.html"
+          "#{SecureRandom.hex}.html",
+          "#{SecureRandom.hex}.json"
         ]
       end
     end
