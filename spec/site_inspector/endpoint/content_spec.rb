@@ -103,9 +103,9 @@ describe SiteInspector::Endpoint::Content do
     end
 
     it 'generates a random path' do
-      path = subject.send(:random_path)
+      path = subject.send(:random_paths).first
       expect(path).to match(/[a-z0-9]{32}/i)
-      expect(subject.send(:random_path)).to eql(path)
+      expect(subject.send(:random_paths).first).to eql(path)
     end
 
     it "doesn't say something exists when there are no 404s" do
