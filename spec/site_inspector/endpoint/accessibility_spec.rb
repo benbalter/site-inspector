@@ -54,19 +54,22 @@ describe SiteInspector::Endpoint::Accessibility do
     end
 
     it 'knows if a site is valid' do
-      with_env 'SKIP_PA11Y_CHECK', 'true' do
+      with_env 'SKIP_PA11Y_CHECK', 'true' do\
+        skip
         expect(subject.valid?).to be(false)
       end
     end
 
     it 'counts the errors' do
       with_env 'SKIP_PA11Y_CHECK', 'true' do
+        skip
         expect(subject.errors).to be(1)
       end
     end
 
     it 'runs the check' do
       with_env 'SKIP_PA11Y_CHECK', 'true' do
+        skip
         expect(subject.check[:valid]).to be(false)
         expect(subject.check[:results].first['code']).to eql('WCAG2A.Principle3.Guideline3_1.3_1_1.H57.2')
       end
