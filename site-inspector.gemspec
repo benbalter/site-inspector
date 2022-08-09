@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency('nokogiri', '~> 1.10')
   s.add_dependency('oj', '~> 3.0')
   s.add_dependency('parallel', '~> 1.0')
-  s.add_dependency('public_suffix', '~> 4.0')
+  s.add_dependency('public_suffix', '>= 4', '< 6')
   s.add_dependency('sniffles', '~> 0.2')
   s.add_dependency('typhoeus', '~> 1.0')
   s.add_dependency('urlscan', '~> 0.6')
