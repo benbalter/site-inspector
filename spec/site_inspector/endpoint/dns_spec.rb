@@ -53,12 +53,12 @@ describe SiteInspector::Endpoint::Dns do
 
       # via https://github.com/alexdalitz/dnsruby/blob/master/test/tc_dnskey.rb
       input = 'example.com. 86400 IN DNSKEY 256 3 5 ( AQPSKmynfzW4kyBv015MUG2DeIQ3' \
-        'Cbl+BBZH4b/0PY1kxkmvHjcZc8no' \
-        'kfzj31GajIQKY+5CptLr3buXA10h' \
-        'WqTkF7H6RfoRqXQeogmMHfpftf6z' \
-        'Mv1LyBUgia7za6ZEzOJBOztyvhjL' \
-        '742iU/TpPSEDhm2SNKLijfUppn1U' \
-        'aNvv4w==  )'
+              'Cbl+BBZH4b/0PY1kxkmvHjcZc8no' \
+              'kfzj31GajIQKY+5CptLr3buXA10h' \
+              'WqTkF7H6RfoRqXQeogmMHfpftf6z' \
+              'Mv1LyBUgia7za6ZEzOJBOztyvhjL' \
+              '742iU/TpPSEDhm2SNKLijfUppn1U' \
+              'aNvv4w==  )'
 
       record = Dnsruby::RR.create input
       allow(subject).to receive(:records) { [record] }

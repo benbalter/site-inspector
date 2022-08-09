@@ -14,7 +14,7 @@ class SiteInspector
       end
 
       def max_age
-        pairs[:"max-age"].to_i
+        pairs[:'max-age'].to_i
       end
 
       def include_subdomains?

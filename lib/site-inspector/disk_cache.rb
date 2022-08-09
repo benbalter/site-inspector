@@ -3,8 +3,8 @@
 class SiteInspector
   class DiskCache
     def initialize(dir = nil, replace = nil)
-      @dir     = dir || ENV['CACHE']
-      @replace = replace || ENV['CACHE_REPLACE']
+      @dir     = dir || ENV.fetch('CACHE', nil)
+      @replace = replace || ENV.fetch('CACHE_REPLACE', nil)
       @memory  = {}
     end
 

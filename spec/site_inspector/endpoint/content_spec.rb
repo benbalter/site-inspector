@@ -111,7 +111,7 @@ describe SiteInspector::Endpoint::Content do
     it "doesn't say something exists when there are no 404s" do
       stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 200)
       stub_request(:head, 'http://example.com/humans.txt').to_return(status: 200)
-      expect(subject.humans_txt?).to be(nil)
+      expect(subject.humans_txt?).to be_nil
     end
   end
 end

@@ -29,7 +29,7 @@ class SiteInspector
     def cache
       @cache ||= if ENV['CACHE']
                    SiteInspector::DiskCache.new
-                 elsif Object.const_defined?('Rails')
+                 elsif Object.const_defined?(:Rails)
                    Typhoeus::Cache::Rails.new
                  else
                    SiteInspector::Cache.new

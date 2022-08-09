@@ -4,8 +4,8 @@ require 'spec_helper'
 
 describe SiteInspector do
   before do
-    described_class.instance_variable_set('@cache', nil)
-    described_class.instance_variable_set('@timeout', nil)
+    described_class.instance_variable_set(:@cache, nil)
+    described_class.instance_variable_set(:@timeout, nil)
   end
 
   it 'defaults to ephemeral cache' do

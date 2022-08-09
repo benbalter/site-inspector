@@ -30,8 +30,8 @@ describe SiteInspector::Endpoint::Hsts do
   end
 
   it 'parses pairs' do
-    expect(subject.send(:pairs).keys).to include(:"max-age")
-    expect(subject.send(:pairs)[:"max-age"]).to eql('31536000')
+    expect(subject.send(:pairs).keys).to include(:'max-age')
+    expect(subject.send(:pairs)[:'max-age']).to eql('31536000')
   end
 
   it 'knows if the header is valid' do
@@ -63,7 +63,7 @@ describe SiteInspector::Endpoint::Hsts do
   it "knows if it's enabled" do
     expect(subject.enabled?).to be(true)
 
-    allow(subject).to receive(:pairs).and_return("max-age": 0)
+    allow(subject).to receive(:pairs).and_return('max-age': 0)
     expect(subject.preload?).to be(false)
 
     allow(subject).to receive(:pairs).and_return(foo: 'bar')
@@ -73,19 +73,19 @@ describe SiteInspector::Endpoint::Hsts do
   it "knows if it's preload ready" do
     expect(subject.preload_ready?).to be(false)
 
-    pairs = { "max-age": 10_886_401, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 10_886_401, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(true)
 
-    pairs = { "max-age": 10_886_401, includesubdomains: nil }
+    pairs = { 'max-age': 10_886_401, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(false)
 
-    pairs = { "max-age": 10_886_401, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 10_886_401, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(true)
 
-    pairs = { "max-age": 5, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 5, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(false)
   end

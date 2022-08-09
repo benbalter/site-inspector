@@ -56,7 +56,7 @@ class SiteInspector
         prefetch
         @hash = {}
 
-        self.class.keys.each do |key|
+        self.class.each_key do |key|
           @hash[key] = public_send(key)
         end
 
@@ -72,7 +72,7 @@ class SiteInspector
       end
 
       def respond_to_missing?(method_sym, include_private = false)
-        if self.class.keys.include?(method_sym)
+        if self.class.key?(method_sym)
           true
         else
           super

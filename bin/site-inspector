@@ -15,7 +15,7 @@ def stringify_keys_deep!(hash)
   end
 end
 
-Mercenary.program(:"site-inspector") do |p|
+Mercenary.program(:'site-inspector') do |p|
   p.version SiteInspector::VERSION
   p.description "Returns information about a domain's technology and capabilities"
   p.syntax 'site-inspector <command> <domain> [options]'

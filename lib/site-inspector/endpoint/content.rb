@@ -9,7 +9,7 @@ class SiteInspector
 
       class << self
         def paths
-          @paths ||= PATHS.map { |p| [key_for(p), p] }.to_h
+          @paths ||= PATHS.to_h { |p| [key_for(p), p] }
         end
 
         def path_for(key)
@@ -66,17 +66,15 @@ class SiteInspector
       end
 
       def security_txt?
-        @security_txt ||= begin
-          if proper_404s?
-            path_exists?('security.txt') || path_exists?('./well-known/security.txt')
-          else
-            false
-          end
-        end
+        @security_txt ||= if proper_404s?
+                            path_exists?('security.txt') || path_exists?('./well-known/security.txt')
+                          else
+                            false
+                          end
       end
 
       def uri_for(key)
-        return nil unless self.class.paths.keys.include?(key)
+        return nil unless self.class.paths.key?(key)
 
         endpoint.join(self.class.paths[key]) if proper_404s?
       end

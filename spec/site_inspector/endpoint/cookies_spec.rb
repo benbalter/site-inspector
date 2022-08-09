@@ -13,7 +13,7 @@ describe SiteInspector::Endpoint::Cookies do
 
     it 'knows when there are no cookies' do
       expect(subject.cookies?).to be(false)
-      expect(subject.all).to be(nil)
+      expect(subject.all).to be_nil
     end
   end
 

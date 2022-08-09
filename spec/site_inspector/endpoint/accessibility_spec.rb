@@ -54,7 +54,7 @@ describe SiteInspector::Endpoint::Accessibility do
     end
 
     it 'knows if a site is valid' do
-      with_env 'SKIP_PA11Y_CHECK', 'true' do\
+      with_env 'SKIP_PA11Y_CHECK', 'true' do \
         skip
         expect(subject.valid?).to be(false)
       end

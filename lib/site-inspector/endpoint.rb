@@ -104,7 +104,7 @@ class SiteInspector
 
     # Does the endpoint return a 2xx or 3xx response code?
     def up?
-      response && response_code.start_with?('2') || response_code.start_with?('3')
+      (response && response_code.start_with?('2')) || response_code.start_with?('3')
     end
 
     # Does the server respond at all?

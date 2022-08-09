@@ -8,9 +8,9 @@ class SiteInspector
       @host = DomainParser.parse(host)
 
       if @host&.trd == 'www'
-        @host.instance_variable_set('@trd', nil)
+        @host.instance_variable_set(:@trd, nil)
       elsif @host&.trd&.start_with?('www.')
-        @host.instance_variable_set('@trd', @host.trd.gsub(/^www\./, ''))
+        @host.instance_variable_set(:@trd, @host.trd.gsub(/^www\./, ''))
       end
     end
 

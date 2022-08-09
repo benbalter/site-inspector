@@ -19,7 +19,7 @@ describe SiteInspector::DiskCache do
     subject.set foo, 'bar'
 
     expect(File.exist?(path)).to be(true)
-    expect(File.open(path).read).to eql("I\"bar:ET")
+    expect(File.read(path)).to eql("I\"bar:ET")
   end
 
   it 'reads a value from disk' do
