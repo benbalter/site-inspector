@@ -5,7 +5,7 @@
   "main": "site-inspector",
   "dependencies": {
     "pa11y": "^5.0.0",
-    "wappalyzer": "^6.5.18"
+    "wappalyzer": "^6.10.38"
   },
   "devDependencies": {},
   "scripts": {
