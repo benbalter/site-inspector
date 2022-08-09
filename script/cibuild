@@ -4,7 +4,7 @@ set -e
 
 bundle exec script/pa11y-version
 
-bundle exec rake spec
+SKIP_PA11Y_CHECK=1 bundle exec rake spec
 
 bundle exec rubocop 
 
