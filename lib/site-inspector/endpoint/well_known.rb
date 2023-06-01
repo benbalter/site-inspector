@@ -56,7 +56,7 @@ class SiteInspector
         prefetch
         @hash = {}
 
-        self.class.keys.each_key do |key|
+        self.class.keys.each do |key|
           @hash[key] = public_send(key)
         end
 
