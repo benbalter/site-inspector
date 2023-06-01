@@ -19,7 +19,7 @@ class SiteInspector
         def wappalyzer
           @wappalyzer ||= begin
             path = ['*', './bin', './node_modules/.bin'].join(File::PATH_SEPARATOR)
-            Cliver::Dependency.new('wappalyzer', path: path)
+            Cliver::Dependency.new('wappalyzer', path:)
           end
         end
 

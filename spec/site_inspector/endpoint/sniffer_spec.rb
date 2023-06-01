@@ -53,7 +53,7 @@ describe SiteInspector::Endpoint::Sniffer do
       BODY
 
       stub_request(:get, 'http://example.com/')
-        .to_return(status: 200, body: body)
+        .to_return(status: 200, body:)
 
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200)

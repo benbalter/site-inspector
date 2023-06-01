@@ -32,7 +32,7 @@ class SiteInspector
       uri.host = www ? "www.#{domain.host}" : domain.host.to_s
       uri.scheme = https ? 'https' : 'http'
 
-      new(uri.to_s, domain: domain)
+      new(uri.to_s, domain:)
     end
 
     # Initatiate a new Endpoint object
@@ -190,7 +190,7 @@ class SiteInspector
         host: host.to_s,
         www: www?,
         https: https?,
-        scheme: scheme,
+        scheme:,
         up: up?,
         responds: responds?,
         timed_out: timed_out?,
@@ -216,7 +216,7 @@ class SiteInspector
       @checks = ObjectSpace.each_object(Class).select { |klass| klass < Check }.select(&:enabled?).sort_by(&:name)
     end
 
-    def method_missing(method_sym, *arguments, &block)
+    def method_missing(method_sym, *arguments, &)
       check = SiteInspector::Endpoint.checks.find { |c| c.name == method_sym }
       if check
         @checks[method_sym] ||= check.new(self)

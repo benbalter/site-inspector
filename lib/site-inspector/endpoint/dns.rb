@@ -93,11 +93,11 @@ class SiteInspector
         {
           dnssec: dnssec?,
           ipv6: ipv6?,
-          cdn: cdn,
-          cloud_provider: cloud_provider,
+          cdn:,
+          cloud_provider:,
           google_apps: google_apps?,
           hostname: hostname.to_s,
-          ip: ip
+          ip:
         }
       end
 

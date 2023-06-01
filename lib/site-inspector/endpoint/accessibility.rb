@@ -40,7 +40,7 @@ class SiteInspector
         def pa11y
           @pa11y ||= begin
             path = ['*', './bin', './node_modules/.bin'].join(File::PATH_SEPARATOR)
-            Cliver::Dependency.new('pa11y', REQUIRED_PA11Y_VERSION, path: path)
+            Cliver::Dependency.new('pa11y', REQUIRED_PA11Y_VERSION, path:)
           end
         end
 
@@ -91,7 +91,7 @@ class SiteInspector
       end
       alias to_h check
 
-      def method_missing(method_sym, *arguments, &block)
+      def method_missing(method_sym, *arguments, &)
         if standard?(method_sym)
           run_pa11y(method_sym)
         else

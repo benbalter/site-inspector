@@ -65,9 +65,9 @@ class SiteInspector
       end
     end
 
-    def build_fragment(&block)
+    def build_fragment(&)
       fragment = Nokogiri::HTML::DocumentFragment.parse ''
-      Nokogiri::HTML::Builder.with(fragment, &block)
+      Nokogiri::HTML::Builder.with(fragment, &)
       fragment.to_s
     end
 

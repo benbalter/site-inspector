@@ -26,7 +26,7 @@ class SiteInspector
         return unless proper_404s?
 
         @exists ||= {}
-        @exists[path] ||= endpoint.up? && endpoint.request(path: path, followlocation: true).success?
+        @exists[path] ||= endpoint.up? && endpoint.request(path:, followlocation: true).success?
       rescue URI::InvalidURIError
         false
       end
@@ -47,7 +47,7 @@ class SiteInspector
         @body ||= document.to_s.force_encoding('UTF-8').encode('UTF-8', invalid: :replace, replace: '')
       end
 
-      def method_missing(method_sym, *arguments, &block)
+      def method_missing(method_sym, *arguments, &)
         key = method_sym.to_s.gsub(/\?$/, '').to_sym
         if respond_to_missing?(key)
           path = self.class.paths[key]
@@ -95,7 +95,7 @@ class SiteInspector
 
         paths = self.class.paths.values.concat(random_paths)
         paths.each do |path|
-          request = endpoint.build_request(path: path, followlocation: true)
+          request = endpoint.build_request(path:, followlocation: true)
           SiteInspector.hydra.queue(request)
         end
 
@@ -123,8 +123,8 @@ class SiteInspector
 
         prefetch
         @hash = {
-          doctype: doctype,
-          generator: generator,
+          doctype:,
+          generator:,
           proper_404s: proper_404s?
         }
 

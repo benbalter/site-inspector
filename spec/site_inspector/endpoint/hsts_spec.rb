@@ -6,7 +6,7 @@ describe SiteInspector::Endpoint::Hsts do
   subject do
     headers = { 'strict-transport-security' => 'max-age=31536000; includeSubDomains;' }
     stub_request(:head, 'http://example.com/')
-      .to_return(status: 200, headers: headers)
+      .to_return(status: 200, headers:)
     endpoint = SiteInspector::Endpoint.new('http://example.com')
     described_class.new(endpoint)
   end

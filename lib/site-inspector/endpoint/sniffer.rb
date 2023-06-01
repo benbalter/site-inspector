@@ -49,10 +49,10 @@ class SiteInspector
         return {} if endpoint.redirect?
 
         {
-          framework: framework,
-          analytics: analytics,
-          javascript: javascript,
-          advertising: advertising
+          framework:,
+          analytics:,
+          javascript:,
+          advertising:
         }
       end
 
