@@ -56,14 +56,14 @@ class SiteInspector
         prefetch
         @hash = {}
 
-        self.class.each_key do |key|
+        self.class.keys.each_key do |key|
           @hash[key] = public_send(key)
         end
 
         @hash
       end
 
-      def method_missing(method_sym, *arguments, &block)
+      def method_missing(method_sym, *arguments, &)
         if respond_to_missing?(method_sym)
           exists?(self.class.key_paths[method_sym])
         else
