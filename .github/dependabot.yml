@@ -8,12 +8,12 @@ updates:
   - package-ecosystem: "bundler"
     directory: "/" 
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "npm"
     directory: "/" 
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "github-actions"
     directory: "/" 
     schedule:
-      interval: "weekly"
+      interval: "monthly"
