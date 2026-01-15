@@ -101,13 +101,14 @@ class SiteInspector
     # HTTPS is "downgraded" if both:
     #
     # * HTTPS is supported, and
-    # * The 'canonical' endpoint gets an immediate internal redirect to HTTP.
+    # * Any HTTPS endpoint redirects to HTTP.
     #
-    # TODO: the redirect must be internal.
+    # This correctly identifies domains where HTTPS is available but
+    # redirects to HTTP, regardless of which endpoint is canonical.
     def downgrades_https?
       return false unless https?
 
-      canonical_endpoint.redirect? && canonical_endpoint.redirect.http?
+      endpoints.select(&:https?).any? { |e| e.redirect&.http? }
     end
 
     # A domain is "canonically" at www if:
