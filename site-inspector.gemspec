@@ -16,9 +16,12 @@ Gem::Specification.new do |s|
   s.executables           = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.require_paths         = ['lib']
 
+  s.required_ruby_version = '>= 3.2'
+
   s.add_dependency('activesupport')
   s.add_dependency('cliver', '~> 0.0')
   s.add_dependency('colorator', '~> 1.1')
+  s.add_dependency('csv', '~> 3.0')
   s.add_dependency('dnsruby', '~> 1.0')
   s.add_dependency('dotenv', '~> 2.0')
   s.add_dependency('gman', '~> 7.0', '>= 7.0.4')
@@ -38,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec', '~> 3.0')
   s.add_development_dependency('rubocop', '~> 1.0')
   s.add_development_dependency('rubocop-performance', '~> 1.5')
-  s.add_development_dependency('rubocop-rspec', '~> 2.0')
+  s.add_development_dependency('rubocop-rspec', '~> 3.0')
   s.add_development_dependency('webmock', '~> 3.0')
   s.metadata['rubygems_mfa_required'] = 'true'
 end
