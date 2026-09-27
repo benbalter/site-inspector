@@ -115,6 +115,22 @@ describe SiteInspector::Endpoint do
       expect(subject.response_code).to eql('200')
     end
 
+    it 'is not up when there is no response' do
+      allow(subject).to receive(:response).and_return(nil)
+      expect(subject.up?).to be(false)
+    end
+
+    it 'is up for 2xx and 3xx responses and down otherwise' do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 200) }
+      expect(subject.up?).to be(true)
+
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 301) }
+      expect(subject.up?).to be(true)
+
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 500) }
+      expect(subject.up?).to be(false)
+    end
+
     it 'knows if a response has timed out' do
       allow(subject).to receive(:response) { Typhoeus::Response.new(return_code: :operation_timedout) }
       expect(subject.timed_out?).to be(true)
