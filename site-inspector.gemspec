@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency('mercenary', '~> 0.0')
   s.add_dependency('naughty_or_nice', '~> 2.0')
   s.add_dependency('nokogiri', '~> 1.10')
-  s.add_dependency('oj', '~> 3.0')
   s.add_dependency('parallel', '~> 1.0')
   s.add_dependency('public_suffix', '>= 4', '< 6')
   s.add_dependency('sniffles', '~> 0.2')
