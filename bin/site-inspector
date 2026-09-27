@@ -5,6 +5,14 @@ require 'mercenary'
 require 'json'
 require 'yaml'
 require 'colorator'
+
+# Load a .env file if dotenv happens to be installed. It is not a dependency.
+begin
+  require 'dotenv/load'
+rescue LoadError
+  nil
+end
+
 require_relative '../lib/site-inspector'
 
 Mercenary.program(:'site-inspector') do |p|

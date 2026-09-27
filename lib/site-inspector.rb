@@ -9,7 +9,6 @@ require 'cliver'
 require 'whois'
 require 'cgi'
 require 'resolv'
-require 'dotenv/load'
 require 'naughty_or_nice'
 require_relative 'cliver/dependency_ext'
 

@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency('cliver', '~> 0.0')
   s.add_dependency('colorator', '~> 1.1')
   s.add_dependency('dnsruby', '~> 1.0')
-  s.add_dependency('dotenv', '~> 2.0')
   s.add_dependency('gman', '~> 7.0', '>= 7.0.4')
   s.add_dependency('mercenary', '~> 0.0')
   s.add_dependency('naughty_or_nice', '~> 2.0')
