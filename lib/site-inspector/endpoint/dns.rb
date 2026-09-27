@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+
 class SiteInspector
   class Endpoint
     class Dns < Check
@@ -61,7 +63,11 @@ class SiteInspector
       end
 
       def localhost?
-        ip == '127.0.0.1'
+        return false unless ip
+
+        IPAddr.new(ip).loopback?
+      rescue IPAddr::InvalidAddressError
+        false
       end
 
       def ip

@@ -177,6 +177,26 @@ describe SiteInspector::Endpoint::Dns do
       expect(subject.localhost?).to be(true)
     end
 
+    it 'treats the whole 127.0.0.0/8 block as loopback' do
+      allow(subject).to receive(:ip).and_return('127.0.1.1')
+      expect(subject.localhost?).to be(true)
+    end
+
+    it 'treats the IPv6 loopback as localhost' do
+      allow(subject).to receive(:ip).and_return('::1')
+      expect(subject.localhost?).to be(true)
+    end
+
+    it "knows a public address isn't localhost" do
+      allow(subject).to receive(:ip).and_return('140.82.112.3')
+      expect(subject.localhost?).to be(false)
+    end
+
+    it "knows a missing address isn't localhost" do
+      allow(subject).to receive(:ip).and_return(nil)
+      expect(subject.localhost?).to be(false)
+    end
+
     it 'returns a LocalhostError' do
       expect(subject.to_h).to eql(error: SiteInspector::Endpoint::Dns::LocalhostError)
     end
