@@ -121,6 +121,7 @@ RSpec/ScatteredSetup:
 # Offense count: 30
 RSpec/SubjectStub:
   Exclude:
+    - 'spec/cliver/dependency_ext_spec.rb'
     - 'spec/site_inspector/endpoint/accessibility_spec.rb'
     - 'spec/site_inspector/endpoint/dns_spec.rb'
     - 'spec/site_inspector/endpoint/headers_spec.rb'
