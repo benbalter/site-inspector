@@ -16,7 +16,6 @@ class SiteInspector
   autoload :Cache, 'site-inspector/cache'
   autoload :DiskCache, 'site-inspector/disk_cache'
   autoload :Formatter, 'site-inspector/formatter'
-  autoload :RailsCache, 'site-inspector/rails_cache'
   autoload :Domain, 'site-inspector/domain'
   autoload :DomainParser, 'site-inspector/domain_parser'
   autoload :Endpoint, 'site-inspector/endpoint'
