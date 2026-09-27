@@ -20,6 +20,16 @@ describe SiteInspector do
     end
   end
 
+  it 'restores the environment when a with_env block raises' do
+    ENV['SITE_INSPECTOR_TEST_ENV'] = 'before'
+    expect do
+      with_env('SITE_INSPECTOR_TEST_ENV', 'during') { raise 'boom' }
+    end.to raise_error('boom')
+    expect(ENV.fetch('SITE_INSPECTOR_TEST_ENV')).to eql('before')
+  ensure
+    ENV.delete('SITE_INSPECTOR_TEST_ENV')
+  end
+
   it 'returns the default timeout' do
     expect(described_class.timeout).to be(10)
   end

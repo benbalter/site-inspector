@@ -11,6 +11,7 @@ def with_env(key, value)
   old_env = ENV.fetch(key, nil)
   ENV[key] = value
   yield
+ensure
   ENV[key] = old_env
 end
 
