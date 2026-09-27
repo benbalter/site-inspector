@@ -9,19 +9,9 @@ describe SiteInspector::Endpoint::Sniffer do
 
   def set_cookie(key, value)
     cookies = [
-      CGI::Cookie.new(
-        'name' => 'foo',
-        'value' => 'bar',
-        'domain' => 'example.com',
-        'path' => '/'
-      ),
-      CGI::Cookie.new(
-        'name' => key,
-        'value' => value,
-        'domain' => 'example.com',
-        'path' => '/'
-      )
-    ].map(&:to_s)
+      'foo=bar; domain=example.com; path=/',
+      "#{key}=#{value}; domain=example.com; path=/"
+    ]
 
     stub_request(:get, 'http://example.com/')
       .to_return(status: 200, body: '')
@@ -123,19 +113,9 @@ describe SiteInspector::Endpoint::Sniffer do
 
     it 'detects ColdFusion' do
       cookies = [
-        CGI::Cookie.new(
-          'name' => 'CFID',
-          'value' => '1234',
-          'domain' => 'example.com',
-          'path' => '/'
-        ),
-        CGI::Cookie.new(
-          'name' => 'CFTOKEN',
-          'value' => '5678',
-          'domain' => 'example.com',
-          'path' => '/'
-        )
-      ].map(&:to_s)
+        'CFID=1234; domain=example.com; path=/',
+        'CFTOKEN=5678; domain=example.com; path=/'
+      ]
 
       stub_request(:get, 'http://example.com/')
         .to_return(status: 200, body: '')

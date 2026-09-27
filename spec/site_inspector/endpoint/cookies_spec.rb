@@ -20,19 +20,9 @@ describe SiteInspector::Endpoint::Cookies do
   context 'with cookies' do
     subject do
       cookies = [
-        CGI::Cookie.new(
-          'name' => 'foo',
-          'value' => 'bar',
-          'domain' => 'example.com',
-          'path' => '/'
-        ),
-        CGI::Cookie.new(
-          'name' => 'foo2',
-          'value' => 'bar2',
-          'domain' => 'example.com',
-          'path' => '/'
-        )
-      ].map(&:to_s)
+        'foo=bar; domain=example.com; path=/',
+        'foo2=bar2; domain=example.com; path=/'
+      ]
 
       stub_request(:head, 'http://example.com/')
         .to_return(status: 200, body: '', headers: { 'set-cookie' => cookies })
@@ -68,6 +58,29 @@ describe SiteInspector::Endpoint::Cookies do
 
     it 'knows cookies are secure' do
       expect(subject.secure?).to be(true)
+    end
+
+    it 'parses cookie attributes' do
+      expect(subject['foo'].secure?).to be(true)
+      expect(subject['foo'].httponly?).to be(true)
+      expect(subject['foo2'].secure?).to be(false)
+    end
+  end
+
+  context 'with Secure and HttpOnly on different cookies' do
+    subject do
+      cookies = [
+        'foo=bar; domain=example.com; path=/; secure',
+        'foo2=bar2; domain=example.com; path=/; HttpOnly'
+      ]
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 200, body: '', headers: { 'set-cookie' => cookies })
+      endpoint = SiteInspector::Endpoint.new('http://example.com')
+      described_class.new(endpoint)
+    end
+
+    it "doesn't count split flags as secure" do
+      expect(subject.secure?).to be(false)
     end
   end
 end
