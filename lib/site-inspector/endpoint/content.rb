@@ -67,7 +67,7 @@ class SiteInspector
 
       def security_txt?
         @security_txt ||= if proper_404s?
-                            path_exists?('security.txt') || path_exists?('./well-known/security.txt')
+                            path_exists?('security.txt') || path_exists?('.well-known/security.txt')
                           else
                             false
                           end
