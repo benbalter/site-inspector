@@ -51,16 +51,17 @@ class SiteInspector
 
       def data
         @data ||= begin
-          output, _status = self.class.run_command([endpoint.uri.to_s])
-          @data = JSON.parse(output)
+          args = [endpoint.uri.to_s]
+          output, _status = self.class.run_command(args)
+          JSON.parse(output)
         rescue Timeout::Error, IOError
-          @data = { technologies: {
+          { technologies: {
             categories: ['timeout'],
             name: "https://www.wappalyzer.com/lookup/#{endpoint.host}"
           } }
+        rescue JSON::ParserError
+          raise WappalyzerError, "Command `wappalyzer #{args.join(' ')}` failed: #{output}"
         end
-      rescue JSON::ParserError
-        raise WappalyzerError, "Command `wappalyzer #{args.join(' ')}` failed: #{output}"
       end
     end
   end
