@@ -81,8 +81,6 @@ RSpec/MultipleExpectations:
 # Configuration parameters: IgnoreSharedExamples.
 RSpec/NamedSubject:
   Exclude:
-    - 'spec/site_inspector/cache_spec.rb'
-    - 'spec/site_inspector/disk_cache_spec.rb'
     - 'spec/site_inspector/domain_spec.rb'
     - 'spec/site_inspector/endpoint/accessibility_spec.rb'
     - 'spec/site_inspector/endpoint/check_spec.rb'

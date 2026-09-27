@@ -36,7 +36,3 @@ Style/ClassVars:
 
 Metrics/BlockLength:
   Enabled: false
-
-Security/MarshalLoad:
-  Exclude:
-    - lib/site-inspector/disk_cache.rb
