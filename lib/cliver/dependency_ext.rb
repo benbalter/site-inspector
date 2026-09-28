@@ -13,8 +13,8 @@ module Cliver
     def version
       return @version if defined? @version
 
-      version = installed_versions.find { |p, _v| p == path }
-      @detected_version = version.nil? ? nil : version[1]
+      detected = installed_versions.find { |p, _v| p == path }
+      @version = detected&.last
     end
 
     def major_version

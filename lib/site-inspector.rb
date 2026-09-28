@@ -4,20 +4,19 @@ require 'open-uri'
 require 'addressable/uri'
 require 'public_suffix'
 require 'typhoeus'
+require 'typhoeus/cache/rails'
+require 'active_support'
+require 'active_support/cache'
 require 'parallel'
 require 'cliver'
 require 'whois'
 require 'cgi'
 require 'resolv'
-require 'dotenv/load'
 require 'naughty_or_nice'
 require_relative 'cliver/dependency_ext'
 
 class SiteInspector
-  autoload :Cache, 'site-inspector/cache'
-  autoload :DiskCache, 'site-inspector/disk_cache'
   autoload :Formatter, 'site-inspector/formatter'
-  autoload :RailsCache, 'site-inspector/rails_cache'
   autoload :Domain, 'site-inspector/domain'
   autoload :DomainParser, 'site-inspector/domain_parser'
   autoload :Endpoint, 'site-inspector/endpoint'
@@ -26,13 +25,16 @@ class SiteInspector
   class << self
     attr_writer :timeout, :cache, :typhoeus_options
 
+    # The Typhoeus response cache. Set CACHE to a directory to persist
+    # responses to disk; inside Rails, Rails.cache is used; otherwise
+    # responses are kept in memory for the life of the process.
     def cache
       @cache ||= if ENV['CACHE']
-                   SiteInspector::DiskCache.new
+                   Typhoeus::Cache::Rails.new(ActiveSupport::Cache::FileStore.new(ENV.fetch('CACHE')))
                  elsif Object.const_defined?(:Rails)
                    Typhoeus::Cache::Rails.new
                  else
-                   SiteInspector::Cache.new
+                   Typhoeus::Cache::Rails.new(ActiveSupport::Cache::MemoryStore.new)
                  end
     end
 

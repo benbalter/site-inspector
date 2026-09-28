@@ -20,7 +20,7 @@ class SiteInspector
       def framework
         cms = sniff :cms
         return cms unless cms.nil?
-        return :expression_engine if endpoint.cookies.any? { |c| c.keys.first =~ /^exp_/ }
+        return :expression_engine if endpoint.cookies.any? { |c| c.name.start_with?('exp_') }
         return :php if endpoint.cookies['PHPSESSID']
         return :coldfusion if endpoint.cookies['CFID'] && endpoint.cookies['CFTOKEN']
         return :cowboy if endpoint.headers.server.to_s.casecmp('cowboy').zero?

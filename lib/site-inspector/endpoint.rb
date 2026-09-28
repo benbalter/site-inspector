@@ -104,7 +104,9 @@ class SiteInspector
 
     # Does the endpoint return a 2xx or 3xx response code?
     def up?
-      (response && response_code.start_with?('2')) || response_code.start_with?('3')
+      return false unless response
+
+      response_code.start_with?('2', '3')
     end
 
     # Does the server respond at all?
@@ -116,15 +118,13 @@ class SiteInspector
     def redirect
       return unless response && response_code.start_with?('3')
 
-      @redirect ||= begin
-        redirect = Addressable::URI.parse(headers['location'])
+      location = headers['location']
+      return if location.nil? || location.empty?
 
-        # This is a relative redirect, but we still need the absolute URI
-        if redirect.relative?
-          redirect.path = "/#{redirect.path}" unless redirect.path[0] == '/'
-          redirect.host = host.to_s
-          redirect.scheme = scheme
-        end
+      @redirect ||= begin
+        # Resolve per RFC 3986, so protocol-relative (`//host`), query-only
+        # (`?q`), and dot-segment (`../x`) locations become absolute URIs
+        redirect = uri.join(location)
 
         # This was a redirect to a subpath or back to itself, which we don't care about
         return if redirect.host == host.to_s && redirect.scheme == scheme

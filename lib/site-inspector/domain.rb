@@ -6,12 +6,7 @@ class SiteInspector
 
     def initialize(host)
       @host = DomainParser.parse(host)
-
-      if @host&.trd == 'www'
-        @host.instance_variable_set(:@trd, nil)
-      elsif @host&.trd&.start_with?('www.')
-        @host.instance_variable_set(:@trd, @host.trd.gsub(/^www\./, ''))
-      end
+      @host = strip_www(@host) if @host&.trd
     end
 
     def endpoints
@@ -272,6 +267,16 @@ class SiteInspector
 
     def to_json(*_args)
       to_h.to_json
+    end
+
+    private
+
+    # Rebuild the domain without a leading `www` label
+    def strip_www(domain)
+      return domain unless domain.trd == 'www' || domain.trd.start_with?('www.')
+
+      trd = domain.trd.delete_prefix('www').delete_prefix('.')
+      PublicSuffix::Domain.new(domain.tld, domain.sld, trd.empty? ? nil : trd)
     end
   end
 end
