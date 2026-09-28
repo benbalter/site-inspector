@@ -2,7 +2,8 @@
 
 require 'spec_helper'
 
-describe SiteInspector::Endpoint::Whois do
+# NOTE: these tests make external WHOIS calls; run them with LIVE=1
+describe SiteInspector::Endpoint::Whois, :live do
   subject do
     stub_request(:head, site).to_return(status: 200)
     endpoint = SiteInspector::Endpoint.new(site)

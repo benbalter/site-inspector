@@ -72,8 +72,8 @@ describe SiteInspector::Endpoint::Dns do
     end
   end
 
-  # NOTE: these tests makes external calls
-  context 'live tests' do
+  # NOTE: these tests make external calls; run them with LIVE=1
+  context 'live tests', :live do
     it 'runs the query' do
       expect(subject.query).not_to be_empty
     end
