@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('colorator', '~> 1.1')
   s.add_dependency('csv', '~> 3.0')
   s.add_dependency('dnsruby', '~> 1.0')
-  s.add_dependency('gman', '~> 7.0', '>= 7.0.4')
+  s.add_dependency('gman', '>= 7.0.4', '< 9')
   s.add_dependency('http-cookie', '~> 1.0')
   s.add_dependency('mercenary', '~> 0.0')
   s.add_dependency('naughty_or_nice', '~> 2.0')
