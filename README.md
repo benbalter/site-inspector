@@ -26,8 +26,8 @@ domain.www?
 #  =>  true
 domain.canonical_endpoint.to_s
 #  => "https://www.whitehouse.gov"
-domain.canonical_endpoint.sniffer.cms
-#  =>  { :drupal  =>  {}}
+domain.canonical_endpoint.wappalyzer.to_h
+#  =>  { :cms => ["Drupal"], ... }
 ```
 
 ### Command line usage
@@ -42,7 +42,6 @@ Usage:
 Options:
         -j, --json         JSON encode the output
         -a, --all          return results for all endpoints (defaults to only the canonical endpoint)
-            --sniffer      return results for the sniffer check (defaults to all checks unless one or more checks are specified)
             --https        return results for the https check (defaults to all checks unless one or more checks are specified)
             --hsts         return results for the hsts check (defaults to all checks unless one or more checks are specified)
             --headers      return results for the headers check (defaults to all checks unless one or more checks are specified)
@@ -132,12 +131,11 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 * `valid` - if the HTTPS response is valid
 * `return_code` - the HTTPS error, if any
 
-#### Sniffer
+#### Wappalyzer
 
-* `cms` - the CMS used, if any
-* `analytics` - the analytics providers used, if any
-* `javascript` - the javascript libraries used, if any
-* `advertising` - the advertising providers used, if any
+Detects the endpoint's CMS and other technologies (analytics, JavaScript libraries, advertising, web servers, and so on) with the [`wappalyzer`](https://www.npmjs.com/package/wappalyzer) CLI. Requires `node`. The check is only enabled when a `wappalyzer` binary is found on your `PATH`, in `./bin`, or in `./node_modules/.bin` (`npm install` in this repository installs it).
+
+Returns a hash of technology names keyed by category, such as `cms`, `analytics`, or `javascript_libraries`.
 
 ## Adding your own check
 

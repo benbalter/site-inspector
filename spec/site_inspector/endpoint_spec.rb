@@ -291,6 +291,7 @@ describe SiteInspector::Endpoint do
       expected = 10
       pa11y = SiteInspector::Endpoint::Accessibility.pa11y?
       expected -= 1 unless pa11y
+      expected -= 1 unless SiteInspector::Endpoint::Wappalyzer.wappalyzer?
       expect(described_class.checks.count).to eql(expected)
     end
 
