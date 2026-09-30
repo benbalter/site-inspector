@@ -203,8 +203,53 @@ describe SiteInspector::Domain do
       expect(subject.enforces_https?).to be(false)
     end
 
-    it 'detects when a domain downgrades to http' do
-      # TODO
+    it 'detects when a domain downgrades to http from the canonical https endpoint' do
+      stub_request(:head, 'https://example.com/')
+        .to_return(status: 301, headers: { location: 'http://example.com' })
+      stub_request(:head, 'https://www.example.com/').to_return(status: 500)
+      stub_request(:head, 'http://example.com/').to_return(status: 200)
+      stub_request(:head, 'http://www.example.com/').to_return(status: 500)
+      allow(subject.endpoints[0].https).to receive(:valid?).and_return(true)
+
+      expect(subject.downgrades_https?).to be(true)
+    end
+
+    it 'detects when a domain downgrades to http even when canonical is http (nytimes.com case)' do
+      # This is the key test case from the issue:
+      # https://nytimes.com redirects to http://www.nytimes.com (canonical)
+      # The canonical endpoint is HTTP, but HTTPS is supported and downgrades to HTTP
+      stub_request(:head, 'https://example.com/')
+        .to_return(status: 301, headers: { location: 'http://www.example.com' })
+      stub_request(:head, 'https://www.example.com/')
+        .to_return(status: 301, headers: { location: 'http://www.example.com' })
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 301, headers: { location: 'http://www.example.com' })
+      stub_request(:head, 'http://www.example.com/').to_return(status: 200)
+      allow(subject.endpoints[0].https).to receive(:valid?).and_return(true)
+      allow(subject.endpoints[1].https).to receive(:valid?).and_return(true)
+
+      expect(subject.downgrades_https?).to be(true)
+    end
+
+    it 'does not consider a domain as downgrading when https is not supported' do
+      stub_request(:head, 'https://example.com/').to_return(status: 500)
+      stub_request(:head, 'https://www.example.com/').to_return(status: 500)
+      stub_request(:head, 'http://example.com/').to_return(status: 200)
+      stub_request(:head, 'http://www.example.com/').to_return(status: 200)
+
+      expect(subject.downgrades_https?).to be(false)
+    end
+
+    it 'does not consider a domain as downgrading when https redirects to https' do
+      stub_request(:head, 'https://example.com/')
+        .to_return(status: 301, headers: { location: 'https://www.example.com' })
+      stub_request(:head, 'https://www.example.com/').to_return(status: 200)
+      stub_request(:head, 'http://example.com/').to_return(status: 500)
+      stub_request(:head, 'http://www.example.com/').to_return(status: 500)
+      allow(subject.endpoints[0].https).to receive(:valid?).and_return(true)
+      allow(subject.endpoints[1].https).to receive(:valid?).and_return(true)
+
+      expect(subject.downgrades_https?).to be(false)
     end
 
     it 'detects when a domain enforces https' do
