@@ -2,11 +2,7 @@
 
 A Ruby Gem to sniff information about a domain's technology and capabilities.
 
-[![Gem Version](https://badge.fury.io/rb/site-inspector.svg)](http://badge.fury.io/rb/site-inspector) [![Build Status](https://travis-ci.org/benbalter/site-inspector.svg)](https://travis-ci.org/benbalter/site-inspector)
-
-## Demo
-
-[site-inspector.herokuapp.com](https://site-inspector.herokuapp.com) ([source](https://github.com/benbalter/site-inspector-demo))
+[![Gem Version](https://img.shields.io/gem/v/site-inspector)](https://rubygems.org/gems/site-inspector) [![CI](https://github.com/benbalter/site-inspector/actions/workflows/ci.yml/badge.svg)](https://github.com/benbalter/site-inspector/actions/workflows/ci.yml)
 
 ## Concepts
 
@@ -145,7 +141,7 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 
 ## Adding your own check
 
-[Checks](https://github.com/benbalter/site-inspector/tree/master/lib/site-inspector/checks) are special classes that are children of [`SiteInspector::Endpoint::Check`](https://github.com/benbalter/site-inspector/blob/master/lib/site-inspector/checks/check.rb). You can implement your own check like this:
+[Checks](https://github.com/benbalter/site-inspector/tree/main/lib/site-inspector/endpoint) are special classes that are children of [`SiteInspector::Endpoint::Check`](https://github.com/benbalter/site-inspector/blob/main/lib/site-inspector/endpoint/check.rb). You can implement your own check like this:
 
 ```ruby
 class SiteInspector
