@@ -19,6 +19,7 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 - **The User-Agent is set with `Typhoeus::Config.user_agent`.** `SiteInspector.typhoeus_defaults` no longer includes a `:headers` key.
 - **pa11y is looked up as `pa11y`** on the `PATH`, in `./bin`, or in `./node_modules/.bin`, instead of `pa11y.js` under the gem's own `node_modules`.
 - **Several checks return `{}` for endpoints that are down or redirect.** This applies to content, cookies, sniffer, wappalyzer, accessibility, and well-known. The headers check returns `{}` for redirects.
+- **Removed the Sniffer check and the `sniffles` dependency; use the Wappalyzer check for CMS/technology detection.** `SiteInspector::Endpoint::Sniffer`, the `--sniffer` CLI flag, and the `sniffer` output key are gone. ([#119](https://github.com/benbalter/site-inspector/pull/119))
 - **`Domain#downgrades_https?` flags any HTTPS endpoint that redirects to HTTP**, including redirects to another host. Before, it only checked the canonical endpoint. ([#106](https://github.com/benbalter/site-inspector/pull/106))
 
 ### Added
@@ -57,12 +58,11 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 
 ### Dependencies
 
-- Added: `activesupport`, `csv` (~> 3.0), `http-cookie` (~> 1.0), `naughty_or_nice` (~> 2.0).
-- Removed: `dotenv`, `oj`.
+- Added: `activesupport` (>= 7.0), `csv` (~> 3.0), `http-cookie` (~> 1.0), `naughty_or_nice` (~> 2.0).
+- Removed: `dotenv`, `oj`, `sniffles` ([#119](https://github.com/benbalter/site-inspector/pull/119)).
 - `gman`: `~> 7.0, >= 7.0.4` became `>= 7.0.4, < 9`, which allows gman 8. ([#109](https://github.com/benbalter/site-inspector/pull/109))
 - `nokogiri`: `~> 1.0` became `~> 1.10`.
 - `public_suffix`: `~> 4.0` became `>= 4, < 6`. ([#92](https://github.com/benbalter/site-inspector/pull/92))
-- `sniffles`: `~> 0.0` became `~> 0.2`.
 - Development: `rubocop-rspec` `~> 2.0` became `~> 3.0`.
 - npm: added `wappalyzer` (now `^6.10.66`) alongside `pa11y`. ([#91](https://github.com/benbalter/site-inspector/pull/91), [#112](https://github.com/benbalter/site-inspector/pull/112))
 
