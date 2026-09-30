@@ -5,7 +5,7 @@ require File.expand_path './lib/site-inspector/version', File.dirname(__FILE__)
 Gem::Specification.new do |s|
   s.name                  = 'site-inspector'
   s.version               = SiteInspector::VERSION
-  s.summary               = 'A Ruby port and v2 of Site Inspector (https://github.com/benbalter/site-inspector)'
+  s.summary               = "Ruby gem and CLI that checks a domain's HTTPS, HSTS, DNS, headers, cookies, WHOIS, accessibility, and tech stack"
   s.description           = "Returns information about a domain's technology and capabilities"
   s.authors               = 'Ben Balter'
   s.email                 = 'ben@balter.com'
@@ -43,4 +43,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rubocop-rspec', '~> 3.0')
   s.add_development_dependency('webmock', '~> 3.0')
   s.metadata['rubygems_mfa_required'] = 'true'
+  s.metadata['homepage_uri'] = 'https://github.com/benbalter/site-inspector'
+  s.metadata['source_code_uri'] = 'https://github.com/benbalter/site-inspector'
+  s.metadata['bug_tracker_uri'] = 'https://github.com/benbalter/site-inspector/issues'
+  s.metadata['changelog_uri'] = 'https://github.com/benbalter/site-inspector/releases'
 end
