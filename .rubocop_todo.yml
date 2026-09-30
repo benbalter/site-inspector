@@ -90,7 +90,6 @@ RSpec/ContextWording:
     - 'spec/site_inspector/domain_spec.rb'
     - 'spec/site_inspector/endpoint/content_spec.rb'
     - 'spec/site_inspector/endpoint/dns_spec.rb'
-    - 'spec/site_inspector/endpoint/sniffer_spec.rb'
     - 'spec/site_inspector/endpoint_spec.rb'
 
 # Offense count: 2
@@ -130,7 +129,6 @@ RSpec/NamedSubject:
     - 'spec/site_inspector/endpoint/headers_spec.rb'
     - 'spec/site_inspector/endpoint/hsts_spec.rb'
     - 'spec/site_inspector/endpoint/https_spec.rb'
-    - 'spec/site_inspector/endpoint/sniffer_spec.rb'
     - 'spec/site_inspector/endpoint/whois_spec.rb'
     - 'spec/site_inspector/endpoint_spec.rb'
 

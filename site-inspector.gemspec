@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency('activesupport')
+  s.add_dependency('activesupport', '>= 7.0')
   s.add_dependency('cliver', '~> 0.0')
   s.add_dependency('colorator', '~> 1.1')
   s.add_dependency('csv', '~> 3.0')
@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_dependency('nokogiri', '~> 1.10')
   s.add_dependency('parallel', '~> 1.0')
   s.add_dependency('public_suffix', '>= 4', '< 6')
-  s.add_dependency('sniffles', '~> 0.2')
   s.add_dependency('typhoeus', '~> 1.0')
   s.add_dependency('urlscan', '~> 0.6')
   s.add_dependency('whois', '~> 5.0')
