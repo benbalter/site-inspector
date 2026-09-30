@@ -85,6 +85,16 @@ describe SiteInspector::Endpoint::Content do
     expect(subject.humans_txt?).to be(true)
   end
 
+  it 'finds security.txt under .well-known' do
+    stub_request(:head, %r{http://example.com/[a-z0-9]{32}}i).to_return(status: 404)
+    stub_request(:head, 'http://example.com/security.txt').to_return(status: 404)
+    stub = stub_request(:head, 'http://example.com/.well-known/security.txt')
+           .to_return(status: 200)
+
+    expect(subject.security_txt?).to be(true)
+    expect(stub).to have_been_requested
+  end
+
   it 'returns the generator' do
     expect(subject.generator).to eql('Jekyll v3.8.5')
   end

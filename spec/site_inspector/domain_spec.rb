@@ -26,6 +26,23 @@ describe SiteInspector::Domain do
       expect(domain.host.to_s).to eql('example.com')
     end
 
+    it 'strips a leading www from a deeper subdomain' do
+      domain = described_class.new('www.foo.example.com')
+      expect(domain.host.to_s).to eql('foo.example.com')
+      expect(domain.host.trd).to eql('foo')
+      expect(domain.host).to be_a(PublicSuffix::Domain)
+    end
+
+    it 'strips www and leaves no subdomain' do
+      domain = described_class.new('www.example.com')
+      expect(domain.host.trd).to be_nil
+    end
+
+    it 'does not strip www from the middle of a subdomain' do
+      domain = described_class.new('foo.www.example.com')
+      expect(domain.host.to_s).to eql('foo.www.example.com')
+    end
+
     it 'strips http://www from the domain' do
       domain = described_class.new('http://www.example.com')
       expect(domain.host.to_s).to eql('example.com')

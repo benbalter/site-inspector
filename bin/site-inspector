@@ -2,18 +2,18 @@
 # frozen_string_literal: true
 
 require 'mercenary'
-require 'oj'
+require 'json'
 require 'yaml'
 require 'colorator'
-require_relative '../lib/site-inspector'
 
-def stringify_keys_deep!(hash)
-  hash.each_key do |k|
-    ks = k.respond_to?(:to_s) ? k.to_s : k
-    hash[ks] = hash.delete k # Preserve order even when k == ks
-    stringify_keys_deep! h[ks] if hash[ks].is_a? Hash
-  end
+# Load a .env file if dotenv happens to be installed. It is not a dependency.
+begin
+  require 'dotenv/load'
+rescue LoadError
+  nil
 end
+
+require_relative '../lib/site-inspector'
 
 Mercenary.program(:'site-inspector') do |p|
   p.version SiteInspector::VERSION
@@ -36,14 +36,14 @@ Mercenary.program(:'site-inspector') do |p|
       # Build our domain hash as requested
       domain = SiteInspector.inspect(args[0])
       hash = domain.to_h(options)
-      json = Oj.dump(hash, indent: 2, mode: :compat)
+      json = JSON.pretty_generate(hash)
 
       # Dump the JSON and run
       next puts json if options['json']
 
-      # This is a dirty, dirty hack, but it's a simple way to stringify keys recursively
-      # And format the output in a human-readable way
-      yaml = YAML.dump Oj.load(json)
+      # Round-trip through JSON so keys and non-primitive values (symbols,
+      # classes) become plain strings before formatting as YAML
+      yaml = YAML.dump JSON.parse(json)
 
       # Colorize bools
       yaml.gsub!(/: (true|ok)$/, ": #{'true'.green}")

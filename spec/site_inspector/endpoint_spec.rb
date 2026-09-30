@@ -115,6 +115,22 @@ describe SiteInspector::Endpoint do
       expect(subject.response_code).to eql('200')
     end
 
+    it 'is not up when there is no response' do
+      allow(subject).to receive(:response).and_return(nil)
+      expect(subject.up?).to be(false)
+    end
+
+    it 'is up for 2xx and 3xx responses and down otherwise' do
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 200) }
+      expect(subject.up?).to be(true)
+
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 301) }
+      expect(subject.up?).to be(true)
+
+      allow(subject).to receive(:response) { Typhoeus::Response.new(code: 500) }
+      expect(subject.up?).to be(false)
+    end
+
     it 'knows if a response has timed out' do
       allow(subject).to receive(:response) { Typhoeus::Response.new(return_code: :operation_timedout) }
       expect(subject.timed_out?).to be(true)
@@ -195,6 +211,44 @@ describe SiteInspector::Endpoint do
     it 'handles relative redirects without a leading slash' do
       stub_request(:head, 'http://example.com/')
         .to_return(status: 301, headers: { location: 'foo' })
+
+      expect(subject.redirect?).to be(false)
+    end
+
+    it 'resolves protocol-relative redirects against the current scheme' do
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 301, headers: { location: '//www.example.com/' })
+
+      expect(subject.redirect?).to be(true)
+      expect(subject.redirect.uri.to_s).to eql('http://www.example.com/')
+    end
+
+    it 'keeps the https scheme for protocol-relative redirects to another host' do
+      endpoint = described_class.new('https://example.com')
+      stub_request(:head, 'https://example.com/')
+        .to_return(status: 301, headers: { location: '//other.com/' })
+
+      expect(endpoint.redirect.uri.to_s).to eql('https://other.com/')
+      expect(endpoint.redirect.scheme).to eql('https')
+    end
+
+    it 'treats query-only redirects as internal' do
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 301, headers: { location: '?q=1' })
+
+      expect(subject.redirect?).to be(false)
+    end
+
+    it 'treats dot-segment redirects as internal' do
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 301, headers: { location: '../x' })
+
+      expect(subject.redirect?).to be(false)
+    end
+
+    it 'handles a redirect without a location header' do
+      stub_request(:head, 'http://example.com/')
+        .to_return(status: 301)
 
       expect(subject.redirect?).to be(false)
     end

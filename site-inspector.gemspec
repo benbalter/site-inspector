@@ -5,7 +5,7 @@ require File.expand_path './lib/site-inspector/version', File.dirname(__FILE__)
 Gem::Specification.new do |s|
   s.name                  = 'site-inspector'
   s.version               = SiteInspector::VERSION
-  s.summary               = 'A Ruby port and v2 of Site Inspector (https://github.com/benbalter/site-inspector)'
+  s.summary               = "Ruby gem and CLI that checks a domain's HTTPS, HSTS, DNS, headers, cookies, WHOIS, accessibility, and tech stack"
   s.description           = "Returns information about a domain's technology and capabilities"
   s.authors               = 'Ben Balter'
   s.email                 = 'ben@balter.com'
@@ -16,16 +16,18 @@ Gem::Specification.new do |s|
   s.executables           = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.require_paths         = ['lib']
 
+  s.required_ruby_version = '>= 3.2'
+
   s.add_dependency('activesupport')
   s.add_dependency('cliver', '~> 0.0')
   s.add_dependency('colorator', '~> 1.1')
+  s.add_dependency('csv', '~> 3.0')
   s.add_dependency('dnsruby', '~> 1.0')
-  s.add_dependency('dotenv', '~> 2.0')
-  s.add_dependency('gman', '~> 7.0', '>= 7.0.4')
+  s.add_dependency('gman', '>= 7.0.4', '< 9')
+  s.add_dependency('http-cookie', '~> 1.0')
   s.add_dependency('mercenary', '~> 0.0')
   s.add_dependency('naughty_or_nice', '~> 2.0')
   s.add_dependency('nokogiri', '~> 1.10')
-  s.add_dependency('oj', '~> 3.0')
   s.add_dependency('parallel', '~> 1.0')
   s.add_dependency('public_suffix', '>= 4', '< 6')
   s.add_dependency('sniffles', '~> 0.2')
@@ -38,7 +40,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec', '~> 3.0')
   s.add_development_dependency('rubocop', '~> 1.0')
   s.add_development_dependency('rubocop-performance', '~> 1.5')
-  s.add_development_dependency('rubocop-rspec', '~> 2.0')
+  s.add_development_dependency('rubocop-rspec', '~> 3.0')
   s.add_development_dependency('webmock', '~> 3.0')
   s.metadata['rubygems_mfa_required'] = 'true'
+  s.metadata['homepage_uri'] = 'https://github.com/benbalter/site-inspector'
+  s.metadata['source_code_uri'] = 'https://github.com/benbalter/site-inspector'
+  s.metadata['bug_tracker_uri'] = 'https://github.com/benbalter/site-inspector/issues'
+  s.metadata['changelog_uri'] = 'https://github.com/benbalter/site-inspector/releases'
 end

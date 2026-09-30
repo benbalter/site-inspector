@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'http-cookie'
+
 class SiteInspector
   class Endpoint
     class Cookies < Check
@@ -14,17 +16,20 @@ class SiteInspector
       end
       alias cookies? any?
 
+      # Returns an array of HTTP::Cookie objects parsed from the Set-Cookie headers
       def all
-        @cookies ||= cookie_header.map { |c| CGI::Cookie.parse(c) } if cookies?
+        @cookies ||= cookie_header.flat_map { |c| HTTP::Cookie.parse(c, endpoint.uri.to_s) } if cookies?
       end
 
       def [](key)
-        all.find { |cookie| cookie.keys.first == key } if cookies?
+        all.find { |cookie| cookie.name == key } if cookies?
       end
 
+      # Does at least one cookie set both the Secure and HttpOnly flags?
       def secure?
-        pairs = cookie_header.join('; ').split('; ') # CGI::Cookies#Parse doesn't seem to like secure headers
-        pairs.any? { |c| c.casecmp('secure').zero? } && pairs.any? { |c| c.casecmp('httponly').zero? }
+        return false unless cookies?
+
+        all.any? { |cookie| cookie.secure? && cookie.httponly? }
       end
 
       def to_h

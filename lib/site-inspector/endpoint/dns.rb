@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+
 class SiteInspector
   class Endpoint
     class Dns < Check
       class LocalhostError < StandardError; end
+
+      # Record types fetched for #records. ANY queries are deprecated
+      # (RFC 8482) and most resolvers answer them with a single HINFO record.
+      RECORD_TYPES = %w[A AAAA CNAME MX DNSKEY].freeze
 
       def self.resolver
         require 'dnsruby'
@@ -14,19 +20,19 @@ class SiteInspector
         end
       end
 
-      def query(type = 'ANY')
-        SiteInspector::Endpoint::Dns.resolver.query(host.to_s, type).answer
-      rescue Dnsruby::ResolvTimeout, Dnsruby::ServFail, Dnsruby::NXDomain, Dnsruby::OtherResolvError => e
-        SiteInspector.logger.warn e.message
-        []
+      def query(type = 'A')
+        lookup(host.to_s, type)
       end
 
       def records
-        @records ||= query
+        @records ||= RECORD_TYPES.flat_map { |type| query(type) }.uniq(&:to_s)
       end
 
       def record?(type)
-        records.any? { |record| record.type == type } || query(type).count != 0
+        return true if records.any? { |record| record.type == type }
+        return false if RECORD_TYPES.include?(type.to_s)
+
+        query(type).any?
       end
       alias has_record? record?
 
@@ -61,20 +67,30 @@ class SiteInspector
       end
 
       def localhost?
-        ip == '127.0.0.1'
+        return false unless ip
+
+        IPAddr.new(ip).loopback?
+      rescue IPAddr::InvalidAddressError
+        false
       end
 
+      # The host's first IPv4 address, falling back to IPv6
       def ip
-        @ip ||= Resolv.getaddress host
-      rescue Resolv::ResolvError, Dnsruby::OtherResolvError
-        nil
+        @ip ||= begin
+          record = records.find { |r| r.type == 'A' } || records.find { |r| r.type == 'AAAA' }
+          record&.address&.to_s
+        end
       end
 
+      # The PTR hostname for #ip
       def hostname
-        require 'resolv'
-        @hostname ||= PublicSuffix.parse(Resolv.getname(ip))
-      rescue Resolv::ResolvError, PublicSuffix::DomainInvalid, Dnsruby::OtherResolvError
-        nil
+        return @hostname if defined?(@hostname)
+        return @hostname = nil unless ip
+
+        ptr = lookup(ip, 'PTR').find { |record| record.type == 'PTR' }
+        @hostname = ptr ? PublicSuffix.parse(ptr.domainname.to_s) : nil
+      rescue PublicSuffix::DomainInvalid
+        @hostname = nil
       end
 
       def cnames
@@ -102,6 +118,13 @@ class SiteInspector
       end
 
       private
+
+      def lookup(name, type)
+        SiteInspector::Endpoint::Dns.resolver.query(name, type).answer
+      rescue Dnsruby::ResolvTimeout, Dnsruby::ResolvError => e
+        SiteInspector.logger.warn e.message
+        []
+      end
 
       def data
         @data ||= {}
