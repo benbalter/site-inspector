@@ -94,6 +94,7 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 #### Content
 
 * `doctype` - The HTML doctype returned
+* `generator` - The site generator reported by the HTML page or `sitemap.xml`
 * `sitemap_xml` - Whether the endpoint has a sitemap
 * `robots_txt` - whether the endpoint has a `robots.txt` file
 

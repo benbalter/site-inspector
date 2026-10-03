@@ -4,7 +4,16 @@ require 'spec_helper'
 
 describe SiteInspector::Endpoint::Content do
   subject do
-    body = <<-BODY
+    stub_request(:get, 'http://example.com/')
+      .to_return(status: 200, body:)
+    stub_request(:head, 'http://example.com/')
+      .to_return(status: 200)
+    endpoint = SiteInspector::Endpoint.new('http://example.com')
+    described_class.new(endpoint)
+  end
+
+  let(:body) do
+    <<-BODY
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html>
         <head>
@@ -15,13 +24,6 @@ describe SiteInspector::Endpoint::Content do
         </body>
       </html>
     BODY
-
-    stub_request(:get, 'http://example.com/')
-      .to_return(status: 200, body:)
-    stub_request(:head, 'http://example.com/')
-      .to_return(status: 200)
-    endpoint = SiteInspector::Endpoint.new('http://example.com')
-    described_class.new(endpoint)
   end
 
   it 'returns the doc' do
@@ -97,6 +99,21 @@ describe SiteInspector::Endpoint::Content do
 
   it 'returns the generator' do
     expect(subject.generator).to eql('Jekyll v3.8.5')
+  end
+
+  it 'returns the generator from sitemap.xml when the page omits it' do
+    allow(self).to receive(:body).and_return('<html><head></head></html>')
+    stub_request(:get, 'http://example.com/sitemap.xml')
+      .to_return(status: 200, body: '<urlset><generator>Jekyll</generator></urlset>')
+
+    expect(subject.generator).to eql('Jekyll')
+  end
+
+  it 'returns nil when neither the page nor sitemap.xml identifies a generator' do
+    allow(self).to receive(:body).and_return('<html><head></head></html>')
+    stub_request(:get, 'http://example.com/sitemap.xml').to_return(status: 404)
+
+    expect(subject.generator).to be_nil
   end
 
   context '404s' do

@@ -86,7 +86,7 @@ class SiteInspector
       def generator
         @generator ||= begin
           tag = document.at('meta[name="generator"]')
-          tag['content'] if tag
+          tag ? tag['content'] : sitemap_generator
         end
       end
 
@@ -137,6 +137,14 @@ class SiteInspector
       end
 
       private
+
+      def sitemap_generator
+        response = endpoint.request(path: 'sitemap.xml', method: :get, followlocation: true)
+        return unless response.success?
+
+        require 'nokogiri'
+        Nokogiri::XML(response.body).at('generator')&.text
+      end
 
       def random_paths
         require 'securerandom'
