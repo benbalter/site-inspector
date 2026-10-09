@@ -4,7 +4,7 @@
   "description": "Returns information about a domain's technology and capabilities",
   "main": "site-inspector",
   "dependencies": {
-    "pa11y": "^5.0.0",
+    "pa11y": "^10.0.0",
     "wappalyzer": "^7.0.3"
   },
   "devDependencies": {},
