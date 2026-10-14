@@ -55,6 +55,7 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 - The Wappalyzer check no longer raises `NameError` when the CLI output isn't JSON. It raises `SiteInspector::Endpoint::Wappalyzer::WappalyzerError` with the command output instead. ([#109](https://github.com/benbalter/site-inspector/pull/109))
 - `Cliver::Dependency#version` is memoized as intended. ([#109](https://github.com/benbalter/site-inspector/pull/109))
 - A `RailsCache` autoload that pointed to a missing file was removed. ([#109](https://github.com/benbalter/site-inspector/pull/109))
+- `Hsts#valid?` now requires a `max-age` directive with a non-negative integer value, per RFC 6797 §6.1.1. A header such as `Strict-Transport-Security: includeSubDomains` is no longer reported as valid. ([#127](https://github.com/benbalter/site-inspector/issues/127))
 
 ### Dependencies
 

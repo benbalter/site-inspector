@@ -9,8 +9,9 @@ class SiteInspector
 
       def valid?
         return false if header.empty?
+        return false unless pairs.none? { |key, value| "#{key}#{value}" =~ /[\s'"]/ }
 
-        pairs.none? { |key, value| "#{key}#{value}" =~ /[\s'"]/ }
+        valid_max_age?
       end
 
       def max_age
@@ -49,6 +50,13 @@ class SiteInspector
       end
 
       private
+
+      # RFC 6797 §6.1.1 requires a max-age directive whose value is a
+      # non-negative integer (optionally quoted, already unquoted in #pairs).
+      def valid_max_age?
+        value = pairs[:'max-age']
+        !value.nil? && /\A\d+\z/.match?(value)
+      end
 
       def headers
         endpoint.headers
