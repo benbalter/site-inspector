@@ -44,6 +44,21 @@ describe SiteInspector::Endpoint::Hsts do
     expect(subject.valid?).to be(false)
   end
 
+  it 'is invalid without a max-age directive' do
+    stub_header('includeSubDomains')
+    expect(subject.valid?).to be(false)
+  end
+
+  it 'is invalid with a non-numeric max-age' do
+    stub_header('max-age=forever')
+    expect(subject.valid?).to be(false)
+  end
+
+  it 'is valid with a quoted max-age' do
+    stub_header('max-age="31536000"')
+    expect(subject.valid?).to be(true)
+  end
+
   it 'knows the max age' do
     expect(subject.max_age).to be(31_536_000)
   end
