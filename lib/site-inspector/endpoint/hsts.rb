@@ -7,6 +7,10 @@ class SiteInspector
     class Hsts < Check
       STATUS_ENDPOINT = 'https://hstspreload.org/api/v2/status'
 
+      # Minimum max-age (one year) required by the HSTS preload list,
+      # see https://hstspreload.org/#submission-requirements
+      PRELOAD_MIN_MAX_AGE = 31_536_000
+
       def valid?
         return false if header.empty?
         return false unless pairs.none? { |key, value| "#{key}#{value}" =~ /[\s'"]/ }
@@ -32,9 +36,10 @@ class SiteInspector
         max_age.positive?
       end
 
-      # Google's minimum max-age for automatic preloading
+      # Whether the header meets the HSTS preload list's requirements
+      # (includeSubDomains, preload, and a max-age of at least one year)
       def preload_ready?
-        include_subdomains? && preload? && max_age >= 10_886_400
+        include_subdomains? && preload? && max_age >= PRELOAD_MIN_MAX_AGE
       end
 
       def to_h
