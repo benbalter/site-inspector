@@ -79,28 +79,39 @@ describe SiteInspector::Endpoint::Hsts do
     expect(subject.enabled?).to be(true)
 
     allow(subject).to receive(:pairs).and_return('max-age': 0)
-    expect(subject.preload?).to be(false)
+    expect(subject.enabled?).to be(false)
 
     allow(subject).to receive(:pairs).and_return(foo: 'bar')
-    expect(subject.preload?).to be(false)
+    expect(subject.enabled?).to be(false)
   end
 
   it "knows if it's preload ready" do
     expect(subject.preload_ready?).to be(false)
 
-    pairs = { 'max-age': 10_886_401, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 31_536_000, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(true)
 
-    pairs = { 'max-age': 10_886_401, includesubdomains: nil }
+    pairs = { 'max-age': 31_536_000, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(false)
 
-    pairs = { 'max-age': 10_886_401, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 31_536_000, preload: nil }
+    allow(subject).to receive(:pairs) { pairs }
+    expect(subject.preload_ready?).to be(false)
+  end
+
+  it 'requires a max-age of at least one year to be preload ready' do
+    pairs = { 'max-age': 63_072_000, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(true)
 
-    pairs = { 'max-age': 5, preload: nil, includesubdomains: nil }
+    pairs = { 'max-age': 31_535_999, preload: nil, includesubdomains: nil }
+    allow(subject).to receive(:pairs) { pairs }
+    expect(subject.preload_ready?).to be(false)
+
+    # The old 18-week minimum no longer qualifies for the preload list
+    pairs = { 'max-age': 10_886_401, preload: nil, includesubdomains: nil }
     allow(subject).to receive(:pairs) { pairs }
     expect(subject.preload_ready?).to be(false)
   end

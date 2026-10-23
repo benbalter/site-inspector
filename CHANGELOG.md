@@ -56,6 +56,7 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 - `Cliver::Dependency#version` is memoized as intended. ([#109](https://github.com/benbalter/site-inspector/pull/109))
 - A `RailsCache` autoload that pointed to a missing file was removed. ([#109](https://github.com/benbalter/site-inspector/pull/109))
 - `Hsts#valid?` now requires a `max-age` directive with a non-negative integer value, per RFC 6797 §6.1.1. A header such as `Strict-Transport-Security: includeSubDomains` is no longer reported as valid. ([#127](https://github.com/benbalter/site-inspector/issues/127))
+- `Hsts#preload_ready?` now requires a `max-age` of at least 31,536,000 seconds (one year), matching the HSTS preload list's current requirements. It used the old 18-week minimum. ([#126](https://github.com/benbalter/site-inspector/issues/126))
 
 ### Dependencies
 
@@ -69,4 +70,4 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 
 ### Contributors
 
-[@benbalter](https://github.com/benbalter) wrote most of this release. The Copilot coding agent opened [#106](https://github.com/benbalter/site-inspector/pull/106), and Dependabot sent the dependency bumps. No outside human contributors this time.
+[@benbalter](https://github.com/benbalter) wrote most of this release. The Copilot coding agent opened [#106](https://github.com/benbalter/site-inspector/pull/106), and Dependabot sent the dependency bumps. Thanks to [@anyingiit](https://github.com/anyingiit) for the HSTS preload threshold fix and the README update ([#133](https://github.com/benbalter/site-inspector/pull/133), [#134](https://github.com/benbalter/site-inspector/pull/134)).
