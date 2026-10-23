@@ -70,4 +70,4 @@ First release since 3.2.0 (November 2020). It's a major version because several 
 
 ### Contributors
 
-[@benbalter](https://github.com/benbalter) wrote most of this release. The Copilot coding agent opened [#106](https://github.com/benbalter/site-inspector/pull/106), and Dependabot sent the dependency bumps. No outside human contributors this time.
+[@benbalter](https://github.com/benbalter) wrote most of this release. The Copilot coding agent opened [#106](https://github.com/benbalter/site-inspector/pull/106), and Dependabot sent the dependency bumps. Thanks to [@anyingiit](https://github.com/anyingiit) for the HSTS preload threshold fix and the README update ([#133](https://github.com/benbalter/site-inspector/pull/133), [#134](https://github.com/benbalter/site-inspector/pull/134)).
