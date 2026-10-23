@@ -42,15 +42,22 @@ Usage:
 Options:
         -j, --json         JSON encode the output
         -a, --all          return results for all endpoints (defaults to only the canonical endpoint)
-            --https        return results for the https check (defaults to all checks unless one or more checks are specified)
-            --hsts         return results for the hsts check (defaults to all checks unless one or more checks are specified)
-            --headers      return results for the headers check (defaults to all checks unless one or more checks are specified)
-            --dns          return results for the dns check (defaults to all checks unless one or more checks are specified)
+            --accessibility  return results for the accessibility check (defaults to all checks unless one or more checks are specified)
             --content      return results for the content check (defaults to all checks unless one or more checks are specified)
+            --cookies      return results for the cookies check (defaults to all checks unless one or more checks are specified)
+            --dns          return results for the dns check (defaults to all checks unless one or more checks are specified)
+            --headers      return results for the headers check (defaults to all checks unless one or more checks are specified)
+            --hsts         return results for the hsts check (defaults to all checks unless one or more checks are specified)
+            --https        return results for the https check (defaults to all checks unless one or more checks are specified)
+            --wappalyzer   return results for the wappalyzer check (defaults to all checks unless one or more checks are specified)
+            --wellknown    return results for the wellknown check (defaults to all checks unless one or more checks are specified)
+            --whois        return results for the whois check (defaults to all checks unless one or more checks are specified)
         -h, --help         Show this message
         -v, --version      Print the name and version
         -t, --trace        Show the full backtrace when an error occurs
 ```
+
+There's one `--<check>` flag per enabled check. `--accessibility` and `--wappalyzer` only appear when the `pa11y` and `wappalyzer` CLIs are installed (see below).
 
 ## What's checked
 
@@ -86,16 +93,27 @@ Each endpoint also returns the following checks:
 
 Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To install `pally`: `[sudo] npm install -g pa11y`.
 
-* `section508` - Tests against the Section508 standard
-* `wcag2a` - Tests against the WCAG2A standard
-* `wcag2aa` - Tests against the WCAG2AA standard
-* `wcag2aaa` - Tests against the WCAG2AAA standard
+* `valid` - whether the endpoint passes the WCAG2A standard
+* `results` - the issues `pa11y` reported
+
+To test against another standard, call `section508`, `wcag2a`, `wcag2aa` or `wcag2aaa` on the check, such as `endpoint.accessibility.wcag2aa`.
 
 #### Content
 
 * `doctype` - The HTML doctype returned
-* `sitemap_xml` - Whether the endpoint has a sitemap
+* `generator` - the content of the `generator` meta tag, if any
+* `proper_404s` - whether the endpoint returns a 404 for pages that don't exist. The path checks below only run when it does.
 * `robots_txt` - whether the endpoint has a `robots.txt` file
+* `sitemap_xml` - Whether the endpoint has a sitemap
+* `humans_txt` - whether the endpoint has a `humans.txt` file
+* `vulnerability_disclosure_policy` - whether the endpoint has a `/vulnerability-disclosure-policy` page
+* `security_txt` - whether the endpoint has a `security.txt` file, at the root or in `.well-known/`
+* `data_json` - whether the endpoint has a `data.json` file
+
+#### Cookies
+
+* `cookie?` - does the endpoint set cookies
+* `secure?` - whether at least one cookie sets both the `Secure` and `HttpOnly` flags
 
 #### DNS
 
@@ -109,13 +127,15 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 
 #### Headers
 
-* `cookies` - does the domain use cookies
-* `strict_transport_security` - whether STS is enabled
-* `content_security_policy` - the endpoint's CSP
-* `click_jacking_protection` - whether an `x-frame-options` header is sent
-* `xss_protection` - whether an `x-xss-protection` header is sent
+The value of each of these headers, or `false` if it isn't sent:
+
+* `strict-transport-security` - the HSTS header
+* `content-security-policy` - the endpoint's CSP
+* `x-frame-options` - click-jacking protection
 * `server` - the server header
-* `secure_cookies` - whether the cookies are secure, or not
+* `x-xss-protection` - XSS protection
+
+Any other `x-` headers the endpoint sends are included too.
 
 #### HSTS
 
@@ -125,6 +145,7 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 * `preload` - whether its preloaded
 * `enabled` - whether HSTS is enabled
 * `preload_ready` - whether HSTS could be preloaded
+* `preload_list_status` - the domain's status on the [HSTS preload list](https://hstspreload.org/), such as `preloaded`, `pending` or `unknown`
 
 #### HTTPS
 
@@ -136,6 +157,15 @@ Uses the `pa11y` CLI to run automated accessibility tests. Requires `node`. To i
 Detects the endpoint's CMS and other technologies (analytics, JavaScript libraries, advertising, web servers, and so on) with the [`wappalyzer`](https://www.npmjs.com/package/wappalyzer) CLI. Requires `node`. The check is only enabled when a `wappalyzer` binary is found on your `PATH`, in `./bin`, or in `./node_modules/.bin` (`npm install` in this repository installs it).
 
 Returns a hash of technology names keyed by category, such as `cms`, `analytics`, or `javascript_libraries`.
+
+#### Well-known
+
+Whether the endpoint serves each [well-known URI](https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml) in the IANA registry, except deprecated ones. Each key is the URI's name with `.` and `-` replaced by `_`, such as `openid_configuration`, `mta_sts_txt` or `host_meta_json`.
+
+#### Whois
+
+* `domain` - the fields of the domain's WHOIS record
+* `ip` - the fields of the WHOIS record for the endpoint's IP address
 
 ## Adding your own check
 
